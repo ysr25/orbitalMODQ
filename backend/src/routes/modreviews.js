@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const ModReview = require('../models/ModReviewModel');
 
 // GET Request for ALL mod reviews
-router.get("/view", (req, res, next) => {
+router.get("/view/all", (req, res, next) => {
   console.log("Handling GET request for ALL mod reviews");
   ModReview.find()
     .then((modreviews) => res.json(modreviews))
@@ -34,7 +34,7 @@ console.log("Handling POST request for mod review");
 });
 
 // UPDATE Request (MUST ADD USER AUTHENTICATION)
-router.patch("/:modReviewId", (req, res, next) => {
+router.patch("/edit/:modReviewId", (req, res, next) => {
   console.log("Handling PATCH request for mod review");
   const updateOps = {};
   for(const ops of req.body) {

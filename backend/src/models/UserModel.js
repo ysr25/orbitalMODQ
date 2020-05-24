@@ -1,9 +1,11 @@
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt');
-//default SALT_WORK_FACTOR = 10;
 
-let yearOfStudyOptions = ["matriculatingSoon", "undergrad1", "undergrad2", "undergrad3", "undergrad4", "masters", "phd"];
+const yearOfStudyOptions = ["matriculatingSoon", 
+  "undergrad",
+  "masters", 
+  "phd", "others"]
 
 let UserSchema = new Schema(
   {

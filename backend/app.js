@@ -1,9 +1,11 @@
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const router = express.Router();
 
 require("dotenv").config();
 const app = express();
+const ModReview = require('./src/models/ModReviewModel');
 
 // mongoose connection
 let uri = 'mongodb+srv://dbUser:dbUserPassword@modq1-msbla.gcp.mongodb.net/modq?retryWrites=true';
@@ -30,8 +32,20 @@ const modReviewRoutes = require('./src/routes/modReviews');
 // Routes for handling requests (for endpoints)
 app.use(cors());
 app.use(express.json());
+
+// GET Request for ALL mod reviews
+app.use(router.get("/", (req, res, next) => {
+    console.log("HOMEPAGE to GET ALL mod reviews");
+    ModReview.find()
+      .then((modreviews) => res.json(modreviews))
+      .catch((err) => res.status(400).json("Error: " + err));
+  })
+);
+
 app.use('/users', usersRoutes);
 app.use('/modReviews', modReviewRoutes);
+
+
 
 // Reaches this when no routes are found
 app.use((req, res, next) => {

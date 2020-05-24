@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Homepage from "./components/Homepage";
+import Homepage from "./directories/Homepage";
 //import EditModReview from "./components/EditModReview";
-import CreateModReview from "./components/CreateModReview";
-import Registration from "./components/Registration";
-import LoginPage from "./components/LoginPage";
+import CreateModReview from "./directories/CreateModReview";
+import Registration from "./directories/Registration";
+import LoginPage from "./directories/LoginPage";
 
 import logo from "./logo.jpg";
 
@@ -16,8 +16,10 @@ class App extends Component {
       <Router>
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
-              <img src={logo} width="30" height="30" alt="MODQ Logo" />
-            <Link to="/" className="navbar-brand">MODQ</Link>
+            <Link to="/" className="navbar-brand">
+              <img src={logo} width="50" height="50" alt="MODQ Logo" />
+              MODQ
+            </Link>
             <div className="collpase navbar-collapse">
               <ul className="navbar-nav mr-auto">
                 <li className="navbar-item">
@@ -36,7 +38,7 @@ class App extends Component {
             </div>
           </nav>
           <br/>
-        <Route path="/modreviews/view" exact component={Homepage} />
+        <Route path="/" exact component={Homepage} />
         <Route path="/modreviews/newpost" component={CreateModReview} />
         {/*<Route path="/modreviews/edit/:modReviewId" component={EditModReview} />*/}
         <Route path="/users/signup" component={Registration} />
