@@ -56,7 +56,7 @@ export default class Registration extends Component {
 
     onChangeYearOfStudy(e) {
         this.setState({
-            user_yearOfStudy: e.target.value
+            user_yearOfStudy: e
         });
     }
 
@@ -151,18 +151,25 @@ export default class Registration extends Component {
                     </Col>
                 </Form.Row>
                 <br></br>
+                    {/* <DropdownButton id="dropdown-yearOfStudy" title="Year Of Study">
+                        {["Matriculating Soon", "Undergraduate", "Masters", "PhD", "Others"].map(option => 
+                            <Dropdown.Item onSelect={this.onChangeYearOfStudy} key={option} eventKey={option}>
+                                {option}
+                            </Dropdown.Item>
+                        )}
+                    </DropdownButton> */}
                     <div className="form-group">
                         <label>Year of Study: </label>
-                        <select ref="YearOfStudy" required
+                        <select required
                                 className="form-control"
                                 value={this.state.user_yearOfStudy}
                                 onChange={this.onChangeYearOfStudy} 
                         >
-                            <option value={'matriculatingSoon'}>{'Matriculating Soon'}</option>
-                            <option value={'undergrad'}>{'Undergrad'}</option>
-                            <option value={'masters'}>{'Masters'}</option>
-                            <option value={'doctorate'}>{'Doctorate'}</option>
-                            <option value={'others'}>{'Others'}</option>
+                            <option value='matriculatingSoon'>Matriculating Soon</option>
+                            <option value='undergrad'>Undergrad</option>
+                            <option value='masters'>Masters</option>
+                            <option value='doctorate'>Doctorate</option>
+                            <option value='others'>Others</option>
                         </select>
                     </div>
                     {/* <DropdownButton id="dropdownYearOfStudy" title="Year of Study" onSelect={this.onChangeYearOfStudy}>
