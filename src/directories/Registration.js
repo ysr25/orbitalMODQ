@@ -54,7 +54,7 @@ export default class Registration extends Component {
 
     onChangeYearOfStudy(e) {
         this.setState({
-            user_yearOfStudy: e.target.value
+            user_yearOfStudy: e
         });
     }
 
@@ -134,11 +134,11 @@ export default class Registration extends Component {
                                 />
                     </div>
                     <DropdownButton id="dropdown-yearOfStudy" title="Year Of Study">
-                        <Dropdown.Item href="#/action-1">Matriculating Soon</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Undergraduate</Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">Masters</Dropdown.Item>
-                        <Dropdown.Item href="#/action-4">PhD</Dropdown.Item>
-                        <Dropdown.Item href="#/action-5">Others</Dropdown.Item>
+                        {["Matriculating Soon", "Undergraduate", "Masters", "PhD", "Others"].map(option => 
+                            <Dropdown.Item onSelect={this.onChangeYearOfStudy} key={option} eventKey={option}>
+                                {option}
+                            </Dropdown.Item>
+                        )}
                     </DropdownButton>
                     <div className="form-group">
                         <label>Username: </label>
