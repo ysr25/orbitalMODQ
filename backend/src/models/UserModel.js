@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const yearOfStudyOptions = ["matriculatingSoon", 
   "undergrad",
   "masters", 
-  "phd", "others"]
+  "doctorate", "others"]
 
 let UserSchema = new Schema(
   {
