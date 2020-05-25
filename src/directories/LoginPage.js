@@ -53,7 +53,6 @@ export default class LoginPage extends Component {
                     <Link to="/users/signup">Register</Link>
                 </p>
             </div>
-
             <form onSubmit={this.onSubmit}>
                 <input  type="text"
                     placeholder="Username"
