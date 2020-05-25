@@ -36,8 +36,9 @@ export default class Registration extends Component {
             user_password: this.state.user_password,
         }
                 
-        axios.post('http://localhost:3000/users/login', userLogIn)
-            .then(res => console.log(res.data));
+        axios.post('http://localhost:3001/users/login', userLogIn)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err));
     }
 
     render() {

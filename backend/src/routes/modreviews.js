@@ -36,13 +36,11 @@ console.log("Handling POST request for mod review");
 // UPDATE Request (MUST ADD USER AUTHENTICATION)
 router.patch("/edit/:modReviewId", (req, res, next) => {
   console.log("Handling PATCH request for mod review");
-  const updateOps = {};
-  for(const ops of req.body) {
-    updateOps[ops.propName] = ops.value;
+  const updateOps = {dateEdited: Date.now()};
+  for(const ops in req.body) {
+    updateOps[ops] = req.body[ops];
   }
-  ModReview.update(
-    {_id: req.params.modReviewId},
-    { $set: updateOps })
+  ModReview.updateOne({_id: req.params.modReviewId}, updateOps)
     .then((modreview) => res.json('Module Review update: ' + modreview))
     .catch((err) => res.status(400).json('Error: ' + err))
 });

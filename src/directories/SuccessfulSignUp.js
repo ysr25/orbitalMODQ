@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class Registration extends Component {
+export default class SuccessfulSignUp extends Component {
     render() {
         return (
             <div style={{marginTop: 10}}>

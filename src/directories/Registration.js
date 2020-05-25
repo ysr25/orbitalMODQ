@@ -92,16 +92,16 @@ export default class Registration extends Component {
             .then(res => console.log(res.data))
             .catch(err => console.log(err));
 
-        // this.setState({
-        //     user_firstName: '',
-        //     user_lastName: '',
-        //     user_email: '',
-        //     user_course: '',
-        //     user_yearOfStudy: '',
-        //     user_username: '',
-        //     user_password: '',
-        //     registered: false
-        // })
+        this.setState({
+             user_firstName: '',
+             user_lastName: '',
+             user_email: '',
+             user_course: '',
+             user_yearOfStudy: '',
+             user_username: '',
+             user_password: '',
+             registered: true
+        })
     }
 
     render() {

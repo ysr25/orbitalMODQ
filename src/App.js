@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Homepage from "./directories/Homepage";
-//import EditModReview from "./components/EditModReview";
 import CreateModReview from "./directories/CreateModReview";
+import EditModReview from "./directories/EditModReview";
 import Registration from "./directories/Registration";
 import LoginPage from "./directories/LoginPage";
 
@@ -40,7 +40,7 @@ class App extends Component {
           <br/>
         <Route path="/" exact component={Homepage} />
         <Route path="/modreviews/newpost" component={CreateModReview} />
-        {/*<Route path="/modreviews/edit/:modReviewId" component={EditModReview} />*/}
+        <Route path="/modreviews/editpost/:id" component={EditModReview} />
         <Route path="/users/signup" component={Registration} />
         <Route path="/users/login" component={LoginPage} />
         </div>
