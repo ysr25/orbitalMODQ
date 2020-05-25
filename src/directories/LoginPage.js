@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import SuccessfulSignUp from './SuccessfulSignUp';
+import SuccessfulLogIn from './SuccessfulLogIn';
+import { BrowserRouter as Route, Link } from "react-router-dom";
+import Homepage from './Homepage';
 
-export default class Registration extends Component {
+export default class LoginPage extends Component {
     constructor(props) {
         super(props);
 
@@ -44,7 +46,14 @@ export default class Registration extends Component {
     render() {
         return (
             <div style={{marginTop: 10}}>
-            <h3>Log in to existing account</h3>
+            <div>
+                <h3>Log in to existing account</h3>
+                <p className="grey-text text-darken-1">
+                    <em>Don't have an account? </em>
+                    <Link to="/users/signup">Register</Link>
+                </p>
+            </div>
+
             <form onSubmit={this.onSubmit}>
                 <input  type="text"
                     placeholder="Username"
@@ -61,7 +70,8 @@ export default class Registration extends Component {
                 />
                 <br />
                 <div className="form-group">
-                        <input type="submit" value="Log In" className="btn btn-primary" onClick={SuccessfulSignUp}/>
+                    <Link to="/" className="btn btn-primary">Log In</Link>
+                    <Route path="/" component={Homepage} />
                     </div>
             </form>
             </div>

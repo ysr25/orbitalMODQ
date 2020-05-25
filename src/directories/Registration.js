@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import SuccessfulSignUp from './SuccessfulSignUp';
+import { BrowserRouter as Route, Link } from "react-router-dom";
 
 export default class Registration extends Component {
 
@@ -86,7 +87,7 @@ export default class Registration extends Component {
             password: this.state.user_password
         }
 
-        console.log('New User successfully created: ' + newUser.user_yearOfStudy);
+        console.log('New User successfully created: ' + newUser);
         
         axios.post('http://localhost:3001/users/signup', newUser)
             .then(res => console.log(res.data))
@@ -107,7 +108,13 @@ export default class Registration extends Component {
     render() {
         return (
             <div style={{marginTop: 10}}>
+            <div>
                 <h3>Create An Account</h3>
+                <p className="grey-text text-darken-1">
+                <em>Already have an account? </em>
+                <Link to="/users/login">Log in to an existing account</Link>
+                </p>
+            </div>
                 <form onSubmit={this.onSubmit}>
                 <Form.Row>
                     <Col>
@@ -187,10 +194,12 @@ export default class Registration extends Component {
                 </Form.Row>
                     <br></br>
                     <div className="form-group">
-                        <input type="submit" value="Create User" className="btn btn-primary" onClick={SuccessfulSignUp}/>
+                        <Link to="/users/signup/success" className="btn btn-primary">Create User</Link>
+                        <Route path="/users/signup/success" component={SuccessfulSignUp} />
                     </div>
                 </form>
             </div>
+            
         )
     }
 }
