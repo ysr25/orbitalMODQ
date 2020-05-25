@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl'
 import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
 import axios from 'axios';
 import moduleList from './ModuleList.js'
 
@@ -12,7 +14,7 @@ export default class Registration extends Component {
             post_id: props.match.params.id,
             post_title: '',
             post_content: '',
-            post_moduleCode: ''
+            post_moduleCode: '',
         }
     }
 
@@ -55,6 +57,12 @@ export default class Registration extends Component {
         }
         
         axios.patch(`http://localhost:3001/modReviews/edit/${this.state.post_id}`, newPost)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err));  
+    }
+
+    delete = (e) => {
+        axios.delete(`http://localhost:3001/modReviews/delete/${this.state.post_id}`)
             .then(res => console.log(res.data))
             .catch(err => console.log(err));
     }
@@ -101,9 +109,9 @@ export default class Registration extends Component {
                         </Form.Control>
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
+                <Button variant="primary" type="submit">Edit</Button>
+                {' '}
+                <Button variant="danger" onClick={this.delete}>Delete</Button>
                 </Form>
             </div>
         )
