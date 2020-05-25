@@ -23,7 +23,7 @@ export default class Registration extends Component {
             user_lastName: '',
             user_email: '',
             user_course: '',
-            user_yearOfStudy: '',
+            user_yearOfStudy: 'matriculatingSoon', // since that's the default option
             user_username: '',
             user_password: '',
             registered: false
@@ -56,7 +56,7 @@ export default class Registration extends Component {
 
     onChangeYearOfStudy(e) {
         this.setState({
-            user_yearOfStudy: e
+            user_yearOfStudy: e.target.value
         });
     }
 
@@ -72,25 +72,25 @@ export default class Registration extends Component {
         });
     }
 
-
-
     onSubmit(e) {
         e.preventDefault();
         
+        // variable names are same as backend
         const newUser = {
-            user_firstName: this.state.user_firstName,
-            user_lastName: this.state.user_lastName,
-            user_email: this.state.user_email,
-            user_course: this.state.user_course,
-            user_yearOfStudy: this.state.user_yearOfStudy,
-            user_username: this.state.user_username,
-            user_password: this.state.user_password,
+            firstName: this.state.user_firstName,
+            lastName: this.state.user_lastName,
+            email: this.state.user_email,
+            course: this.state.user_course,
+            yearOfStudy: this.state.user_yearOfStudy,
+            username: this.state.user_username,
+            password: this.state.user_password
         }
 
         console.log('New User successfully created: ' + newUser.user_yearOfStudy);
         
-        axios.post('http://localhost:3000/users/signup', newUser)
-            .then(res => console.log(res.data));
+        axios.post('http://localhost:3001/users/signup', newUser)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err));
 
         // this.setState({
         //     user_firstName: '',
@@ -112,7 +112,7 @@ export default class Registration extends Component {
                 <Form.Row>
                     <Col>
                     <Form.Control
-                        input  type="text"
+                        type="text"
                         placeholder="First Name"
                         className="form-control"
                         value={this.state.user_firstName}
@@ -121,7 +121,7 @@ export default class Registration extends Component {
                     </Col>
                     <Col>
                     <Form.Control
-                        input  type="text"
+                        type="text"
                         placeholder="Last Name"
                         className="form-control"
                         value={this.state.user_lastName}
@@ -133,7 +133,7 @@ export default class Registration extends Component {
                 <Form.Row>
                     <Col>
                     <Form.Control
-                        input  type="text"
+                        type="text"
                         placeholder="Email Address"
                         className="form-control"
                         value={this.state.user_email}
@@ -142,7 +142,7 @@ export default class Registration extends Component {
                     </Col>
                     <Col>
                     <Form.Control
-                        input  type="text"
+                        type="text"
                         placeholder="Course of Study"
                         className="form-control"
                         value={this.state.user_course}
@@ -151,13 +151,6 @@ export default class Registration extends Component {
                     </Col>
                 </Form.Row>
                 <br></br>
-                    {/* <DropdownButton id="dropdown-yearOfStudy" title="Year Of Study">
-                        {["Matriculating Soon", "Undergraduate", "Masters", "PhD", "Others"].map(option => 
-                            <Dropdown.Item onSelect={this.onChangeYearOfStudy} key={option} eventKey={option}>
-                                {option}
-                            </Dropdown.Item>
-                        )}
-                    </DropdownButton> */}
                     <div className="form-group">
                         <label>Year of Study: </label>
                         <select required
@@ -172,17 +165,10 @@ export default class Registration extends Component {
                             <option value='others'>Others</option>
                         </select>
                     </div>
-                    {/* <DropdownButton id="dropdownYearOfStudy" title="Year of Study" onSelect={this.onChangeYearOfStudy}>
-                        <Dropdown.Item user_YOS="MATS">Matriculating Soon</Dropdown.Item>
-                        <Dropdown.Item user_YOS="UG">Undergraduate</Dropdown.Item>
-                        <Dropdown.Item user_YOS="MS">Master</Dropdown.Item>
-                        <Dropdown.Item user_YOS="PhD">Doctorate</Dropdown.Item>
-                        <Dropdown.Item user_YOS="ETC">Others</Dropdown.Item>
-                    </DropdownButton> */}
                     <Form.Row>
                     <Col>
                         <Form.Control
-                            input  type="text"
+                            type="text"
                             placeholder="Username"
                             className="form-control"
                             value={this.state.user_username}
@@ -191,7 +177,7 @@ export default class Registration extends Component {
                     </Col>
                     <Col>
                         <Form.Control
-                            input  type="password"
+                            type="password"
                             placeholder="Password"
                             className="form-control"
                             value={this.state.user_password}
