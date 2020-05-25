@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
-let moduleList = ['CS1101S', 'CS1231']; // etc...
+const moduleList = require('./ModuleList');
 
 let modReviewSchema = new Schema({
   author: {
@@ -31,7 +30,7 @@ let modReviewSchema = new Schema({
   moduleCode: {
     type: String, 
     required: true,
-    enum: moduleList // drop-down list?
+    enum: moduleList
   }
 });
 
