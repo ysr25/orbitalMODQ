@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import SuccessfulLogIn from './SuccessfulLogIn';
 import { BrowserRouter as Route, Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import Homepage from './Homepage';
 
 export default class LoginPage extends Component {
     constructor(props) {
