@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import SuccessfulLogIn from './SuccessfulLogIn';
 import { BrowserRouter as Route, Link } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 import Homepage from './Homepage';
 
 export default class LoginPage extends Component {
@@ -34,12 +35,13 @@ export default class LoginPage extends Component {
         e.preventDefault();
         
         const userLogIn = {
-            user_username: this.state.user_username,
-            user_password: this.state.user_password,
+            username: this.state.user_username,
+            password: this.state.user_password
         }
                 
         axios.post('http://localhost:3001/users/login', userLogIn)
             .then(res => console.log(res.data))
+            .then(res => this.props.history.push('/'))
             .catch(err => console.log(err));
     }
 
@@ -70,9 +72,8 @@ export default class LoginPage extends Component {
                 />
                 <br />
                 <div className="form-group">
-                    <Link to="/" className="btn btn-primary">Log In</Link>
-                    <Route path="/" component={Homepage} />
-                    </div>
+                    <Button type="submit" className="btn btn-primary">Log In</Button>
+                </div>
             </form>
             </div>
         )
