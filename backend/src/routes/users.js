@@ -45,11 +45,11 @@ router.post('/login', (req, res, next) => {
         username: req.body.username
     })
     .then(user => {
-        if(!user) { res.json('No user with entered username found, please create an account.') }
+        if(!user) { res.status(400).json('No user with entered username found, please create an account.') }
         else { 
             bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(result) { res.json('Correct password entered') }
-                else { res.json('Incorrect password, please try again.') }
+                if(result) { res.status(200).json('Correct password entered') }
+                else { res.status(400).json('Incorrect password, please try again.') }
             });
         }
     })

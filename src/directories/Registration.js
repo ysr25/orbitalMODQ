@@ -3,7 +3,8 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import SuccessfulSignUp from './SuccessfulSignUp';
-import { BrowserRouter as Route, Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 
 export default class Registration extends Component {
 
@@ -91,18 +92,20 @@ export default class Registration extends Component {
         
         axios.post('http://localhost:3001/users/signup', newUser)
             .then(res => console.log(res.data))
+            .then(res => this.props.history.push('/users/signup/success'))
             .catch(err => console.log(err));
 
-        this.setState({
-             user_firstName: '',
-             user_lastName: '',
-             user_email: '',
-             user_course: '',
-             user_yearOfStudy: '',
-             user_username: '',
-             user_password: '',
-             registered: true
-        })
+//        this.setState({
+//            user_firstName: '',
+//            user_lastName: '',
+//            user_email: '',
+//            user_course: '',
+//            user_yearOfStudy: '',
+//            user_username: '',
+//            user_password: '',
+//            registered: true
+//       })
+
     }
 
     render() {
@@ -194,8 +197,8 @@ export default class Registration extends Component {
                 </Form.Row>
                     <br></br>
                     <div className="form-group">
-                        <Link to="/users/signup/success" className="btn btn-primary">Create User</Link>
                         <Route path="/users/signup/success" component={SuccessfulSignUp} />
+                        <Button type="submit" className="btn btn-primary">Create User</Button>
                     </div>
                 </form>
             </div>
