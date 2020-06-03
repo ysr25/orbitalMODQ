@@ -21,10 +21,10 @@ router.get('/view/:modReviewId', (req, res, next) => {
 
 // Post Request (MUST ADD USER AUTHENTICATION)
 router.post("/newpost", (req, res, next) => {
-console.log("Handling POST request for mod review");
+ console.log("Handling POST request for mod review");
  ModReview.create({
     _id: new mongoose.Types.ObjectId(),
-    author: req.body.author,
+    author: req.session.user,
     title: req.body.title,
     content: req.body.content,
     moduleCode: req.body.moduleCode

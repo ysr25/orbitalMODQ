@@ -44,7 +44,7 @@ export default class CreateModReview extends Component {
             author: this.state.post_author
         }
         
-        axios.post('http://localhost:3001/modReviews/newpost', newPost)
+        axios.post('http://localhost:3001/modReviews/newpost', newPost, {withCredentials: true})
             .then(res => console.log(res.data))
             .catch(err => console.log(err));
 

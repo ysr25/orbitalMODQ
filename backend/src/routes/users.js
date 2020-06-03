@@ -48,11 +48,21 @@ router.post('/login', (req, res, next) => {
         if(!user) { res.status(400).json('No user with entered username found, please create an account.') }
         else { 
             bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(result) { res.status(200).json('Correct password entered') }
+                if(result) { 
+                    req.session.user = user._id;
+                    res.status(200).json('Correct password entered');
+                }
                 else { res.status(400).json('Incorrect password, please try again.') }
             });
         }
     })
+});
+
+// POST Request, user sign out verification
+router.post('/logout', (req, res, next) => {
+    req.session.destroy((err) => {
+        res.status(200).json('Logged out');
+    });
 });
 
 router.delete('/delete/:userId', (req, res, next) => {

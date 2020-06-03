@@ -37,7 +37,7 @@ export default class LoginPage extends Component {
             password: this.state.user_password
         }
                 
-        axios.post('http://localhost:3001/users/login', userLogIn)
+        axios.post('http://localhost:3001/users/login', userLogIn, {withCredentials: true})
             .then(res => console.log(res.data))
             .then(res => this.props.history.push('/'))
             .catch(err => console.log(err));
