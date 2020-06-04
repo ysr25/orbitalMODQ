@@ -71,7 +71,7 @@ export default class Registration extends Component {
         return (
             <div style={{marginTop: 10}}>
                 <h3>Edit Post</h3>
-                <Form onSubmit={this.onSubmit}>
+                <form onSubmit={this.onSubmit}>
                 <Form.Group>
                 <Form.Control
                     type="text"
@@ -82,19 +82,6 @@ export default class Registration extends Component {
                     required
                 />
                 </Form.Group>
-
-                <Form.Group>
-                <Form.Control
-                    type="text"
-                    as="textarea" rows="5"
-                    placeholder="Content"
-                    className="form-control"
-                    value={this.state.post_content}
-                    onChange={this.onChangeContent}
-                    required
-                />
-                </Form.Group>
-
                 <Form.Group>
                     <Form.Label>Module: </Form.Label>
                         <Form.Control as="select"
@@ -108,11 +95,20 @@ export default class Registration extends Component {
                         )}
                         </Form.Control>
                 </Form.Group>
-
-                <Button variant="primary" type="submit">Edit</Button>
-                {' '}
-                <Button variant="danger" onClick={this.delete}>Delete</Button>
-                </Form>
+                <Form.Group>
+                <Form.Control
+                    type="text"
+                    as="textarea" rows="5"
+                    placeholder="Content"
+                    className="form-control"
+                    value={this.state.post_content}
+                    onChange={this.onChangeContent}
+                    required
+                />
+                </Form.Group>
+                        <Button type="submit">Edit</Button> {' '}
+                        <Button variant="danger" onClick={this.delete}>Delete</Button>
+                </form>
             </div>
         )
     }

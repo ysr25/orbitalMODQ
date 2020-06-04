@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
 import axios from 'axios';
-import SuccessfulSignUp from './SuccessfulSignUp';
-import { Route, Link } from "react-router-dom";
+import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import { Link } from "react-router-dom";
 
 export default class Registration extends Component {
 
@@ -25,10 +24,12 @@ export default class Registration extends Component {
             user_lastName: '',
             user_email: '',
             user_course: '',
-            user_yearOfStudy: 'matriculatingSoon', // since that's the default option
+            user_yearOfStudy: 'matriculatingSoon', // default option
             user_username: '',
             user_password: '',
-            registered: false
+            isButtonDisabled: false,
+            buttonVariant: 'primary',
+            regStatus:'Create Account'
         }
     }
 
@@ -92,7 +93,6 @@ export default class Registration extends Component {
         
         axios.post('http://localhost:3001/users/signup', newUser)
             .then(res => console.log(res.data))
-            .then(res => this.props.history.push('/users/signup/success'))
             .catch(err => console.log(err));
 
 //        this.setState({
@@ -105,6 +105,11 @@ export default class Registration extends Component {
 //            user_password: '',
 //            registered: true
 //       })
+        this.setState({
+            isButtonDisabled: true,
+            buttonVariant: 'dark',
+            regStatus: 'Registration Successful'
+        })
 
     }
 
@@ -197,8 +202,13 @@ export default class Registration extends Component {
                 </Form.Row>
                     <br></br>
                     <div className="form-group">
-                        <Route path="/users/signup/success" component={SuccessfulSignUp} />
-                        <Button type="submit" className="btn btn-primary">Create User</Button>
+                        <Button 
+                            type="submit" 
+                            className="btn btn-primary" 
+                            disabled={this.state.isButtonDisabled}
+                            variant={this.state.buttonVariant}>
+                                {this.state.regStatus}
+                        </Button>
                     </div>
                 </form>
             </div>

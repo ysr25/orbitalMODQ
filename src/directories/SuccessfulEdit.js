@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-export default class SuccessfulSignUp extends Component {
+export default class SuccessfulEdit extends Component {
     render() {
         return (
             <div style={{marginTop: 10}}>
-            <p>Successful Sign Up!</p>
+            <p>Post Successfully Edited!</p>
             </div>
         )
     }

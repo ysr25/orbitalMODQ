@@ -7,6 +7,7 @@ import CreateModReview from "./directories/CreateModReview";
 import EditModReview from "./directories/EditModReview";
 import Registration from "./directories/Registration";
 import LoginPage from "./directories/LoginPage";
+import ViewPost from "./directories/ViewPost";
 
 import logo from "./logo.jpg";
 
@@ -40,7 +41,8 @@ class App extends Component {
           <br/>
         <Route path="/" exact component={Homepage} />
         <Route path="/modreviews/newpost" component={CreateModReview} />
-        <Route path="/modreviews/editpost/:id" component={EditModReview} />
+        <Route path="/modreviews/edit/:id" component={EditModReview} />
+        <Route path="/modreviews/view/:id" component={ViewPost} />
         <Route path="/users/signup" component={Registration} />
         <Route path="/users/login" component={LoginPage} />
         </div>
