@@ -11,7 +11,6 @@ export default class CreateModReview extends Component {
         super(props);
 
         this.state = {
-            post_author: '5ec846e3bab41bf6e9ba4667',
             post_title: '',
             post_content: '',
             post_moduleCode: 'ACC1002',
@@ -45,7 +44,6 @@ export default class CreateModReview extends Component {
             title: this.state.post_title,
             content: this.state.post_content,
             moduleCode: this.state.post_moduleCode,
-            author: this.state.post_author
         }
         
         axios.post('http://localhost:3001/modReviews/newpost', newPost, {withCredentials: true})
