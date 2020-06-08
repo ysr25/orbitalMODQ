@@ -26,7 +26,7 @@ router.post('/signup', (req, res, next) => {
     console.log("Handling POST request for user (CREATION)");
     const hash = bcrypt.hashSync(req.body.password, saltRounds);
     User.create({     
-        _id: new mongoose.Types.ObjectId,
+        _id: new mongoose.Types.ObjectId(),
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         username: req.body.username,
@@ -48,7 +48,7 @@ router.post('/login', (req, res, next) => {
         if(!user) { res.status(400).json('No user with entered username found, please create an account.') }
         else { 
             bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(result) { 
+                if(result) {
                     req.session.user = user._id;
                     res.status(200).json('Correct password entered');
                 }

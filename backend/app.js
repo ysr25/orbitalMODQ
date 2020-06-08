@@ -4,6 +4,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require('connect-mongo')(session);
 const router = express.Router();
+const debug = require("debug")("app.js");
 
 require("dotenv").config();
 const app = express();
@@ -65,6 +66,25 @@ app.use('/users', usersRoutes);
 app.use('/modReviews', modReviewRoutes);
 
 
+// var checkLoggedIn = function(req, res, next) {
+//     if (req.session.loggedIn) {
+//       debug(
+//         "checkLoggedIn(), req.session.loggedIn:",
+//         req.session.loggedIn,
+//         "executing next()"
+//       );
+//       next();
+//     } else {
+//       debug(
+//         "checkLoggedIn(), req.session.loggedIn:",
+//         req.session.loggedIn,
+//         "rendering login"
+//       );
+//       res.render("login", { title: "Login Here" });
+//     }
+//   };
+
+// app.use("/", checkLoggedIn, modReviewRoutes);
 
 // Reaches this when no routes are found
 app.use((req, res, next) => {
