@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { BrowserRouter as Route, Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 
 export default class LoginPage extends Component {
@@ -42,6 +42,7 @@ export default class LoginPage extends Component {
                 
         axios.post('http://localhost:3001/users/login', userLogIn, {withCredentials: true})
             .then(res => console.log(res.data))
+            .then(res => this.props.login())
             .then(res => this.props.history.push('/'))
             .catch(err => console.log(err));
             

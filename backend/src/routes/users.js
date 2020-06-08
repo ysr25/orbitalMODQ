@@ -13,6 +13,15 @@ router.get('/', (req, res, next) => {
       .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// GET Request, check if user is logged in
+router.get('/status', (req, res, next) => {
+    if (req.session.user) {
+        res.status(200).json({loggedIn: true});
+    } else {
+        res.status(200).json({loggedIn: false});
+    }
+});
+
 // At this phase, for admin -- eventually can implement to let others view user page
 router.get("/:userId", (req, res, next) => {
   console.log("Handling GET request for SPECIFIC user");
