@@ -7,6 +7,7 @@ const ModReview = require('../models/ModReviewModel');
 router.get("/view/all", (req, res, next) => {
   console.log("Handling GET request for ALL mod reviews");
   ModReview.find()
+    .populate('author')
     .then((modreviews) => res.json(modreviews))
     .catch((err) => res.status(400).json("Error: " + err));
 });

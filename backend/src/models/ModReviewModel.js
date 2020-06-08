@@ -5,7 +5,7 @@ const moduleList = require('./ModuleList');
 let modReviewSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'User',
     required: true
   },
   datePosted: {
