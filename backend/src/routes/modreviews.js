@@ -26,7 +26,7 @@ router.post("/newpost", (req, res, next) => {
  console.log("Handling POST request for mod review");
  ModReview.create({
     _id: new mongoose.Types.ObjectId(),
-    author: req.session.user,
+    author: req.session.passport.user,
     title: req.body.title,
     content: req.body.content,
     moduleCode: req.body.moduleCode

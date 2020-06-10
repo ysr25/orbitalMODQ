@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import axios from 'axios';
 import moduleList from './ModuleList.js';
 import SuccessfulPost from './SuccessfulPost';
-import { Route, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 export default class CreateModReview extends Component {
     constructor(props) {

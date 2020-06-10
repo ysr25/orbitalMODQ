@@ -2,8 +2,11 @@ const cors = require("cors");
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require("connect-mongo")(session);
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
+const User = require("./src/models/UserModel");
 
 require("dotenv").config();
 const app = express();
@@ -26,9 +29,38 @@ app.use(session({
     store: new MongoStore({mongooseConnection: mongoose.connection}) // use existing connection
 }));
 
-// Assigning directory to respective var names
-const usersRoutes = require('./src/routes/users');
-const modReviewRoutes = require('./src/routes/modReviews');
+// passport (for logging in and out)
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+});
+
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+        if (err) {
+            return done(err);
+        } else {
+            done(null, user);
+        }
+    });
+});
+
+passport.use(new LocalStrategy((username, password, done) => {
+    User
+    .findOne({ username: username })
+    .then(user => {
+        if (!user) { 
+            return done(null, false, {message: 'No user with entered username found, please create an account.'});
+        } else if (!user.validPassword(password)) {
+            return done(null, false, {message: 'Incorrect password, please try again.'});
+        } else {
+            return done(null, user);
+        }
+    })
+    .catch(err => done(err));
+}));
 
 // Routes for handling requests (for endpoints)
 const corsOptions = {
@@ -37,6 +69,10 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Assigning directory to respective var names
+const usersRoutes = require('./src/routes/users');
+const modReviewRoutes = require('./src/routes/modReviews');
 
 app.use('/users', usersRoutes);
 app.use('/modReviews', modReviewRoutes);

@@ -56,12 +56,14 @@ export default class EditModReview extends Component {
         
         axios.patch(`http://localhost:3001/modReviews/edit/${this.state.post_id}`, newPost)
             .then(res => console.log(res.data))
+            .then(res => this.props.history.push(`/modreviews/view/${this.state.post_id}`))
             .catch(err => console.log(err));
     }
 
     onDelete = (e) => {
         axios.delete(`http://localhost:3001/modReviews/delete/${this.state.post_id}`)
             .then(res => console.log(res.data))
+            .then(res => this.props.history.push('/'))
             .catch(err => console.log(err));
     }
 

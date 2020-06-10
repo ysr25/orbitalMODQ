@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt'); // Used to encrpyt passwords with hashing
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const passport = require("passport");
 const User = require("../models/UserModel");
 const saltRounds = 10; // default value used
 
@@ -11,15 +12,6 @@ router.get('/', (req, res, next) => {
     User.find()
       .then((users) => res.json(users))
       .catch((err) => res.status(400).json("Error: " + err));
-});
-
-// GET Request, check if user is logged in
-router.get('/status', (req, res, next) => {
-    if (req.session.user) {
-        res.status(200).json({loggedIn: true});
-    } else {
-        res.status(200).json({loggedIn: false});
-    }
 });
 
 // At this phase, for admin -- eventually can implement to let others view user page
@@ -49,29 +41,14 @@ router.post('/signup', (req, res, next) => {
 });
 
 // POST Request, user sign in verification
-router.post('/login', (req, res, next) => {
-    User.findOne({
-        username: req.body.username
-    })
-    .then(user => {
-        if(!user) { res.status(400).json('No user with entered username found, please create an account.') }
-        else { 
-            bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(result) { 
-                    req.session.user = user._id;
-                    res.status(200).json('Correct password entered');
-                }
-                else { res.status(400).json('Incorrect password, please try again.') }
-            });
-        }
-    })
+router.post('/login', passport.authenticate('local'), (req, res) => {
+    res.sendStatus(200);
 });
 
 // POST Request, user sign out verification
 router.post('/logout', (req, res, next) => {
-    req.session.destroy((err) => {
-        res.status(200).json('Logged out');
-    });
+    req.logout();
+    res.sendStatus(200);
 });
 
 router.delete('/delete/:userId', (req, res, next) => {

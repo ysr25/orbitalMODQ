@@ -37,17 +37,18 @@ export default class Registration extends Component {
         return (
             <div style={{marginTop: 10}}>
                 <h6>Post #{this.state.post_id}</h6>
-                <em>Last edited on {new Date(this.state.post_editedDate).toString()}</em><br  />
+                <em>Last edited on {new Date(this.state.post_editedDate).toLocaleString()}</em><br  />
                 <Form.Group>
                 <br  />
                 <h2>{this.state.post_title}</h2>
-                Posted by <em>{this.state.post_author} on {new Date(this.state.post_date).toString()}</em><br  />
+                Posted by <em>{this.state.post_author} on {new Date(this.state.post_date).toLocaleString()}</em><br  />
                 <br  />
                 <h5>Review for: <b><em>{this.state.post_moduleCode}</em></b></h5><br  />
                 {this.state.post_content}
                 </Form.Group>
                 <br  />
-                <Button type="button" variant="outline-primary" size="sm" href={`/modreviews/edit/${this.state.post_id}`}>Edit</Button> {' '}
+                <Button type="button" variant="outline-primary" href={`/modreviews/edit/${this.state.post_id}`}>Edit</Button><br />
+                <br />
                 <Button type="button" variant="outline-secondary" size="sm" href={`/`}>Return to Homepage</Button> {' '}
             </div>
         )

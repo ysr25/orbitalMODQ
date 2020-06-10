@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Card from "react-bootstrap/Card";
 import ToggleButton from 'react-bootstrap/ToggleButton'
@@ -39,7 +38,7 @@ export default class Registration extends Component {
             })
         }));
     } else if (e === "most_upvotes") {
-      // next time
+        console.log("doesn't do anything for now");
     }
   }
 
@@ -47,11 +46,9 @@ export default class Registration extends Component {
     return (
       <div style={{ marginTop: 10 }}>
         <div>
-        Sort by
-        {' '}
         <ToggleButtonGroup type="radio" name="sort_by" defaultValue="date_posted" onChange={this.changeSort}>
-          <ToggleButton value="date_posted">Date posted</ToggleButton>
-          <ToggleButton value="date_edited">Date edited</ToggleButton>
+          <ToggleButton value="date_posted">Recently posted</ToggleButton>
+          <ToggleButton value="date_edited">Recently edited</ToggleButton>
           <ToggleButton value="most_upvotes">Most upvotes</ToggleButton>
         </ToggleButtonGroup>
         </div>
@@ -68,8 +65,8 @@ export default class Registration extends Component {
                 <Card.Text>{post.content}</Card.Text>
                 <Card.Text>
                   <em>posted by {post.author.username}</em><br />
-                  <em>date posted {post.datePosted}</em><br />
-                  <em>date edited {post.dateEdited}</em>
+                  <em>date posted {new Date(post.datePosted).toLocaleString()}</em><br />
+                  <em>date edited {new Date(post.dateEdited).toLocaleString()}</em>
                   {""}
                 </Card.Text>
                 <Card.Link href={`/modreviews/view/${post._id}`}>
