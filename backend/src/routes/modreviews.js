@@ -16,6 +16,7 @@ router.get("/view/all", (req, res, next) => {
 router.get('/view/:modReviewId', (req, res, next) => {
     console.log("Handling GET request for specific mod review");
     ModReview.findById(req.params.modReviewId)
+    .populate('author')
     .then((modReview) => res.json(modReview))
     .catch((err) => res.status(400).json("Error: " + err));
 });

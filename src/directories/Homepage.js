@@ -37,7 +37,7 @@ export default class Registration extends Component {
               <Card.Body key={post._id}>
                 <Card.Text>{post.content}</Card.Text>
                 <Card.Text>
-                  <em>posted by {post.author} </em>
+                  <em>posted by {post.author.username} </em>
                   {""}
                 </Card.Text>
                 <Card.Link href={`/modreviews/view/${post._id}`}>
