@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import axios from 'axios';
 import moduleList from './ModuleList.js'
 
-export default class Registration extends Component {
+export default class EditModReview extends Component {
     constructor(props) {
         super(props);
 
@@ -48,7 +48,7 @@ export default class Registration extends Component {
     onSubmit = (e) => {
         e.preventDefault();
 
-       const newPost = {
+        const newPost = {
             title: this.state.post_title,
             content: this.state.post_content,
             moduleCode: this.state.post_moduleCode
@@ -56,12 +56,14 @@ export default class Registration extends Component {
         
         axios.patch(`http://localhost:3001/modReviews/edit/${this.state.post_id}`, newPost)
             .then(res => console.log(res.data))
-            .catch(err => console.log(err));  
+            .then(res => this.props.history.push(`/modreviews/view/${this.state.post_id}`))
+            .catch(err => console.log(err));
     }
 
-    delete = (e) => {
+    onDelete = (e) => {
         axios.delete(`http://localhost:3001/modReviews/delete/${this.state.post_id}`)
             .then(res => console.log(res.data))
+            .then(res => this.props.history.push('/'))
             .catch(err => console.log(err));
     }
 
@@ -104,8 +106,9 @@ export default class Registration extends Component {
                     required
                 />
                 </Form.Group>
-                        <Button type="submit">Edit</Button> {' '}
-                        <Button variant="danger" onClick={this.delete}>Delete</Button>
+                        <Button variant="outline-primary" type="submit">Submit</Button>{' '}
+                        <Button variant="outline-secondary" href={`/modreviews/view/${this.state.post_id}`}>Cancel</Button>{' '}
+                        <Button variant="outline-danger" onClick={this.onDelete}>Delete</Button>
                 </form>
             </div>
         )

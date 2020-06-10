@@ -2,13 +2,18 @@ const cors = require("cors");
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require("connect-mongo")(session);
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
+<<<<<<< HEAD
 const debug = require("debug")("app.js");
+=======
+const User = require("./src/models/UserModel");
+>>>>>>> 9a02bd0663d7672b4ecefd39f3acaa58d6138db3
 
 require("dotenv").config();
 const app = express();
-const ModReview = require('./src/models/ModReviewModel');
 
 // mongoose connection
 let uri = process.env.MONGO_URL;
@@ -24,25 +29,42 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 3600000 // expires in 1 hour
-        //domain: ".app.localhost:3000"
     }, 
     store: new MongoStore({mongooseConnection: mongoose.connection}) // use existing connection
 }));
 
-// fs.readdirSync(__direname + '/models').forEach(function(filename) {
-//     if(~filename.indexOf('.js')) require(__dirname + '/models/' + filename)
-// });
+// passport (for logging in and out)
+app.use(passport.initialize());
+app.use(passport.session());
 
-// // Default test response
-// app.use((req, res, next) => {
-//     res.status(200).json({
-//         message: "Working test"
-//     });
-// });
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+});
 
-// Assigning directory to respective var names
-const usersRoutes = require('./src/routes/users');
-const modReviewRoutes = require('./src/routes/modReviews');
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+        if (err) {
+            return done(err);
+        } else {
+            done(null, user);
+        }
+    });
+});
+
+passport.use(new LocalStrategy((username, password, done) => {
+    User
+    .findOne({ username: username })
+    .then(user => {
+        if (!user) { 
+            return done(null, false, {message: 'No user with entered username found, please create an account.'});
+        } else if (!user.validPassword(password)) {
+            return done(null, false, {message: 'Incorrect password, please try again.'});
+        } else {
+            return done(null, user);
+        }
+    })
+    .catch(err => done(err));
+}));
 
 // Routes for handling requests (for endpoints)
 const corsOptions = {
@@ -52,19 +74,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// GET Request for ALL mod reviews
-app.use(router.get("/", (req, res, next) => {
-    console.log("HOMEPAGE to GET ALL mod reviews");
-    ModReview.find()
-      .then((modreviews) => res.json(modreviews))
-      .catch((err) => res.status(400).json("Error: " + err));
-  })
-);
-
+// Assigning directory to respective var names
+const usersRoutes = require('./src/routes/users');
+const modReviewRoutes = require('./src/routes/modReviews');
 
 app.use('/users', usersRoutes);
 app.use('/modReviews', modReviewRoutes);
 
+<<<<<<< HEAD
 
 // var checkLoggedIn = function(req, res, next) {
 //     if (req.session.loggedIn) {
@@ -86,6 +103,8 @@ app.use('/modReviews', modReviewRoutes);
 
 // app.use("/", checkLoggedIn, modReviewRoutes);
 
+=======
+>>>>>>> 9a02bd0663d7672b4ecefd39f3acaa58d6138db3
 // Reaches this when no routes are found
 app.use((req, res, next) => {
     const error = new Error('No endpoint (route) found');

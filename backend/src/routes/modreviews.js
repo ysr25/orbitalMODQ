@@ -16,6 +16,7 @@ router.get("/view/all", (req, res, next) => {
 router.get('/view/:modReviewId', (req, res, next) => {
     console.log("Handling GET request for specific mod review");
     ModReview.findById(req.params.modReviewId)
+    .populate('author')
     .then((modReview) => res.json(modReview))
     .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -25,7 +26,7 @@ router.post("/newpost", (req, res, next) => {
  console.log("Handling POST request for mod review");
  ModReview.create({
     _id: new mongoose.Types.ObjectId(),
-    author: req.session.user,
+    author: req.session.passport.user,
     title: req.body.title,
     content: req.body.content,
     moduleCode: req.body.moduleCode
@@ -52,6 +53,11 @@ router.delete("/delete/:modReviewId", (req, res, next) => {
   ModReview.findByIdAndDelete(req.params.modReviewId)
     .then((modReview) => res.json('module review deleted: ' + modReview))
     .catch((err) => res.status(400).json("Error: " + err))
+});
+
+// upvote or downvote
+router.patch("/vote/:modReviewId", (req, res, next) => {
+  //tbd
 });
 
 module.exports = router;

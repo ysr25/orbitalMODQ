@@ -21,17 +21,6 @@ class App extends Component {
         }
     }
 
-  checkLoggedIn = () => {
-    axios
-      .get("http://localhost:3001/users/status", {withCredentials: true})
-      .then(res => this.setState({loggedIn: res.data.loggedIn}))
-      .catch((err) => console.log(err));
-  }
-
-  componentDidMount = () => {
-    this.checkLoggedIn();
-  }
-
   render() {
     return (
       <Router>

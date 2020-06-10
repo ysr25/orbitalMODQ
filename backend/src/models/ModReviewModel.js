@@ -31,6 +31,10 @@ let modReviewSchema = new Schema({
     type: String, 
     required: true,
     enum: moduleList
+  },
+  votes: {
+    type: Number, 
+    default: 0
   }
 });
 
