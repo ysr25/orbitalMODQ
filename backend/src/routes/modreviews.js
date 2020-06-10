@@ -55,4 +55,9 @@ router.delete("/delete/:modReviewId", (req, res, next) => {
     .catch((err) => res.status(400).json("Error: " + err))
 });
 
+// upvote or downvote
+router.patch("/vote/:modReviewId", (req, res, next) => {
+  //tbd
+});
+
 module.exports = router;
