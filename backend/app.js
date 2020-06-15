@@ -6,11 +6,7 @@ const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
-<<<<<<< HEAD
-const debug = require("debug")("app.js");
-=======
 const User = require("./src/models/UserModel");
->>>>>>> 9a02bd0663d7672b4ecefd39f3acaa58d6138db3
 
 require("dotenv").config();
 const app = express();
@@ -81,30 +77,6 @@ const modReviewRoutes = require('./src/routes/modReviews');
 app.use('/users', usersRoutes);
 app.use('/modReviews', modReviewRoutes);
 
-<<<<<<< HEAD
-
-// var checkLoggedIn = function(req, res, next) {
-//     if (req.session.loggedIn) {
-//       debug(
-//         "checkLoggedIn(), req.session.loggedIn:",
-//         req.session.loggedIn,
-//         "executing next()"
-//       );
-//       next();
-//     } else {
-//       debug(
-//         "checkLoggedIn(), req.session.loggedIn:",
-//         req.session.loggedIn,
-//         "rendering login"
-//       );
-//       res.render("login", { title: "Login Here" });
-//     }
-//   };
-
-// app.use("/", checkLoggedIn, modReviewRoutes);
-
-=======
->>>>>>> 9a02bd0663d7672b4ecefd39f3acaa58d6138db3
 // Reaches this when no routes are found
 app.use((req, res, next) => {
     const error = new Error('No endpoint (route) found');

@@ -4,7 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require("passport");
 const User = require("../models/UserModel");
-const saltRounds = 10; // default value used
+const saltRounds = 12; // default value used
 
 // GET Request -- For admin
 router.get('/', (req, res, next) => {
@@ -41,27 +41,8 @@ router.post('/signup', (req, res, next) => {
 });
 
 // POST Request, user sign in verification
-<<<<<<< HEAD
-router.post('/login', (req, res, next) => {
-    User.findOne({
-        username: req.body.username
-    })
-    .then(user => {
-        if(!user) { res.status(400).json('No user with entered username found, please create an account.') }
-        else { 
-            bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(result) {
-                    req.session.user = user._id;
-                    res.status(200).json('Correct password entered');
-                }
-                else { res.status(400).json('Incorrect password, please try again.') }
-            });
-        }
-    })
-=======
 router.post('/login', passport.authenticate('local'), (req, res) => {
     res.sendStatus(200);
->>>>>>> 9a02bd0663d7672b4ecefd39f3acaa58d6138db3
 });
 
 // POST Request, user sign out verification
@@ -70,6 +51,7 @@ router.post('/logout', (req, res, next) => {
     res.sendStatus(200);
 });
 
+// FOR ADMIN
 router.delete('/delete/:userId', (req, res, next) => {
     console.log("Handling DELETE request for SPECIFIC user");
     User.findByIdAndDelete(req.params.userId)
