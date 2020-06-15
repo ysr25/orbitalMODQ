@@ -9,7 +9,9 @@ export default class Registration extends Component {
     super(props);
 
     this.state = {
-      post_list: []
+      post_list: [],
+      sort_property: "datePosted",
+      sort_direction: 1
     };
   }
 
@@ -18,42 +20,49 @@ export default class Registration extends Component {
       .get("http://localhost:3001/modReviews/view/all")
       .then((res) =>
         this.setState({
-          post_list: res.data.reverse(),
+          post_list: res.data,
         })
       )
       .catch((err) => console.log(err));
   };
 
+  compare = (property, direction) => {
+      if (property === "datePosted" || property === "dateEdited") {
+          return (a, b) => {
+              return (new Date(a[property]) < new Date(b[property]) ? 1 : -1) * direction;
+          }
+      } else {
+          return (a, b) => {
+              return (a[property] < b[property] ? 1 : -1) * direction;
+          }
+      }
+  }
+
   changeSort = (e) => {
-    if (e === "date_posted") {
-        this.setState(prevState => ({
-            post_list: prevState.post_list.slice().sort((a, b) => {
-                return (new Date(a.datePosted) < new Date(b.datePosted)) ? 1 : -1;
-            })
-        }));
-    } else if (e === "date_edited") {
-        this.setState(prevState => ({
-            post_list: prevState.post_list.slice().sort((a, b) => {
-                return (new Date(a.dateEdited) < new Date(b.dateEdited)) ? 1 : -1;
-            })
-        }));
-    } else if (e === "most_upvotes") {
-        console.log("doesn't do anything for now");
-    }
+      this.setState({sort_property: e});
+  }
+
+  changeDirection = (e) => {
+      this.setState({sort_direction: e});
   }
 
   render() {
     return (
       <div style={{ marginTop: 10 }}>
         <div>
-        <ToggleButtonGroup type="radio" name="sort_by" defaultValue="date_posted" onChange={this.changeSort}>
-          <ToggleButton value="date_posted">Recently posted</ToggleButton>
-          <ToggleButton value="date_edited">Recently edited</ToggleButton>
-          <ToggleButton value="most_upvotes">Most upvotes</ToggleButton>
+        <ToggleButtonGroup type="radio" name="sort_by" defaultValue="datePosted" onChange={this.changeSort}>
+          <ToggleButton value="datePosted">Date posted</ToggleButton>
+          <ToggleButton value="dateEdited">Date edited</ToggleButton>
+          <ToggleButton value="upvotes">Upvotes</ToggleButton>
+        </ToggleButtonGroup>
+        {' '}
+        <ToggleButtonGroup type="radio" name="sort_by" defaultValue={1} onChange={this.changeDirection}>
+          <ToggleButton value={-1}>Ascending</ToggleButton>
+          <ToggleButton value={1}>Descending</ToggleButton>
         </ToggleButtonGroup>
         </div>
         <br />
-        {this.state.post_list.map((post) => (
+        {this.state.post_list.slice().sort(this.compare(this.state.sort_property, this.state.sort_direction)).map((post) => (
           <div key={post._id}>
             <Card border="Secondary">
               <Card.Header>
