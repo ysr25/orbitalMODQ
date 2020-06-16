@@ -24,8 +24,7 @@ export default class LoginPage extends Component {
     }
 
     updateGlobalLoginStatus(e) {
-        // App.updateLoginStatus(e);
-        console.log(e)
+        this.props.login(e);
     }
 
     onChangeUsername(e) {
@@ -63,7 +62,6 @@ export default class LoginPage extends Component {
             })
             .catch(err => console.log(err));
 
-            
         this.setState({
             isButtonDisabled: true,
             buttonVariant: 'dark',

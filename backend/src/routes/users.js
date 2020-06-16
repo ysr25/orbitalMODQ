@@ -77,7 +77,6 @@ router.post('/signup', (req, res, next) => {
 // POST Request, user sign in verification
 router.post('/login', 
     passport.authenticate('local', {
-        successRedirect: "/", 
         failureRedirect: "/login",
         failureFlash: true
     }), (req, res) => {
