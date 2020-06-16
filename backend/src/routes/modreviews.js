@@ -62,14 +62,14 @@ router.post(
       content: req.body.content,
       moduleCode: req.body.moduleCode,
     })
-      .then(() => { console.log(newPostId);
-        res.json(newPostId)})
+      .then(() => res.json(newPostId))
       .catch((err) => res.status(400).json("Error: " + err));
   }
 );
 
 // UPDATE Request (MUST ADD USER AUTHENTICATION)
-router.patch("/edit/:modReviewId", (req, res, next) => {
+router.patch("/edit/:modReviewId", passport.authenticate(["local"]),
+(req, res, next) => {
   console.log("Handling PATCH request for mod review");
   const updateOps = { dateEdited: Date.now() };
   for (const ops in req.body) {

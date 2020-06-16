@@ -50,18 +50,20 @@ class Navbar extends Component {
               </Link>
             </li>
           ) : (
-            <div>
               <li className="navbar-item">
                 <Link to="/users/signup" className="nav-link">
                   Register
                 </Link>
               </li>
-              <li className="navbar-item">
+          )}
+          {loggedIn ? (
+            <blank />
+          ) : (
+            <li className="navbar-item">
                 <Link to="/users/login" className="nav-link">
                   Log In
                 </Link>
               </li>
-            </div>
           )}
         </ul>
       </div>

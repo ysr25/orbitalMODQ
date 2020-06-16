@@ -103,7 +103,7 @@ export default class CreateModReview extends Component {
           <Form.Control
             type="text"
             as="textarea"
-            rows="5"
+            rows="16"
             placeholder="Content"
             className="form-control"
             value={this.state.post_content}

@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import moduleList from "./ModuleList.js";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 export default class EditModReview extends Component {
   constructor(props) {
@@ -82,7 +84,11 @@ export default class EditModReview extends Component {
       <div style={{ marginTop: 10 }}>
         <h3>Edit Post</h3>
         <form onSubmit={this.onSubmit}>
-          <Form.Group>
+          <Form.Group as={Row}>
+          <Form.Label column sm={1}>
+      Title
+    </Form.Label>
+    <Col sm={11}>
             <Form.Control
               type="text"
               placeholder="Title"
@@ -91,9 +97,13 @@ export default class EditModReview extends Component {
               onChange={this.onChangeTitle}
               required
             />
+            </Col>
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Module: </Form.Label>
+          <Form.Group as={Row}>
+          <Form.Label column sm={1}>
+          Module
+          </Form.Label>
+    <Col sm={11}>
             <Form.Control
               as="select"
               className="form-control"
@@ -107,12 +117,13 @@ export default class EditModReview extends Component {
                 </option>
               ))}
             </Form.Control>
+            </Col>
           </Form.Group>
           <Form.Group>
             <Form.Control
               type="text"
               as="textarea"
-              rows="5"
+              rows="16"
               placeholder="Content"
               className="form-control"
               value={this.state.post_content}

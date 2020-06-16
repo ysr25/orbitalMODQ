@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import moduleList from "./ModuleList.js";
+import Col from "react-bootstrap/Col";
 
 export default class Registration extends Component {
   constructor(props) {
@@ -97,9 +98,15 @@ export default class Registration extends Component {
             defaultValue="datePosted"
             onChange={this.changeSort}
           >
-            <ToggleButton value="datePosted">Date posted</ToggleButton>
-            <ToggleButton value="dateEdited">Date edited</ToggleButton>
-            <ToggleButton value="upvotes">Upvotes</ToggleButton>
+            <ToggleButton variant="outline-info" value="datePosted">
+              Date posted
+            </ToggleButton>
+            <ToggleButton variant="outline-info" value="dateEdited">
+              Date edited
+            </ToggleButton>
+            <ToggleButton variant="outline-info" value="upvotes">
+              Upvotes
+            </ToggleButton>
           </ToggleButtonGroup>{" "}
           <ToggleButtonGroup
             type="radio"
@@ -107,8 +114,12 @@ export default class Registration extends Component {
             defaultValue={1}
             onChange={this.changeDirection}
           >
-            <ToggleButton value={-1}>Ascending</ToggleButton>
-            <ToggleButton value={1}>Descending</ToggleButton>
+            <ToggleButton variant="outline-info" value={-1}>
+              Ascending
+            </ToggleButton>
+            <ToggleButton variant="outline-info" value={1}>
+              Descending
+            </ToggleButton>
           </ToggleButtonGroup>
           <br />
           <br />
@@ -119,7 +130,7 @@ export default class Registration extends Component {
             onChange={this.changeFilter}
           >
             <option key="all" value="">
-              All modules
+              Find with module code
             </option>
             {moduleList.map((module) => (
               <option
@@ -129,15 +140,25 @@ export default class Registration extends Component {
             ))}
           </Form.Control>
           <br />
-          <Form inline onSubmit={this.submitSearch}>
-            <Form.Control
-              value={this.state.search}
-              onChange={this.changeSearch}
-              required
-              placeholder="Search reviews"
-            />
-            <Button type="submit">Search</Button>
-            <Button onClick={this.reset}>Reset</Button>
+          <Form onSubmit={this.submitSearch}>
+            <Form.Row>
+            <Col>
+              <Form.Control
+                value={this.state.search}
+                onChange={this.changeSearch}
+                required
+                placeholder="Search reviews"
+              />
+              </Col>
+              <Col>
+                <Button variant="info" type="submit">
+                  Search
+                </Button> {''}
+                <Button variant="info" onClick={this.reset}>
+                  Reset
+                </Button>
+              </Col>
+            </Form.Row>
           </Form>
         </div>
         <br />
