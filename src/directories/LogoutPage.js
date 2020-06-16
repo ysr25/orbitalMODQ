@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import App from "../App";
 
 export default class LoginPage extends Component {
     constructor(props) {
@@ -17,14 +16,8 @@ export default class LoginPage extends Component {
             user_password: '',
             isButtonDisabled: false,
             buttonVariant: 'primary',
-            loginStatus:'Log In',
-            loggedIn: false
+            loginStatus:'Log In'
         }
-    }
-
-    updateGlobalLoginStatus(e) {
-        // App.updateLoginStatus(e);
-        console.log(e)
     }
 
     onChangeUsername(e) {
@@ -50,17 +43,14 @@ export default class LoginPage extends Component {
         axios.post('http://localhost:3001/users/login', userLogIn, {withCredentials: true})
             .then(res => console.log(res.data))
             .then(res => this.props.login())
-            .then(this.updateGlobalLoginStatus(true))
             .then(res => this.props.history.push('/'))
             .catch(err => console.log(err));
-
             
         this.setState({
             isButtonDisabled: true,
             buttonVariant: 'dark',
-            loginStatus:'Logging In...'
+            loginStatus:'Logging in...'
         });
-        
     }
 
     render() {
@@ -91,11 +81,10 @@ export default class LoginPage extends Component {
                 <div className="form-group">
                 <Button 
                         type="submit" 
-                        className="btn btn-primary"
+                        className="btn btn-primary" 
                         disabled={this.state.isButtonDisabled}
                         variant={this.state.buttonVariant}>
                             {this.state.loginStatus}
-                        
                         </Button>
                 </div>
             </form>

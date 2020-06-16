@@ -13,13 +13,19 @@ import UserPage from "./directories/UserPage";
 
 import logo from "./logo.jpg";
 
+function updateLoginStatus(loggedIn) {
+  this.setState({loggedIn});
+}
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedIn: false
-        }
-    }
+  constructor(props) {
+      super(props);
+      this.state = {
+          loggedIn: false
+      }
+      updateLoginStatus = updateLoginStatus.bind(this);
+  }
+
+
 
   render() {
     return (

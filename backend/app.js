@@ -4,7 +4,6 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
 const User = require("./src/models/UserModel");
 
@@ -36,31 +35,6 @@ app.use(passport.session());
 passport.serializeUser((user, done) => {
     done(null, user._id);
 });
-
-passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-        if (err) {
-            return done(err);
-        } else {
-            done(null, user);
-        }
-    });
-});
-
-passport.use(new LocalStrategy((username, password, done) => {
-    User
-    .findOne({ username: username })
-    .then(user => {
-        if (!user) { 
-            return done(null, false, {message: 'No user with entered username found, please create an account.'});
-        } else if (!user.validPassword(password)) {
-            return done(null, false, {message: 'Incorrect password, please try again.'});
-        } else {
-            return done(null, user);
-        }
-    })
-    .catch(err => done(err));
-}));
 
 // Routes for handling requests (for endpoints)
 const corsOptions = {

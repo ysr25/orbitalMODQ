@@ -91,10 +91,25 @@ export default class Registration extends Component {
 
         console.log('New User successfully created: ' + newUser);
         
+        this.setState({
+            isButtonDisabled: true,
+            buttonVariant: 'dark',
+            regStatus: 'Registration Successful'
+        })
+
+        const userLogIn = {
+            username: this.state.user_username,
+            password: this.state.user_password
+        }
+
         axios.post('http://localhost:3001/users/signup', newUser)
             .then(res => console.log(res.data))
-            .catch(err => console.log(err));
-
+            // .then(axios.post('http://localhost:3001/users/login', userLogIn, {withCredentials: true})
+            //     .then(res => console.log(res.data))
+            //     .then(res => this.props.login())
+            .then(res => this.props.history.push('/'))
+            .catch(err => console.log(err))
+    }
 //        this.setState({
 //            user_firstName: '',
 //            user_lastName: '',
@@ -105,13 +120,6 @@ export default class Registration extends Component {
 //            user_password: '',
 //            registered: true
 //       })
-        this.setState({
-            isButtonDisabled: true,
-            buttonVariant: 'dark',
-            regStatus: 'Registration Successful'
-        })
-
-    }
 
     render() {
         return (
