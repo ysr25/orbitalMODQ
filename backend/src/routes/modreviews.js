@@ -2,6 +2,27 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const ModReview = require('../models/ModReviewModel');
+const passport = require('passport');
+const LocalStrategy = require("passport-local").Strategy;
+const AnonymousStrategy = require('passport-anonymous').Strategy;
+const User = require("../models/UserModel");
+
+passport.use(new LocalStrategy((username, password, done) => {
+  User
+  .findOne({ username: username })
+  .then(user => {
+      if (!user) { 
+          return done(null, false, {message: 'No user with entered username found, please create an account.'});
+      } else if (!user.validPassword(password)) {
+          return done(null, false, {message: 'Incorrect password, please try again.'});
+      } else {
+          return done(null, user);
+      }
+  })
+  .catch(err => done(err));
+}));
+
+passport.use(new AnonymousStrategy());
 
 // GET Request for ALL mod reviews
 router.get("/view/all", (req, res, next) => {
@@ -22,7 +43,7 @@ router.get('/view/:modReviewId', (req, res, next) => {
 });
 
 // Post Request (MUST ADD USER AUTHENTICATION)
-router.post("/newpost", (req, res, next) => {
+router.post("/newpost", passport.authenticate(['local', 'anonymous']), (req, res, next) => {
  console.log("Handling POST request for mod review");
  ModReview.create({
     _id: new mongoose.Types.ObjectId(),

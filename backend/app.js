@@ -36,6 +36,17 @@ passport.serializeUser((user, done) => {
     done(null, user._id);
 });
 
+
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+        if (err) {
+            return done(err);
+        } else {
+            done(null, user);
+        }
+    });
+});
+
 // Routes for handling requests (for endpoints)
 const corsOptions = {
     origin: "http://localhost:3000",

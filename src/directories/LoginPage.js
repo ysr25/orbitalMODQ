@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import App from "../App";
+import {Redirect} from 'react-router-dom'
 
 export default class LoginPage extends Component {
     constructor(props) {
@@ -18,7 +18,8 @@ export default class LoginPage extends Component {
             isButtonDisabled: false,
             buttonVariant: 'primary',
             loginStatus:'Log In',
-            loggedIn: false
+            loggedIn: false,
+            redirectTo: null
         }
     }
 
@@ -48,10 +49,18 @@ export default class LoginPage extends Component {
         }
                 
         axios.post('http://localhost:3001/users/login', userLogIn, {withCredentials: true})
-            .then(res => console.log(res.data))
-            .then(res => this.props.login())
-            .then(this.updateGlobalLoginStatus(true))
-            .then(res => this.props.history.push('/'))
+            .then(res =>  {
+                console.log(res.data);
+                this.props.login();
+                if(res.status === 200) {
+                    this.props.updateGlobalLoginStatus({
+                        loggedIn: true
+                    })
+                    this.setState({
+                        redirectTo: '/'
+                    })
+                }
+            })
             .catch(err => console.log(err));
 
             
@@ -64,42 +73,46 @@ export default class LoginPage extends Component {
     }
 
     render() {
-        return (
-            <div style={{marginTop: 10}}>
-            <div>
-                <h3>Log in to existing account</h3>
-                <p className="grey-text text-darken-1">
-                    <em>Don't have an account? </em>
-                    <Link to="/users/signup">Register</Link>
-                </p>
-            </div>
-            <form onSubmit={this.onSubmit}>
-                <input  type="text"
-                    placeholder="Username"
-                    className="form-control"
-                    value={this.state.user_username}
-                    onChange={this.onChangeUsername}
-                />
-                <br></br>
-                <input  type="password"
-                    placeholder="Password"
-                    className="form-control"
-                    value={this.state.user_password}
-                    onChange={this.onChangePassword}
-                />
-                <br />
-                <div className="form-group">
-                <Button 
-                        type="submit" 
-                        className="btn btn-primary"
-                        disabled={this.state.isButtonDisabled}
-                        variant={this.state.buttonVariant}>
-                            {this.state.loginStatus}
-                        
-                        </Button>
+        if(this.state.redirectTo) {
+            return <Redirect to= {{ pathname: this.state.redirecTo}} />
+            } else {
+            return (
+                <div style={{marginTop: 10}}>
+                <div>
+                    <h3>Log in to existing account</h3>
+                    <p className="grey-text text-darken-1">
+                        <em>Don't have an account? </em>
+                        <Link to="/users/signup">Register</Link>
+                    </p>
                 </div>
-            </form>
-            </div>
-        )
+                <form onSubmit={this.onSubmit}>
+                    <input  type="text"
+                        placeholder="Username"
+                        className="form-control"
+                        value={this.state.user_username}
+                        onChange={this.onChangeUsername}
+                    />
+                    <br></br>
+                    <input  type="password"
+                        placeholder="Password"
+                        className="form-control"
+                        value={this.state.user_password}
+                        onChange={this.onChangePassword}
+                    />
+                    <br />
+                    <div className="form-group">
+                    <Button 
+                            type="submit" 
+                            className="btn btn-primary"
+                            disabled={this.state.isButtonDisabled}
+                            variant={this.state.buttonVariant}>
+                                {this.state.loginStatus}
+                            
+                            </Button>
+                    </div>
+                </form>
+                </div>
+            )
+        }
     }
 }
