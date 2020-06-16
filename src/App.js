@@ -22,10 +22,11 @@ class App extends Component {
       this.state = {
           loggedIn: false
       }
-      updateLoginStatus = updateLoginStatus.bind(this);
   }
 
-
+  updateLoginStatus = (status) => {
+     this.setState({loggedIn: status});
+  }
 
   render() {
     return (
@@ -62,9 +63,9 @@ class App extends Component {
         <Route path="/modreviews/edit/:id" component={EditModReview} />
         <Route path="/modreviews/view/:id" component={ViewPost} />
         <Route path="/users/signup" component={Registration} />
-        <Route path="/users/login" render={props => <LoginPage {...props} login={this.checkLoggedIn} />} />
+        <Route path="/users/login" render={props => <LoginPage {...props} login={this.updateLoginStatus} />} />
         {/*still accessible by typing in the url even when not logged in*/}
-        <Route path="/users/profile" render={props => <UserPage {...props} logout={this.checkLoggedIn} />} />
+        <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateLoginStatus} />} />
         </div>
       </Router>
     );
