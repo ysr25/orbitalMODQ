@@ -31,11 +31,7 @@ let modReviewSchema = new Schema({
     type: String, 
     required: true,
     enum: moduleList
-  },
-  votes: {
-    type: Number, 
-    default: 0
   }
 });
-
+modReviewSchema.index({title: 'text', content: 'text'});
 module.exports = mongoose.model('ModReview', modReviewSchema);
