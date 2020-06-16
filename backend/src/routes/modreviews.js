@@ -55,9 +55,12 @@ router.delete("/delete/:modReviewId", (req, res, next) => {
     .catch((err) => res.status(400).json("Error: " + err))
 });
 
-// upvote or downvote
-router.patch("/vote/:modReviewId", (req, res, next) => {
-  //tbd
+// search for post
+router.get("/search", (req, res, next) => {
+  ModReview.find({$text: {$search: req.query.q}})
+    .populate('author')
+    .then((modreviews) => res.json(modreviews))
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
 module.exports = router;
