@@ -1,37 +1,37 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const moduleList = require('./ModuleList');
+const moduleList = require("./ModuleList");
 
 let modReviewSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: "User",
+    required: true,
   },
   datePosted: {
-    type: Date, 
-    default: Date.now
+    type: Date,
+    default: Date.now,
   },
   dateEdited: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   title: {
-    type: String, 
+    type: String,
     required: true,
     trim: true,
-    maxlength: 100
+    maxlength: 100,
   },
   content: {
-    type: String, 
+    type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   moduleCode: {
-    type: String, 
+    type: String,
     required: true,
-    enum: moduleList
-  }
+    enum: moduleList,
+  },
 });
-modReviewSchema.index({title: 'text', content: 'text'});
-module.exports = mongoose.model('ModReview', modReviewSchema);
+modReviewSchema.index({ title: "text", content: "text" });
+module.exports = mongoose.model("ModReview", modReviewSchema);

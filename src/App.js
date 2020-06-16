@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Homepage from "./directories/Homepage";
@@ -10,23 +10,47 @@ import Registration from "./directories/Registration";
 import LoginPage from "./directories/LoginPage";
 import ViewPost from "./directories/ViewPost";
 import UserPage from "./directories/UserPage";
-
+import Navbar from "./components/Navbar";
 import logo from "./logo.jpg";
 
-function updateLoginStatus(loggedIn) {
-  this.setState({loggedIn});
-}
 class App extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-          loggedIn: false,
-          username: null
-      }
+  constructor() {
+    super();
+    this.state = {
+      loggedIn: false,
+    };
+
+    this.getUser = this.getUser.bind(this);
+    this.componentDidMount = this.componentDidMount(this);
+    this.updateUser = this.updateUser.bind(this);
   }
 
-  updateLoginStatus = (status) => {
-     this.setState({loggedIn: status});
+  componentDidMount() {
+    this.getUser();
+  }
+
+  updateUser(user) {
+    this.setState(user);
+  }
+
+  getUser() {
+    axios.get("/user").then((response) => {
+      console.log("Get user response: ");
+      console.log(response.data);
+      if (response.data.user) {
+        console.log("Get User: There is a user saved in the server session: ");
+
+        this.setState({
+          loggedIn: true,
+          username: response.data.user.username,
+        });
+      } else {
+        console.log("Get user: no user");
+        this.setState({
+          loggedIn: false,
+        });
+      }
+    });
   }
 
   render() {
@@ -38,35 +62,23 @@ class App extends Component {
               <img src={logo} width="50" height="50" alt="MODQ Logo" />
               MODQ
             </Link>
-            <div className="collpase navbar-collapse">
-              <ul className="navbar-nav mr-auto">
-                <li className="navbar-item">
-                  <Link to="/" className="nav-link">Home</Link>
-                </li>
-                <li className="navbar-item">
-                  <Link to="/modreviews/newpost" className="nav-link">Create A Post</Link>
-                </li>
-                <li className="navbar-item">
-                  <Link to="/users/signup" className="nav-link">Register</Link>
-                </li>
-                <li className="navbar-item">
-                  {this.state.loggedIn
-                    ? <Link to="/users/profile" className="nav-link">Profile</Link>
-                    : <Link to="/users/login" className="nav-link">Log In</Link>
-                  }
-                </li>
-              </ul>
-            </div>
+            <Navbar
+              updateUser={this.updateUser}
+              loggedIn={this.state.loggedIn}
+            />
           </nav>
-          <br/>
-        <Route path="/" exact component={Homepage} />
-        <Route path="/modreviews/newpost" component={CreateModReview} />
-        <Route path="/modreviews/edit/:id" component={EditModReview} />
-        <Route path="/modreviews/view/:id" component={ViewPost} />
-        <Route path="/users/signup" component={Registration} />
-        <Route path="/users/login" render={props => <LoginPage {...props} login={this.updateLoginStatus} />} />
-        {/*still accessible by typing in the url even when not logged in*/}
-        <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateLoginStatus} />} />
+          <br />
+          <Route exact path="/" component={Homepage} />
+          <Route path="/modreviews/newpost" component={CreateModReview} />
+          <Route path="/modreviews/edit/:id" component={EditModReview} />
+          <Route path="/modreviews/view/:id" component={ViewPost} />
+          <Route path="/users/signup" render={() => <Registration />} />
+          <Route
+            path="/users/login"
+            render={() => <LoginPage updateUser={this.updateUser} />}
+          />
+          {/*still accessible by typing in the url even when not logged in*/}
+          {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateLoginStatus} />} /> */}
         </div>
       </Router>
     );

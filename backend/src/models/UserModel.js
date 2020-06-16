@@ -1,11 +1,14 @@
-const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
+const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const yearOfStudyOptions = ["matriculatingSoon", 
+const yearOfStudyOptions = [
+  "matriculatingSoon",
   "undergrad",
-  "masters", 
-  "doctorate", "others"]
+  "masters",
+  "doctorate",
+  "others",
+];
 
 let UserSchema = new Schema(
   {
@@ -20,7 +23,7 @@ let UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     course: {
       type: String,
@@ -43,16 +46,16 @@ let UserSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true
-    }
+      unique: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-UserSchema.methods.validPassword = function(password) {
+UserSchema.methods.validPassword = function (password) {
   return bcrypt.compare(password, this.password);
-}
+};
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);
