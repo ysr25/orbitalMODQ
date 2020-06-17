@@ -20,6 +20,7 @@ export default class LoginPage extends Component {
       loginStatus: "Log In",
       loggedIn: false,
       redirectTo: null,
+      loginError: null
     };
   }
 
@@ -62,7 +63,15 @@ export default class LoginPage extends Component {
           });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+        this.setState({
+          loginError: "Please try again. The account does not exist, or wrong account info entered.",
+          buttonVariant: "primary",
+          loginStatus: "Log In",
+          isButtonDisabled: false
+        })
+      });
   }
 
   render() {
@@ -104,6 +113,7 @@ export default class LoginPage extends Component {
               >
                 {this.state.loginStatus}
               </Button>
+              <p>{this.state.loginError}</p>
             </div>
           </form>
         </div>

@@ -30,6 +30,19 @@ passport.use(
 
 passport.use(new AnonymousStrategy());
 
+
+const loggedInOnly = (req, res, next) => {
+  console.log("checking if logged in");
+  if (req.isAuthenticated()) next();
+  else res.json({msg: "you need to be logged in to do this"});
+};
+
+const loggedOutOnly = (req, res, next) => {
+  console.log("checking if logged out");
+  if (req.isUnauthenticated()) next();
+  else res.json({msg: "you need to be logged out to do this"});
+};
+
 // GET Request for ALL mod reviews
 router.get("/view/all", (req, res, next) => {
   console.log("Handling GET request for ALL mod reviews");
@@ -68,7 +81,7 @@ router.post(
 );
 
 // UPDATE Request (MUST ADD USER AUTHENTICATION)
-router.patch("/edit/:modReviewId", passport.authenticate(["local"]),
+router.patch("/edit/:modReviewId", loggedInOnly,
 (req, res, next) => {
   console.log("Handling PATCH request for mod review");
   const updateOps = { dateEdited: Date.now() };
@@ -81,7 +94,7 @@ router.patch("/edit/:modReviewId", passport.authenticate(["local"]),
 });
 
 // DELETE Request (MUST ADD USER AUTHENTICATION)
-router.delete("/delete/:modReviewId", (req, res, next) => {
+router.delete("/delete/:modReviewId", loggedInOnly, (req, res, next) => {
   console.log("Handling DELETE request for specific mod reviews");
   ModReview.findByIdAndDelete(req.params.modReviewId)
     .then((modReview) => res.json("module review deleted: " + modReview))

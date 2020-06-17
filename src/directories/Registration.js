@@ -29,6 +29,7 @@ export default class Registration extends Component {
       isButtonDisabled: false,
       buttonVariant: "primary",
       regStatus: "Create Account",
+      errorMessage:null
     };
   }
 
@@ -93,7 +94,7 @@ export default class Registration extends Component {
     this.setState({
       isButtonDisabled: true,
       buttonVariant: "dark",
-      regStatus: "Registration Successful",
+      regStatus: "Creating Account...",
     });
 
     axios
@@ -112,7 +113,15 @@ export default class Registration extends Component {
           console.log("username taken");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          errorMessage: "Username has been taken, please use a different username.",
+          isButtonDisabled: false,
+          buttonVariant: "primary",
+          regStatus: "Create Account",
+        })
+      });
   }
   //        this.setState({
   //            user_firstName: '',
@@ -226,6 +235,7 @@ export default class Registration extends Component {
               >
                 {this.state.regStatus}
               </Button>
+              <p>{this.state.errorMessage}</p>
             </div>
           </form>
         </div>

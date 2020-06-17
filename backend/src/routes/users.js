@@ -8,7 +8,7 @@ const User = require("../models/UserModel");
 const saltRounds = 12; // default value used
 
 passport.use(
-  new LocalStrategy((username, password, done) => {
+  new LocalStrategy((username, password, done, res) => {
     User.findOne({ username: username })
       .then((user) => {
         if (!user) {
@@ -64,11 +64,6 @@ router.get("/:userId", (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => res.json(user))
     .catch((err) => res.status(400).json("Error: " + err));
-});
-
-// Register View
-router.get("/signup", loggedOutOnly, (req, res) => {
-  res.render("signup");
 });
 
 // POST Request, creating new user

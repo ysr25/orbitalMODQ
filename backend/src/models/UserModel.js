@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
+const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;
 
 const yearOfStudyOptions = [
@@ -18,12 +19,13 @@ let UserSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
-      minlength: 5,
+      //minlength: 5,
     },
     password: {
       type: String,
       required: true,
       trim: true,
+     // minlength: 6
     },
     course: {
       type: String,
@@ -58,4 +60,5 @@ UserSchema.methods.validPassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
+UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model("User", UserSchema);
