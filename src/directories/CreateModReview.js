@@ -17,6 +17,7 @@ export default class CreateModReview extends Component {
       isButtonDisabled: false,
       buttonVariant: "primary",
       post_id: "",
+      postStatus: null
     };
   }
 
@@ -58,12 +59,20 @@ export default class CreateModReview extends Component {
       .then((res) => {
         console.log(res.data);
         console.log(res);
+        this.setState({
+          postStatus: "Successfully Posted"
+        });
         if(res.status === 200) {
           this.props.history.push(`/modreviews/view/${res.data}`);
         }
       })
       //.then((res) => this.props.history.push("/modReviews/newpost/success"))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          postStatus: "Unable to create new post, please log in or register.\nNote: Post will not be saved.",
+        })
+      });
 
     this.setState({
       isButtonDisabled: true,
@@ -121,6 +130,7 @@ export default class CreateModReview extends Component {
             >
               Submit Post
             </Button>
+            <p>{this.state.postStatus}</p>
             {/* <Route
               path="/modReviews/newpost/success"
               render={() => <ViewNewPost post_id={this.getPostId} />}
