@@ -79,12 +79,15 @@ export default class Registration extends Component {
   reset = () => {
     axios
       .get("http://localhost:3001/modReviews/view/all")
-      .then((res) =>
+      .then((res) => {
         this.setState({
           post_list: res.data,
           search: "",
-        })
-      )
+          sort_property: "datePosted",
+          sort_direction: 1,
+          filter_moduleCode: "",
+        });
+      })
       .catch((err) => console.log(err));
   };
 
@@ -97,6 +100,7 @@ export default class Registration extends Component {
             name="sort_by"
             defaultValue="datePosted"
             onChange={this.changeSort}
+            value={this.state.sort_property}
           >
             <ToggleButton variant="outline-info" value="datePosted">
               Date posted
@@ -113,12 +117,13 @@ export default class Registration extends Component {
             name="sort_by"
             defaultValue={1}
             onChange={this.changeDirection}
+            value={this.state.sort_direction}
           >
             <ToggleButton variant="outline-info" value={-1}>
-              Ascending
+              Oldest to Latest Post
             </ToggleButton>
             <ToggleButton variant="outline-info" value={1}>
-              Descending
+              Latest to Oldest Post
             </ToggleButton>
           </ToggleButtonGroup>
           <br />
