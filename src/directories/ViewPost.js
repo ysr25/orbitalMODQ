@@ -2,11 +2,12 @@ import axios from "axios";
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
 
 export default class Registration extends Component {
   constructor(props) {
     super(props);
-
+  
     this.state = {
       post_id: props.match.params.id,
       post_title: "",
@@ -16,7 +17,9 @@ export default class Registration extends Component {
       post_author: "",
       post_date: "",
       post_editedDate: "",
+      originalPoster: null
     };
+
   }
 
   componentDidMount = () => {
@@ -34,9 +37,35 @@ export default class Registration extends Component {
         })
       )
       .catch((err) => console.log(err));
+
+      console.log("checking if original poster");
+      axios
+        .get(
+          `http://localhost:3001/modReviews/checkPoster/${this.state.post_id}`, 
+          {withCredentials: true}
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              originalPoster: true
+            })
+          } else {
+            this.setState({
+              originalPoster: false
+            })
+          }
+        })
+        .catch((error) => {
+          console.log("Not original poster");
+          this.setState({
+            originalPoster: false
+          })
+        });
   };
 
   render() {
+    const originalPoster = this.state.originalPoster;
+    
     return (
       <div style={{ marginTop: 10 }}>
         <h6>Post #{this.state.post_id}</h6>
@@ -63,19 +92,27 @@ export default class Registration extends Component {
           <br />
           {this.state.post_content}
         </Form.Group>
-        <br />
-        <Button
+        <Form.Row>
+        <Col>
+        {originalPoster ? (
+          <Button
           type="button"
           variant="outline-primary"
+          size="sm"
           href={`/modreviews/edit/${this.state.post_id}`}
         >
           Edit
-        </Button>
-        <br />
-        <br />
+        </Button>): (
+          <></>
+        )} {''}
         <Button type="button" variant="outline-secondary" size="sm" href={`/`}>
           Return to Homepage
-        </Button>{" "}
+        </Button>
+        </Col>
+        </Form.Row>
+        <br />
+        <br />
+        <br />
       </div>
     );
   }

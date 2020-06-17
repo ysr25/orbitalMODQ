@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 export default class LoginPage extends Component {
   constructor() {
     super();
-
+    
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);

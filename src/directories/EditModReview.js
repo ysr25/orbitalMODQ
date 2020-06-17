@@ -62,7 +62,7 @@ export default class EditModReview extends Component {
     axios
       .patch(
         `http://localhost:3001/modReviews/edit/${this.state.post_id}`,
-        newPost
+        newPost, {withCredentials: true}
       )
       .then((res) => console.log(res.data))
       .then((res) =>
