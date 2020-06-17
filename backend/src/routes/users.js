@@ -28,9 +28,16 @@ passport.use(
   })
 );
 
+const loggedInOnly = (req, res, next) => {
+  console.log("checking if logged in");
+  if (req.isAuthenticated()) next();
+  else res.json({msg: "you need to be logged in to do this"});
+};
+
 const loggedOutOnly = (req, res, next) => {
+  console.log("checking if logged out");
   if (req.isUnauthenticated()) next();
-  else res.redirect("/");
+  else res.json({msg: "you need to be logged out to do this"});
 };
 
 // // GET Request -- For admin
@@ -42,6 +49,7 @@ const loggedOutOnly = (req, res, next) => {
 // });
 
 router.get('/', (req, res, next) => {
+  console.log("GET request to /")
   console.log(req.user)
   if (req.user) {
       res.json({ user: req.user })
@@ -77,25 +85,25 @@ router.post("/signup", (req, res, next) => {
     password: hash,
     email: req.body.email,
   })
-    .then((user) =>
+    .then((user) => {
       req.login(user, (err) => {
-        if (err) next(err);
-        else res.redirect("/");
-      })
-    )
+        if (err) {
+          return next(err);
+        } else {
+          res.status(200).json({msg: "logged in"});
+        }
+      });
+    })
     .catch((err) => {
       if (err.name == "ValidationError") {
-        req.flash("Sorry, that username has been taken.");
-        res.redirect("/register");
+        res.json({msg: "Sorry, that username has been taken."});
       } else next(err);
     });
 });
 
 // POST Request, user sign in verification
-router.post(
-  "/login",
+router.post("/login", loggedOutOnly,
   passport.authenticate("local", {
-    failureRedirect: "/login",
     failureFlash: true,
   }),
   (req, res) => {
@@ -104,13 +112,10 @@ router.post(
 );
 
 // POST Request, user sign out verification
-router.post("/logout", (req, res, next) => {
-  if(req.user) {
-    req.logout();
-    res.send({msg: 'logging out'})
-  } else {
-    res.send({msg: 'no user to log out'})
-  }
+router.post("/logout", loggedInOnly, (req, res, next) => {
+  console.log("Handling POST request to /logout");
+  req.logout();
+  res.send({msg: 'logging out'})
 });
 
 // FOR ADMIN

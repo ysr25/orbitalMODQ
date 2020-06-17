@@ -54,12 +54,9 @@ export default class LoginPage extends Component {
         withCredentials: true,
       })
       .then((res) => {
-        console.log("OK");
         console.log(res.data);
         if (res.status === 200) {
-          this.props.updateUser({
-            loggedIn: true,
-          });
+          this.props.updateUser();
           this.setState({
             redirectTo: "/",
           });
@@ -70,7 +67,7 @@ export default class LoginPage extends Component {
 
   render() {
     if (this.state.redirectTo) {
-      return <Redirect to={{ pathname: this.state.redirecTo }} />;
+      return <Redirect to={{ pathname: this.state.redirectTo }} />;
     } else {
       return (
         <div style={{ marginTop: 10 }}>

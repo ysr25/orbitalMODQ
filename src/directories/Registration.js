@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export default class Registration extends Component {
   constructor(props) {
@@ -88,7 +88,7 @@ export default class Registration extends Component {
       password: this.state.user_password,
     };
 
-    console.log("New User successfully created: " + newUser);
+    console.log("New User successfully created (not submitted): " + newUser);
 
     this.setState({
       isButtonDisabled: true,
@@ -96,27 +96,22 @@ export default class Registration extends Component {
       regStatus: "Registration Successful",
     });
 
-    // const userLogIn = {
-    //   username: this.state.user_username,
-    //   password: this.state.user_password,
-    // };
-
     axios
-      .post("http://localhost:3001/users/signup", newUser)
+      .post("http://localhost:3001/users/signup", newUser, {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res.data);
         if (!res.data.errmsg) {
           console.log("successful signup");
+          this.props.updateUser();
           this.setState({
-            redirectTo: "/login",
+            redirectTo: "/",
           });
         } else {
           console.log("username taken");
         }
       })
-      // .then(axios.post('http://localhost:3001/users/login', userLogIn, {withCredentials: true})
-      //     .then(res => console.log(res.data))
-      //     .then(res => this.props.login())
       .catch((err) => console.log(err));
   }
   //        this.setState({
@@ -131,152 +126,110 @@ export default class Registration extends Component {
   //       })
 
   render() {
-    return (
-      <div style={{ marginTop: 10 }}>
-        <div>
-          <h3>Create An Account</h3>
-          <p className="grey-text text-darken-1">
-            <em>Already have an account? </em>
-            <Link to="/users/login">Log in to an existing account</Link>
-          </p>
+    if (this.state.redirectTo) {
+      return <Redirect to={{ pathname: this.state.redirectTo }} />;
+    } else {
+      return (
+        <div style={{ marginTop: 10 }}>
+          <div>
+            <h3>Create An Account</h3>
+            <p className="grey-text text-darken-1">
+              <em>Already have an account? </em>
+              <Link to="/users/login">Log in to an existing account</Link>
+            </p>
+          </div>
+          <form onSubmit={this.onSubmit}>
+            <Form.Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="First Name"
+                  className="form-control"
+                  value={this.state.user_firstName}
+                  onChange={this.onChangeFirstName}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Last Name"
+                  className="form-control"
+                  value={this.state.user_lastName}
+                  onChange={this.onChangeLastName}
+                />
+              </Col>
+            </Form.Row>
+            <br></br>
+            <Form.Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Email Address"
+                  className="form-control"
+                  value={this.state.user_email}
+                  onChange={this.onChangeEmail}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Course of Study"
+                  className="form-control"
+                  value={this.state.user_course}
+                  onChange={this.onChangeCourse}
+                />
+              </Col>
+            </Form.Row>
+            <br></br>
+            <div className="form-group">
+              <label>Year of Study: </label>
+              <select
+                required
+                className="form-control"
+                value={this.state.user_yearOfStudy}
+                onChange={this.onChangeYearOfStudy}
+              >
+                <option value="matriculatingSoon">Matriculating Soon</option>
+                <option value="undergrad">Undergrad</option>
+                <option value="masters">Masters</option>
+                <option value="doctorate">Doctorate</option>
+                <option value="others">Others</option>
+              </select>
+            </div>
+            <Form.Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Username"
+                  className="form-control"
+                  value={this.state.user_username}
+                  onChange={this.onChangeUsername}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  className="form-control"
+                  value={this.state.user_password}
+                  onChange={this.onChangePassword}
+                />
+              </Col>
+            </Form.Row>
+            <br></br>
+            <div className="form-group">
+              <Button
+                type="submit"
+                className="btn btn-primary"
+                disabled={this.state.isButtonDisabled}
+                variant={this.state.buttonVariant}
+              >
+                {this.state.regStatus}
+              </Button>
+            </div>
+          </form>
         </div>
-        <form onSubmit={this.onSubmit}>
-          <Form.Row>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="First Name"
-                className="form-control"
-                value={this.state.user_firstName}
-                onChange={this.onChangeFirstName}
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="Last Name"
-                className="form-control"
-                value={this.state.user_lastName}
-                onChange={this.onChangeLastName}
-              />
-            </Col>
-          </Form.Row>
-          <br></br>
-          <Form.Row>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="Email Address"
-                className="form-control"
-                value={this.state.user_email}
-                onChange={this.onChangeEmail}
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="Course of Study"
-                className="form-control"
-                value={this.state.user_course}
-                onChange={this.onChangeCourse}
-              />
-            </Col>
-          </Form.Row>
-          <br></br>
-          <div className="form-group">
-            <label>Year of Study: </label>
-            <select
-              required
-              className="form-control"
-              value={this.state.user_yearOfStudy}
-              onChange={this.onChangeYearOfStudy}
-            >
-              <option value="matriculatingSoon">Matriculating Soon</option>
-              <option value="undergrad">Undergrad</option>
-              <option value="masters">Masters</option>
-              <option value="doctorate">Doctorate</option>
-              <option value="others">Others</option>
-            </select>
-          </div>
-          <Form.Row>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="Username"
-                className="form-control"
-                value={this.state.user_username}
-                onChange={this.onChangeUsername}
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                className="form-control"
-                value={this.state.user_password}
-                onChange={this.onChangePassword}
-              />
-            </Col>
-          </Form.Row>
-          <br></br>
-          <div className="form-group">
-            <Button
-              type="submit"
-              className="btn btn-primary"
-              disabled={this.state.isButtonDisabled}
-              variant={this.state.buttonVariant}
-            >
-              {this.state.regStatus}
-            </Button>
-          </div>
-        </form>
-      </div>
-    );
+      );
+    }
   }
 }
-
-// export default class Registration extends Component {
-//     render() {
-//         return (
-//             <div style={{marginTop: 10}}>
-//                 <Form>
-//                     <Form.Group controlId="formSignUp">
-//                         <Form.Row>
-//                             <Col>
-//                                 <Form.Control placeholder="First name" />
-//                             </Col>
-//                             <Col>
-//                                 <Form.Control placeholder="Last name" />
-//                             </Col>
-//                         </Form.Row>
-//                             <br></br>
-//     <Form.Row>
-//         <Col>
-//             <Form.Control type="email" placeholder="Enter email" />
-//         </Col>
-//         <Col>
-//             <Form.Control placeholder="Course of Study" />
-//         </Col>
-// </Form.Row>
-//                         <br></br>
-//                             <DropdownButton id="yearOfStudy" title="Year of Study" variant="outline-secondary">
-//                                 <Dropdown.Item href="#/action-1">Matriculating Soon</Dropdown.Item>
-//                                 <Dropdown.Item href="#/action-2">Undergraduate</Dropdown.Item>
-//                                 <Dropdown.Item href="#/action-3">Masters</Dropdown.Item>
-//                                 <Dropdown.Item href="#/action-4">Doctorate</Dropdown.Item>
-//                                 <Dropdown.Item href="#/action-5">Others</Dropdown.Item>
-//                             </DropdownButton>
-//                         <br></br>
-//                         <Form.Row>
-//                                 <Col>
-//                                     <Form.Control placeholder="Username" />
-//                                 </Col>
-//                                 <Col>
-//                                     <Form.Control type="password" placeholder="Password" />
-//                                 </Col>
-//                         </Form.Row>
-//                     </Form.Group>
-//                 </Form>
-//             </div>
-//         )}
-// }

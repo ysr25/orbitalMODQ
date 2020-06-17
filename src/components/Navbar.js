@@ -13,13 +13,13 @@ class Navbar extends Component {
     event.preventDefault();
     console.log("logging out");
     axios
-      .post("http://localhost:3001/users/logout")
+      .post("http://localhost:3001/users/logout", {}, {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res.data);
         if (res.status === 200) {
-          this.props.updateUser({
-            loggedIn: false,
-          });
+          this.props.updateUser();
         }
       })
       .catch((error) => {
@@ -57,7 +57,7 @@ class Navbar extends Component {
               </li>
           )}
           {loggedIn ? (
-            <blank />
+            <></>
           ) : (
             <li className="navbar-item">
                 <Link to="/users/login" className="nav-link">

@@ -20,21 +20,17 @@ class App extends Component {
       loggedIn: false,
     };
 
-    this.getUser = this.getUser.bind(this);
-    this.componentDidMount = this.componentDidMount(this);
     this.updateUser = this.updateUser.bind(this);
   }
 
   componentDidMount() {
-    this.getUser();
+    this.updateUser();
   }
 
-  updateUser(user) {
-    this.setState(user);
-  }
-
-  getUser() {
-    axios.get("/users").then((response) => {
+  updateUser() {
+    axios.get("http://localhost:3001/users", {
+        withCredentials: true,
+      }).then((response) => {
       console.log("Get user response: ");
       console.log(response.data);
       if (response.data.user) {
@@ -48,7 +44,8 @@ class App extends Component {
           loggedIn: false,
         });
       }
-    });
+    })
+    .catch((err) => console.log(err));
   }
 
   render() {
@@ -70,7 +67,9 @@ class App extends Component {
           <Route path="/modreviews/newpost" component={CreateModReview} />
           <Route path="/modreviews/edit/:id" component={EditModReview} />
           <Route path="/modreviews/view/:id" component={ViewPost} />
-          <Route path="/users/signup" render={() => <Registration />} />
+          <Route 
+            path="/users/signup" 
+            render={() => <Registration updateUser={this.updateUser} />} />
           <Route
             path="/users/login"
             render={() => <LoginPage updateUser={this.updateUser} />}
