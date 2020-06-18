@@ -6,7 +6,6 @@ let modReviewSchema = new Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
   },
   datePosted: {
     type: Date,
@@ -32,6 +31,10 @@ let modReviewSchema = new Schema({
     required: true,
     enum: moduleList,
   },
+  anonymous: {
+    type: Boolean,
+    required: true,
+  }
 });
 modReviewSchema.index({ title: "text", content: "text" });
 module.exports = mongoose.model("ModReview", modReviewSchema);

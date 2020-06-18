@@ -31,7 +31,7 @@ export default class Registration extends Component {
           post_title: res.data.title,
           post_content: res.data.content,
           post_moduleCode: res.data.moduleCode,
-          post_author: res.data.author.username,
+          post_author: res.data.anonymous || !res.data.author ? "Anonymous" : res.data.author.username,
           post_date: res.data.datePosted,
           post_editedDate: res.data.dateEdited,
         })

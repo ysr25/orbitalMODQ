@@ -188,7 +188,7 @@ export default class Registration extends Component {
                 <Card.Body>
                   <Card.Text>{post.content}</Card.Text>
                   <Card.Text>
-                    <em>posted by {post.author ? post.author.username : "Anonymous"}</em>
+                    <em>posted by {post.anonymous || !post.author ? "Anonymous" : post.author.username}</em>
                     <br />
                     <em>
                       date posted {new Date(post.datePosted).toLocaleString()}

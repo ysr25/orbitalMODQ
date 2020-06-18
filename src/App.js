@@ -9,7 +9,7 @@ import EditModReview from "./directories/EditModReview";
 import Registration from "./directories/Registration";
 import LoginPage from "./directories/LoginPage";
 import ViewPost from "./directories/ViewPost";
-import UserPage from "./directories/UserPage";
+//import UserPage from "./directories/UserPage";
 import Navbar from "./components/Navbar";
 import logo from "./logo.jpg";
 
@@ -75,7 +75,7 @@ class App extends Component {
             render={() => <LoginPage updateUser={this.updateUser} />}
           />
           {/*still accessible by typing in the url even when not logged in*/}
-          {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateLoginStatus} />} /> */}
+          {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateUser} />} /> */}
         </div>
       </Router>
     );

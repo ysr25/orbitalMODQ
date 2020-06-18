@@ -33,21 +33,15 @@ export default class EditModReview extends Component {
   };
 
   onChangeTitle = (e) => {
-    this.setState({
-      post_title: e.target.value,
-    });
+    this.setState({ post_title: e.target.value });
   };
 
   onChangeContent = (e) => {
-    this.setState({
-      post_content: e.target.value,
-    });
+    this.setState({ post_content: e.target.value });
   };
 
   onChangeModuleCode = (e) => {
-    this.setState({
-      post_moduleCode: e.target.value,
-    });
+    this.setState({ post_moduleCode: e.target.value });
   };
 
   onSubmit = (e) => {
@@ -73,7 +67,7 @@ export default class EditModReview extends Component {
 
   onDelete = (e) => {
     axios
-      .delete(`http://localhost:3001/modReviews/delete/${this.state.post_id}`)
+      .delete(`http://localhost:3001/modReviews/delete/${this.state.post_id}`, {withCredentials: true})
       .then((res) => console.log(res.data))
       .then((res) => this.props.history.push("/"))
       .catch((err) => console.log(err));

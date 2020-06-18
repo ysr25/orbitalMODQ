@@ -60,20 +60,28 @@ router.get("/view/:modReviewId", (req, res, next) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// Post Request (MUST ADD USER AUTHENTICATION)
+// Post Request
 router.post(
   "/newpost",
   passport.authenticate(["local", "anonymous"]),
   (req, res, next) => {
     console.log("Handling POST request for mod review");
     let newPostId = new mongoose.Types.ObjectId();
-    ModReview.create({
+    let newPost = {
       _id: newPostId,
-      author: req.user._id,
       title: req.body.title,
       content: req.body.content,
       moduleCode: req.body.moduleCode,
-    })
+    };
+    if (req.user) {
+      newPost.author = req.user._id;
+      newPost.anonymous = req.body.anonymous;
+    } else if (req.body.anonymous) {
+      newPost.anonymous = true;
+    } else {
+      return res.status(400).send("Error: must log in to post unanonymously");
+    }
+    ModReview.create(newPost)
       .then(() => res.json(newPostId))
       .catch((err) => res.status(400).json("Error: " + err));
   }
@@ -124,12 +132,22 @@ router.patch(
 );
 
 // DELETE Request (MUST ADD USER AUTHENTICATION)
-router.delete("/delete/:modReviewId", loggedInOnly, (req, res, next) => {
-  console.log("Handling DELETE request for specific mod reviews");
-  ModReview.findByIdAndDelete(req.params.modReviewId)
-    .then((modReview) => res.json("module review deleted: " + modReview))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
+router.delete(
+  "/delete/:modReviewId", 
+  passport.authenticate(["local", "anonymous"]),
+  (req, res, next) => {
+    console.log("Handling DELETE request for specific mod reviews");
+    ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
+      if (String(modreview.author) === String(req.user._id)) {
+      ModReview.findByIdAndDelete(req.params.modReviewId)
+        .then((modReview) => res.json("module review deleted: " + modReview))
+        .catch((err) => res.status(400).json("Error: " + err));
+      } else {
+        console.log("Error deleting post");
+      }
+    });
+  }
+);
 
 // search for post
 router.get("/search", (req, res, next) => {

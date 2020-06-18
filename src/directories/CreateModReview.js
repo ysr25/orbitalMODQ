@@ -3,8 +3,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import moduleList from "./ModuleList.js";
-// import ViewNewPost from "./ViewNewPost";
-import { Route } from "react-router-dom";
 
 export default class CreateModReview extends Component {
   constructor(props) {
@@ -17,31 +15,26 @@ export default class CreateModReview extends Component {
       isButtonDisabled: false,
       buttonVariant: "primary",
       post_id: "",
+      post_anonymously: false,
       postStatus: null
     };
   }
 
   onChangeTitle = (e) => {
-    this.setState({
-      post_title: e.target.value,
-    });
+    this.setState({ post_title: e.target.value });
   };
 
   onChangeContent = (e) => {
-    this.setState({
-      post_content: e.target.value,
-    });
+    this.setState({ post_content: e.target.value });
   };
 
   onChangeModuleCode = (e) => {
-    this.setState({
-      post_moduleCode: e.target.value,
-    });
+    this.setState({ post_moduleCode: e.target.value });
   };
 
-  onNewPost = (e) => {
-    // axios.get()
-  }
+  onChangeAnonymous = (e) => {
+    this.setState(prevState => ({ post_anonymously: !prevState.post_anonymously }));
+  };
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -50,10 +43,11 @@ export default class CreateModReview extends Component {
       title: this.state.post_title,
       content: this.state.post_content,
       moduleCode: this.state.post_moduleCode,
+      anonymous: this.state.post_anonymously,
     };
 
     axios
-      .post("http://localhost:3001/modReviews/newpost", newPost, {
+      .post('http://localhost:3001/modReviews/newpost', newPost, {
         withCredentials: true,
       })
       .then((res) => {
@@ -66,11 +60,10 @@ export default class CreateModReview extends Component {
           this.props.history.push(`/modreviews/view/${res.data}`);
         }
       })
-      //.then((res) => this.props.history.push("/modReviews/newpost/success"))
       .catch((err) => {
         console.log(err);
         this.setState({
-          postStatus: "Unable to create new post, please log in or register.\nNote: Post will not be saved.",
+          postStatus: err.response.data,
         })
       });
 
@@ -84,22 +77,22 @@ export default class CreateModReview extends Component {
     return (
       <div style={{ marginTop: 10 }}>
         <h3>New Post</h3>
-        <Form.Label>Module: </Form.Label>
-        <Form.Control
-          as="select"
-          className="form-control"
-          value={this.state.post_moduleCode}
-          onChange={this.onChangeModuleCode}
-          required
-        >
-          {moduleList.map((module) => (
-            <option key={module.code} value={module.code}>
-              {module.code + ": " + module.title}
-            </option>
-          ))}
-        </Form.Control>
-        <br />
         <Form onSubmit={this.onSubmit}>
+          <Form.Label>Module: </Form.Label>
+          <Form.Control
+            as="select"
+            className="form-control"
+            value={this.state.post_moduleCode}
+            onChange={this.onChangeModuleCode}
+            required
+          >
+            {moduleList.map((module) => (
+              <option key={module.code} value={module.code}>
+                {module.code + ": " + module.title}
+              </option>
+            ))}
+          </Form.Control>
+          <br />
           <Form.Control
             type="text"
             placeholder="Title"
@@ -120,7 +113,14 @@ export default class CreateModReview extends Component {
             required
           />
           <br />
-
+          <Form.Check
+            type="checkbox"
+            id="postAnonymously"
+            label="Post anonymously"
+            checked={this.state.post_anonymously}
+            onChange={this.onChangeAnonymous}
+          />
+          <br />
           <div className="form-group">
             <Button
               type="submit"
@@ -131,10 +131,6 @@ export default class CreateModReview extends Component {
               Submit Post
             </Button>
             <p>{this.state.postStatus}</p>
-            {/* <Route
-              path="/modReviews/newpost/success"
-              render={() => <ViewNewPost post_id={this.getPostId} />}
-            /> */}
           </div>
         </Form>
       </div>
