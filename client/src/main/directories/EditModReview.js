@@ -20,7 +20,7 @@ export default class EditModReview extends Component {
 
   componentDidMount = () => {
     axios
-      .get(`http://localhost:3001/modReviews/view/${this.state.post_id}`)
+      .get(`/modReviews/view/${this.state.post_id}`)
       .then((res) =>
         this.setState({
           post_id: res.data.content._id,
@@ -55,7 +55,7 @@ export default class EditModReview extends Component {
 
     axios
       .patch(
-        `http://localhost:3001/modReviews/edit/${this.state.post_id}`,
+        `/modReviews/edit/${this.state.post_id}`,
         newPost, 
         { withCredentials: true },
       )
@@ -68,7 +68,7 @@ export default class EditModReview extends Component {
   onDelete = (e) => {
     axios
       .delete(
-        `http://localhost:3001/modReviews/delete/${this.state.post_id}`,
+        `/modReviews/delete/${this.state.post_id}`,
         { withCredentials: true }
       )
       .then((res) => console.log(res.data.content))

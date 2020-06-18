@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 export default class LoginPage extends Component {
   onClick = (e) => {
     axios
-      .post("http://localhost:3001/users/logout", {}, { withCredentials: true })
+      .post("/users/logout", {}, { withCredentials: true })
       .then((res) => console.log(res.data))
       .then((res) => this.props.logout())
       .then((res) => this.props.history.push("/"))

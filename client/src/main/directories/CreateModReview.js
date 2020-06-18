@@ -47,7 +47,7 @@ export default class CreateModReview extends Component {
     };
 
     axios
-      .post('http://localhost:3001/modReviews/newpost', newPost, {
+      .post('/modReviews/newpost', newPost, {
         withCredentials: true,
       })
       .then((res) => {

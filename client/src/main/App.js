@@ -28,7 +28,7 @@ class App extends Component {
   }
 
   updateUser() {
-    axios.get("http://localhost:3001/users", {
+    axios.get("/users", {
       withCredentials: true,
     })
     .then((response) => {

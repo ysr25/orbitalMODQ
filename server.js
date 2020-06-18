@@ -62,11 +62,12 @@ passport.deserializeUser((id, done) => {
 });
 
 // for restricting domain(?)
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: "http://localhost:3000",
+//   credentials: true,
+// };
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // Routes for handling requests (for endpoints)
@@ -76,25 +77,28 @@ app.use("/modReviews", modReviewRoutes);
 // for heroku deployment
 app.use(express.static(path.join(__dirname, "client", "build")));
 
+app.use(express.static(path.join(__dirname, "../build")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  res.sendFile(path.join(__dirname, "../build"));
 });
 
-app.listen(port);
-
-// Reaches this when no routes are found
-app.use((req, res, next) => {
-  const error = new Error("No endpoint (route) found");
-  error.status = 404;
-  next(error);
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
 
-// Reaches this when other parts of code throws error
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    error: {
-      message: error.message,
-    },
-  });
-});
+// // Reaches this when no routes are found
+// app.use((req, res, next) => {
+//   const error = new Error("No endpoint (route) found");
+//   error.status = 404;
+//   next(error);
+// });
+
+// // Reaches this when other parts of code throws error
+// app.use((error, req, res, next) => {
+//   res.status(error.status || 500);
+//   res.json({
+//     error: {
+//       message: error.message,
+//     },
+//   });
+// });
