@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
 const router = express.Router();
-const User = require("./src/models/UserModel");
+const User = require("./models/UserModel");
 
 require("dotenv").config();
 const app = express();
@@ -55,8 +55,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Assigning directory to respective var names
-const usersRoutes = require('./src/routes/users');
-const modReviewRoutes = require('./src/routes/modReviews');
+const usersRoutes = require('./routes/users');
+const modReviewRoutes = require('./routes/modReviews');
 
 app.use('/users', usersRoutes);
 app.use('/modReviews', modReviewRoutes);
