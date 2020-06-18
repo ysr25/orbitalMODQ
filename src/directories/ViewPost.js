@@ -25,17 +25,18 @@ export default class Registration extends Component {
   componentDidMount = () => {
     axios
       .get(`http://localhost:3001/modReviews/view/${this.state.post_id}`)
-      .then((res) =>
+      .then((res) => {
+        const post = res.data.content;
         this.setState({
-          post_id: res.data._id,
-          post_title: res.data.title,
-          post_content: res.data.content,
-          post_moduleCode: res.data.moduleCode,
-          post_author: res.data.anonymous || !res.data.author ? "Anonymous" : res.data.author.username,
-          post_date: res.data.datePosted,
-          post_editedDate: res.data.dateEdited,
+          post_id: post._id,
+          post_title: post.title,
+          post_content: post.content,
+          post_moduleCode: post.moduleCode,
+          post_author: post.anonymous || !post.author ? "Anonymous" : post.author.username,
+          post_date: post.datePosted,
+          post_editedDate: post.dateEdited,
         })
-      )
+      })
       .catch((err) => console.log(err));
 
       console.log("checking if original poster");
@@ -45,22 +46,9 @@ export default class Registration extends Component {
           {withCredentials: true}
         )
         .then((res) => {
-          if (res.status === 200) {
-            this.setState({
-              originalPoster: true
-            })
-          } else {
-            this.setState({
-              originalPoster: false
-            })
-          }
+          this.setState({ originalPoster: res.data.content })
         })
-        .catch((error) => {
-          console.log("Not original poster");
-          this.setState({
-            originalPoster: false
-          })
-        });
+        .catch((err) => console.log(err));
   };
 
   render() {

@@ -53,18 +53,12 @@ export default class CreateModReview extends Component {
       .then((res) => {
         console.log(res.data);
         console.log(res);
-        this.setState({
-          postStatus: "Successfully Posted"
-        });
-        if(res.status === 200) {
-          this.props.history.push(`/modreviews/view/${res.data}`);
-        }
+        this.setState({ postStatus: res.data.msg });
+        this.props.history.push(`/modreviews/view/${res.data.content}`);
       })
       .catch((err) => {
         console.log(err);
-        this.setState({
-          postStatus: err.response.data,
-        })
+        this.setState({ postStatus: err.response.data.msg })
       });
 
     this.setState({

@@ -29,20 +29,17 @@ class App extends Component {
 
   updateUser() {
     axios.get("http://localhost:3001/users", {
-        withCredentials: true,
-      }).then((response) => {
+      withCredentials: true,
+    })
+    .then((response) => {
       console.log("Get user response: ");
       console.log(response.data);
-      if (response.data.user) {
+      if (response.data.content) {
         console.log("Get User: There is a user saved in the server session: ");
-        this.setState({
-          loggedIn: true,
-        });
+        this.setState({ loggedIn: true });
       } else {
         console.log("Get user: no user");
-        this.setState({
-          loggedIn: false,
-        });
+        this.setState({ loggedIn: false });
       }
     })
     .catch((err) => console.log(err));

@@ -23,10 +23,10 @@ export default class EditModReview extends Component {
       .get(`http://localhost:3001/modReviews/view/${this.state.post_id}`)
       .then((res) =>
         this.setState({
-          post_id: res.data._id,
-          post_title: res.data.title,
-          post_content: res.data.content,
-          post_moduleCode: res.data.moduleCode,
+          post_id: res.data.content._id,
+          post_title: res.data.content.title,
+          post_content: res.data.content.content,
+          post_moduleCode: res.data.content.moduleCode,
         })
       )
       .catch((err) => console.log(err));
@@ -56,9 +56,9 @@ export default class EditModReview extends Component {
     axios
       .patch(
         `http://localhost:3001/modReviews/edit/${this.state.post_id}`,
-        newPost, {withCredentials: true}
+        newPost, 
+        { withCredentials: true },
       )
-      .then((res) => console.log(res.data))
       .then((res) =>
         this.props.history.push(`/modreviews/view/${this.state.post_id}`)
       )
@@ -67,8 +67,11 @@ export default class EditModReview extends Component {
 
   onDelete = (e) => {
     axios
-      .delete(`http://localhost:3001/modReviews/delete/${this.state.post_id}`, {withCredentials: true})
-      .then((res) => console.log(res.data))
+      .delete(
+        `http://localhost:3001/modReviews/delete/${this.state.post_id}`,
+        { withCredentials: true }
+      )
+      .then((res) => console.log(res.data.content))
       .then((res) => this.props.history.push("/"))
       .catch((err) => console.log(err));
   };

@@ -26,7 +26,7 @@ export default class Registration extends Component {
       .get("http://localhost:3001/modReviews/view/all")
       .then((res) =>
         this.setState({
-          post_list: res.data,
+          post_list: res.data.content,
         })
       )
       .catch((err) => console.log(err));
@@ -70,7 +70,7 @@ export default class Registration extends Component {
       })
       .then((res) =>
         this.setState({
-          post_list: res.data,
+          post_list: res.data.content,
         })
       )
       .catch((err) => console.log(err));
@@ -81,7 +81,7 @@ export default class Registration extends Component {
       .get("http://localhost:3001/modReviews/view/all")
       .then((res) => {
         this.setState({
-          post_list: res.data,
+          post_list: res.data.content,
           search: "",
           sort_property: "datePosted",
           sort_direction: 1,

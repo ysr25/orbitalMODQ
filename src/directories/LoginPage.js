@@ -51,22 +51,20 @@ export default class LoginPage extends Component {
     });
 
     axios
-      .post("http://localhost:3001/users/login", userLogIn, {
-        withCredentials: true,
-      })
+      .post(
+        "http://localhost:3001/users/login", 
+         userLogIn, 
+         { withCredentials: true }
+      )
       .then((res) => {
         console.log(res.data);
-        if (res.status === 200) {
-          this.props.updateUser();
-          this.setState({
-            redirectTo: "/",
-          });
-        }
+        this.props.updateUser();
+        this.setState({ redirectTo: "/" });
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         this.setState({
-          loginError: "Please try again. The account does not exist, or wrong account info entered.",
+          loginError: err.response.data.msg,
           buttonVariant: "primary",
           loginStatus: "Log In",
           isButtonDisabled: false

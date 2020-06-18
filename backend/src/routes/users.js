@@ -8,36 +8,42 @@ const User = require("../models/UserModel");
 const saltRounds = 12; // default value used
 
 passport.use(
-  new LocalStrategy((username, password, done, res) => {
+  new LocalStrategy((username, password, done) => {
     User.findOne({ username: username })
       .then((user) => {
         if (!user) {
           return done(null, false, {
-            message:
+            msg:
               "No user with entered username found, please create an account.",
           });
-        } else if (!user.validPassword(password)) {
-          return done(null, false, {
-            message: "Incorrect password, please try again.",
-          });
         } else {
-          return done(null, user);
+          bcrypt.compare(password, user.password)
+          .then(res => {
+            if (res) {
+              return done(null, user);
+            } else {
+              return done(null, false, {
+                msg: "Incorrect password, please try again.",
+              });
+            }
+          })
+          .catch(err => done(err));
         }
       })
-      .catch((err) => done(err));
+      .catch((err) => console.log(err));
   })
 );
 
 const loggedInOnly = (req, res, next) => {
   console.log("checking if logged in");
   if (req.isAuthenticated()) next();
-  else res.json({msg: "you need to be logged in to do this"});
+  else res.status(403).json({ msg: "You need to be logged in to do this." });
 };
 
 const loggedOutOnly = (req, res, next) => {
   console.log("checking if logged out");
   if (req.isUnauthenticated()) next();
-  else res.json({msg: "you need to be logged out to do this"});
+  else res.status(403).json({ msg: "You need to be logged out to do this." });
 };
 
 // // GET Request -- For admin
@@ -52,9 +58,9 @@ router.get('/', (req, res, next) => {
   console.log("GET request to /")
   console.log(req.user)
   if (req.user) {
-      res.json({ user: req.user })
+      res.status(200).json({ content: req.user })
   } else {
-      res.json({ user: null })
+      res.status(200).json({ content: null })
   }
 })
 
@@ -62,8 +68,8 @@ router.get('/', (req, res, next) => {
 router.get("/:userId", (req, res, next) => {
   console.log("Handling GET request for SPECIFIC user");
   User.findById(req.params.userId)
-    .then((user) => res.json(user))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((user) => res.status(200).json({ content: user }))
+    .catch((err) => res.status(400).json({ msg: err }));
 });
 
 // POST Request, creating new user
@@ -85,40 +91,52 @@ router.post("/signup", (req, res, next) => {
         if (err) {
           return next(err);
         } else {
-          res.status(200).json({msg: "logged in"});
+          res.status(200).json({ msg: "Logged in successfully." });
         }
       });
     })
     .catch((err) => {
-      if (err.name == "ValidationError") {
-        res.json({msg: "Sorry, that username has been taken."});
-      } else next(err);
+      if (err.name === "MongoError" && err.code === 11000) {
+        res.status(400).json({ msg: "Sorry, that username has been taken." });
+      } else {
+        //res.status(400).json({ msg: "Some other kind of error." });
+      }
     });
 });
 
 // POST Request, user sign in verification
-router.post("/login", loggedOutOnly,
-  passport.authenticate("local", {
-    failureFlash: true,
-  }),
-  (req, res) => {
-    res.sendStatus(200);
-  }
-);
+router.post("/login", loggedOutOnly, (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    console.log(user);
+    if (err) { 
+      return next(err);
+    } if (!user) {
+      res.status(403).json(info); 
+    } else {
+      req.login(user, (err) => {
+        if (err) {
+          return next(err);
+        } else {
+          res.status(200).json({msg: "Logged in successfully."});
+        }
+      });
+    }
+  })(req, res, next);
+});
 
 // POST Request, user sign out verification
 router.post("/logout", loggedInOnly, (req, res, next) => {
   console.log("Handling POST request to /logout");
   req.logout();
-  res.send({msg: 'logging out'})
+  res.status(200).json({ msg: "Logged out successfully." })
 });
 
 // FOR ADMIN
 router.delete("/delete/:userId", (req, res, next) => {
   console.log("Handling DELETE request for SPECIFIC user");
   User.findByIdAndDelete(req.params.userId)
-    .then(() => res.json("User deleted"))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then(() => res.status(200).json({ msg: "User deleted successfully." }))
+    .catch((err) => res.status(400).json({ msg: err }));
 });
 
 module.exports = router;

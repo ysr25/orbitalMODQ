@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -13,33 +14,33 @@ passport.use(
       .then((user) => {
         if (!user) {
           return done(null, false, {
-            message:
+            msg:
               "No user with entered username found, please create an account.",
           });
-        } else if (!user.validPassword(password)) {
-          return done(null, false, {
-            message: "Incorrect password, please try again.",
-          });
         } else {
-          return done(null, user);
+          bcrypt.compare(password, user.password)
+          .then(res => {
+            if (res) {
+              return done(null, user);
+            } else {
+              return done(null, false, {
+                msg: "Incorrect password, please try again.",
+              });
+            }
+          })
+          .catch(err => done(err));
         }
       })
-      .catch((err) => done(err));
+      .catch((err) => console.log(err));
   })
 );
 
 passport.use(new AnonymousStrategy());
 
-const loggedInOnly = (req, res, next) => {
-  console.log("checking if logged in");
-  if (req.isAuthenticated()) next();
-  else res.json({ msg: "you need to be logged in to do this" });
-};
-
 const loggedOutOnly = (req, res, next) => {
   console.log("checking if logged out");
   if (req.isUnauthenticated()) next();
-  else res.json({ msg: "you need to be logged out to do this" });
+  else res.status(403).json({ msg: "You need to be logged out to do this." });
 };
 
 // GET Request for ALL mod reviews
@@ -47,8 +48,8 @@ router.get("/view/all", (req, res, next) => {
   console.log("Handling GET request for ALL mod reviews");
   ModReview.find()
     .populate("author")
-    .then((modreviews) => res.json(modreviews))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((modreviews) => res.status(200).json({ content: modreviews }))
+    .catch((err) => res.status(400).json({ msg: err }));
 });
 
 // GET Request for specific review
@@ -56,8 +57,8 @@ router.get("/view/:modReviewId", (req, res, next) => {
   console.log("Handling GET request for specific mod review");
   ModReview.findById(req.params.modReviewId)
     .populate("author")
-    .then((modReview) => res.json(modReview))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((modReview) => res.status(200).json({ content: modReview }))
+    .catch((err) => res.status(400).json({ msg: err }));
 });
 
 // Post Request
@@ -79,11 +80,14 @@ router.post(
     } else if (req.body.anonymous) {
       newPost.anonymous = true;
     } else {
-      return res.status(400).send("Error: must log in to post unanonymously");
+      return res.status(403).json({ msg: "Please log in or choose to post anonymously." });
     }
     ModReview.create(newPost)
-      .then(() => res.json(newPostId))
-      .catch((err) => res.status(400).json("Error: " + err));
+      .then(() => res.status(200).json({
+        msg: "New module review created successfully.",
+        content: newPostId,
+      }))
+      .catch((err) => res.status(400).json({ msg: err }));
   }
 );
 
@@ -96,12 +100,12 @@ router.get(
     ModReview.findOne({ _id: req.params.modReviewId })
     .then((modreview) => {
       if (String(modreview.author) === String(req.user._id)) {
-        res.sendStatus(200);
+        res.status(200).json({ content: true });
       } else {
-        res.sendStatus(403); //Forbidden
+        res.status(200).json({ content: false });
       }
     })
-    .catch(err => res.status(403).json("Error: " + err));
+    .catch(err => res.status(400).json({ msg: err }));
   }
 )
 
@@ -120,14 +124,17 @@ router.patch(
         }
         ModReview.updateOne({ _id: req.params.modReviewId }, updateOps)
           .then((modreview) => {
-            res.json("Module Review update: " + modreview);
-            res.sendStatus(200);
+            res.status(200).json({ 
+              msg: "Module review updated successfully.",
+              content: modreview, 
+            });
           })
-          .catch((err) => res.status(400).json("Error: " + err));
+          .catch((err) => res.status(400).json({ msg: err }));
       } else {
-        console.log("Error editing post");
+        res.status(403).json({ msg: "You can only edit your own post." });
       }
-    });
+    })
+    .catch((err) => res.status(400).json({ msg: err }));
   }
 );
 
@@ -140,12 +147,16 @@ router.delete(
     ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
       if (String(modreview.author) === String(req.user._id)) {
       ModReview.findByIdAndDelete(req.params.modReviewId)
-        .then((modReview) => res.json("module review deleted: " + modReview))
-        .catch((err) => res.status(400).json("Error: " + err));
+        .then((modReview) => res.status(200).json({
+            msg: "Module review deleted successfully.",
+            content: modReview,
+        }))
+        .catch((err) => res.status(400).json({ msg: err }));
       } else {
-        console.log("Error deleting post");
+        res.status(403).json({ msg: "You can only delete your own post." });
       }
-    });
+    })
+    .catch((err) => res.status(400).json({ msg: err }));
   }
 );
 
@@ -153,8 +164,8 @@ router.delete(
 router.get("/search", (req, res, next) => {
   ModReview.find({ $text: { $search: req.query.q } })
     .populate("author")
-    .then((modreviews) => res.json(modreviews))
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then((modreviews) => res.status(200).json({ content: modreviews }))
+    .catch((err) => res.status(400).json({ msg: err }));
 });
 
 module.exports = router;

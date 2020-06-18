@@ -103,36 +103,20 @@ export default class Registration extends Component {
       })
       .then((res) => {
         console.log(res.data);
-        if (!res.data.errmsg) {
-          console.log("successful signup");
-          this.props.updateUser();
-          this.setState({
-            redirectTo: "/",
-          });
-        } else {
-          console.log("username taken");
-        }
+        console.log("successful signup");
+        this.props.updateUser();
+        this.setState({ redirectTo: "/" });
       })
       .catch((err) => {
         console.log(err);
         this.setState({
-          errorMessage: "Username has been taken, please use a different username.",
+          errorMessage: err.response.data.msg,
           isButtonDisabled: false,
           buttonVariant: "primary",
           regStatus: "Create Account",
         })
       });
   }
-  //        this.setState({
-  //            user_firstName: '',
-  //            user_lastName: '',
-  //            user_email: '',
-  //            user_course: '',
-  //            user_yearOfStudy: '',
-  //            user_username: '',
-  //            user_password: '',
-  //            registered: true
-  //       })
 
   render() {
     if (this.state.redirectTo) {
