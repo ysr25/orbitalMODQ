@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt"); // Used to encrpyt passwords with hashing
+const bcrypt = require("bcryptjs"); // Used to encrpyt passwords with hashing
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
