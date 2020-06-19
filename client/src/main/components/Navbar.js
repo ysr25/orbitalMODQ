@@ -13,7 +13,7 @@ class Navbar extends Component {
     event.preventDefault();
     console.log("logging out");
     axios
-      .post("/users/logout", {}, {
+      .post("/api/users/logout", {}, {
         withCredentials: true,
       })
       .then((res) => {

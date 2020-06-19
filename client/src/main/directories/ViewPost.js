@@ -24,7 +24,7 @@ export default class Registration extends Component {
 
   componentDidMount = () => {
     axios
-      .get(`/modReviews/view/${this.state.post_id}`)
+      .get(`/api/modReviews/view/${this.state.post_id}`)
       .then((res) => {
         const post = res.data.content;
         this.setState({
@@ -42,7 +42,7 @@ export default class Registration extends Component {
       console.log("checking if original poster");
       axios
         .get(
-          `/modReviews/checkPoster/${this.state.post_id}`, 
+          `/api/modReviews/checkPoster/${this.state.post_id}`, 
           {withCredentials: true}
         )
         .then((res) => {

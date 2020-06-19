@@ -71,15 +71,13 @@ app.use(cors());
 app.use(express.json());
 
 // Routes for handling requests (for endpoints)
-app.use("/users", usersRoutes);
-app.use("/modReviews", modReviewRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/modReviews", modReviewRoutes);
 
 // for heroku deployment
 app.use(express.static(path.join(__dirname, "client", "build")));
-
-app.use(express.static(path.join(__dirname, "../build")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build"));
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => {

@@ -52,7 +52,7 @@ export default class LoginPage extends Component {
 
     axios
       .post(
-        "/users/login", 
+        "/api/users/login", 
          userLogIn, 
          { withCredentials: true }
       )

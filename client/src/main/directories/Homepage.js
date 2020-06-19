@@ -23,7 +23,7 @@ export default class Registration extends Component {
 
   componentDidMount = () => {
     axios
-      .get("/modReviews/view/all")
+      .get("/api/modReviews/view/all")
       .then((res) =>
         this.setState({
           post_list: res.data.content,
@@ -65,7 +65,7 @@ export default class Registration extends Component {
   submitSearch = (e) => {
     e.preventDefault();
     axios
-      .get("/modReviews/search", {
+      .get("/api/modReviews/search", {
         params: { q: this.state.search },
       })
       .then((res) =>
@@ -78,7 +78,7 @@ export default class Registration extends Component {
 
   reset = () => {
     axios
-      .get("/modReviews/view/all")
+      .get("/api/modReviews/view/all")
       .then((res) => {
         this.setState({
           post_list: res.data.content,

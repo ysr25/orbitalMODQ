@@ -98,7 +98,7 @@ export default class Registration extends Component {
     });
 
     axios
-      .post("/users/signup", newUser, {
+      .post("/api/users/signup", newUser, {
         withCredentials: true,
       })
       .then((res) => {
