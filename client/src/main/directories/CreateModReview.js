@@ -16,7 +16,8 @@ export default class CreateModReview extends Component {
       buttonVariant: "primary",
       post_id: "",
       post_anonymously: false,
-      postStatus: null
+      postStatus: null,
+      postButton: "Submit Post"
     };
   }
 
@@ -58,12 +59,15 @@ export default class CreateModReview extends Component {
       })
       .catch((err) => {
         console.log(err);
-        this.setState({ postStatus: err.response.data.msg })
+        this.setState({ 
+          postStatus: err.response.data.msg,
+          postButton: "Try Again"
+        })
       });
 
     this.setState({
-      isButtonDisabled: true,
       buttonVariant: "dark",
+      postButton: "Posting..."
     });
   };
 
@@ -122,7 +126,7 @@ export default class CreateModReview extends Component {
               disabled={this.state.isButtonDisabled}
               variant={this.state.buttonVariant}
             >
-              Submit Post
+              {this.state.postButton}
             </Button>
             <p>{this.state.postStatus}</p>
           </div>

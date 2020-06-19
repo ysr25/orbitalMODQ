@@ -80,7 +80,7 @@ router.post(
     } else if (req.body.anonymous) {
       newPost.anonymous = true;
     } else {
-      return res.status(403).json({ msg: "Please log in or choose to post anonymously." });
+      return res.status(403).json({ msg: "Please log in or choose to post anonymously."});
     }
     ModReview.create(newPost)
       .then(() => res.status(200).json({
