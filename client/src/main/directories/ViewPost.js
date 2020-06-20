@@ -78,7 +78,7 @@ export default class Registration extends Component {
             </b>
           </h5>
           <br />
-          {this.state.post_content}
+          <div className="postContent">{this.state.post_content}</div>
         </Form.Group>
         <Form.Row>
         <Col>
