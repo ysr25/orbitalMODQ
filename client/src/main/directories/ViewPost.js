@@ -17,9 +17,22 @@ export default class Registration extends Component {
       post_author: "",
       post_date: "",
       post_editedDate: "",
+      post_upvotes: [],
       originalPoster: null
     };
 
+  }
+
+  onUpvote = () => {
+    axios
+      .patch(
+        `/api/modReviews/upvote/${this.state.post_id}`, 
+        {withCredentials: true}
+      )
+      .then((res) => {
+        this.setState({ post_upvotes: res.data.content })
+      })
+      .catch((err) => console.log(err.response.data.msg));
   }
 
   componentDidMount = () => {
@@ -35,6 +48,7 @@ export default class Registration extends Component {
           post_author: post.anonymous || !post.author ? "Anonymous" : post.author.username,
           post_date: post.datePosted,
           post_editedDate: post.dateEdited,
+          post_upvotes: post.upvotes,
         })
       })
       .catch((err) => console.log(err));
@@ -70,6 +84,8 @@ export default class Registration extends Component {
             {new Date(this.state.post_date).toLocaleString()}
           </em>
           <br />
+          Upvotes: {this.state.post_upvotes.length}
+          <br />
           <br />
           <h5>
             Review for:{" "}
@@ -93,6 +109,14 @@ export default class Registration extends Component {
         </Button>): (
           <></>
         )} {''}
+        <Button
+          type="button"
+          variant="outline-primary"
+          size="sm"
+          onClick={this.onUpvote}
+        >
+          Upvote
+        </Button>{" "}
         <Button type="button" variant="outline-secondary" size="sm" href={`/`}>
           Return to Homepage
         </Button>

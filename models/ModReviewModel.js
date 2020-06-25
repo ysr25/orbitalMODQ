@@ -34,6 +34,11 @@ let modReviewSchema = new Schema({
   anonymous: {
     type: Boolean,
     required: true,
+  },
+  upvotes: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "User",
+    default: [],
   }
 });
 modReviewSchema.index({ title: "text", content: "text" });

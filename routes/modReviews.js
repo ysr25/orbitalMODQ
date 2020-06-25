@@ -37,10 +37,10 @@ passport.use(
 
 passport.use(new AnonymousStrategy());
 
-const loggedOutOnly = (req, res, next) => {
-  console.log("checking if logged out");
-  if (req.isUnauthenticated()) next();
-  else res.status(403).json({ msg: "You need to be logged out to do this." });
+const loggedInOnly = (req, res, next) => {
+  console.log("checking if logged in");
+  if (req.isAuthenticated()) next();
+  else res.status(403).json({ msg: "You need to be logged in to do this." });
 };
 
 // GET Request for ALL mod reviews
@@ -166,6 +166,39 @@ router.get("/search", (req, res, next) => {
     .populate("author")
     .then((modreviews) => res.status(200).json({ content: modreviews }))
     .catch((err) => res.status(400).json({ msg: err }));
+});
+
+// upvote post
+router.patch("/upvote/:modReviewId", loggedInOnly, (req, res, next) => {
+  ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
+    if (modreview.upvotes.includes(req.user._id)) {
+      // take back upvote
+      const newUpvoteArray = modreview.upvotes.filter(item => String(item) !== String(req.user._id));
+      ModReview.findOneAndUpdate(
+        { _id: req.params.modReviewId }, 
+        { upvotes: newUpvoteArray }, 
+        { new: true, useFindAndModify: false }
+      )
+        .then((modrev) => {
+          res.status(200).json({ msg: "Module review upvote removed.", content: modrev.upvotes});
+        })
+        .catch((err) => res.status(400).json({ msg: err }));
+    } else {
+      // upvote
+      const newUpvoteArray = modreview.upvotes.slice();
+      newUpvoteArray.push(req.user._id);
+      ModReview.findOneAndUpdate(
+        { _id: req.params.modReviewId }, 
+        { upvotes: newUpvoteArray }, 
+        {new: true, useFindAndModify: false}
+      )
+        .then((modrev) => {
+          res.status(200).json({ msg: "Module review upvoted.", content: modrev.upvotes});
+        })
+        .catch((err) => res.status(400).json({ msg: err }));
+    }
+  })
+  .catch((err) => res.status(400).json({ msg: err }));
 });
 
 module.exports = router;

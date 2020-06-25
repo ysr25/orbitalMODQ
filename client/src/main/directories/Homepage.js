@@ -39,9 +39,9 @@ export default class Registration extends Component {
           (new Date(a[property]) < new Date(b[property]) ? 1 : -1) * direction
         );
       };
-    } else {
+    } else if (property === "upvotes") {
       return (a, b) => {
-        return (a[property] < b[property] ? 1 : -1) * direction;
+        return (a.upvotes.length < b.upvotes.length ? 1 : -1) * direction;
       };
     }
   };
@@ -197,6 +197,8 @@ export default class Registration extends Component {
                     <em>
                       date edited {new Date(post.dateEdited).toLocaleString()}
                     </em>
+                    <br />
+                    Upvotes: {post.upvotes.length}
                     {""}
                   </Card.Text>
                   <Card.Link href={`/modreviews/view/${post._id}`}>
