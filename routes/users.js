@@ -97,9 +97,10 @@ router.post("/signup", (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "MongoError" && err.code === 11000) {
-        res.status(400).json({ msg: "Sorry, that username has been taken." });
+        res.status(400).json({ msg: "Sorry, that username/email has been taken." });
       } else {
-        //res.status(400).json({ msg: "Some other kind of error." });
+        console.log(err);
+        res.status(400).json({ msg: err }); // Some other kind of error
       }
     });
 });
@@ -117,7 +118,7 @@ router.post("/login", loggedOutOnly, (req, res, next) => {
         if (err) {
           return next(err);
         } else {
-          res.status(200).json({msg: "Logged in successfully."});
+          res.status(200).json({ msg: "Logged in successfully." });
         }
       });
     }

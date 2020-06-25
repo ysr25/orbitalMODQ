@@ -140,6 +140,7 @@ export default class Registration extends Component {
                   className="form-control"
                   value={this.state.user_firstName}
                   onChange={this.onChangeFirstName}
+                  required
                 />
               </Col>
               <Col>
@@ -149,6 +150,7 @@ export default class Registration extends Component {
                   className="form-control"
                   value={this.state.user_lastName}
                   onChange={this.onChangeLastName}
+                  required
                 />
               </Col>
             </Form.Row>
@@ -161,6 +163,7 @@ export default class Registration extends Component {
                   className="form-control"
                   value={this.state.user_email}
                   onChange={this.onChangeEmail}
+                  required
                 />
               </Col>
               <Col>
@@ -170,6 +173,7 @@ export default class Registration extends Component {
                   className="form-control"
                   value={this.state.user_course}
                   onChange={this.onChangeCourse}
+                  required
                 />
               </Col>
             </Form.Row>
@@ -197,6 +201,7 @@ export default class Registration extends Component {
                   className="form-control"
                   value={this.state.user_username}
                   onChange={this.onChangeUsername}
+                  required
                 />
               </Col>
               <Col>
@@ -206,6 +211,7 @@ export default class Registration extends Component {
                   className="form-control"
                   value={this.state.user_password}
                   onChange={this.onChangePassword}
+                  required
                 />
               </Col>
             </Form.Row>
