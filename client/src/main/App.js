@@ -63,15 +63,18 @@ class App extends Component {
           <Route exact path="/" component={Homepage} />
           <Route path="/modreviews/newpost" component={CreateModReview} />
           <Route path="/modreviews/edit/:id" component={EditModReview} />
-          <Route path="/modreviews/view/:id" component={ViewPost} />
+          <Route 
+            path="/modreviews/view/:id" 
+            render={props => <ViewPost {...props} loggedIn={this.state.loggedIn} />} 
+          />
           <Route 
             path="/users/signup" 
-            render={() => <Registration updateUser={this.updateUser} />} />
+            render={() => <Registration updateUser={this.updateUser} />}
+          />
           <Route
             path="/users/login"
             render={() => <LoginPage updateUser={this.updateUser} />}
           />
-          {/*still accessible by typing in the url even when not logged in*/}
           {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateUser} />} /> */}
         </div>
       </Router>

@@ -37,9 +37,36 @@ let modReviewSchema = new Schema({
   },
   upvotes: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: "User",
+    default: [],
+  },
+  downvotes: {
+    type: [mongoose.Schema.Types.ObjectId],
     default: [],
   }
 });
+
 modReviewSchema.index({ title: "text", content: "text" });
+
+modReviewSchema.virtual("votes").get(function() {
+  return this.upvotes.length - this.downvotes.length;
+})
+
+modReviewSchema.methods.updateUpvotes = function(newArray, next) {
+  return mongoose.model("ModReview").findOneAndUpdate(
+    { _id: this._id }, 
+    { upvotes: newArray }, 
+    { new: true, useFindAndModify: false },
+    next
+  )
+}
+
+modReviewSchema.methods.updateDownvotes = function(newArray, next) {
+  return mongoose.model("ModReview").findOneAndUpdate(
+    { _id: this._id }, 
+    { downvotes: newArray }, 
+    { new: true, useFindAndModify: false },
+    next
+  )
+}
+
 module.exports = mongoose.model("ModReview", modReviewSchema);

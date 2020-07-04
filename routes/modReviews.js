@@ -97,15 +97,19 @@ router.get(
   passport.authenticate(["local", "anonymous"]),
   (req, res, next) => {
     console.log("Handling GET request for mod review to check poster");
-    ModReview.findOne({ _id: req.params.modReviewId })
-    .then((modreview) => {
-      if (String(modreview.author) === String(req.user._id)) {
-        res.status(200).json({ content: true });
-      } else {
-        res.status(200).json({ content: false });
-      }
-    })
-    .catch(err => res.status(400).json({ msg: err }));
+    if (req.user) {
+      ModReview.findOne({ _id: req.params.modReviewId })
+      .then((modreview) => {
+        if (String(modreview.author) === String(req.user._id)) {
+          res.status(200).json({ content: true });
+        } else {
+          res.status(200).json({ content: false });
+        }
+      })
+      .catch(err => res.status(400).json({ msg: err }));
+    } else {
+      res.status(200).json({ content: false });
+    }
   }
 )
 
@@ -173,29 +177,50 @@ router.patch("/upvote/:modReviewId", loggedInOnly, (req, res, next) => {
   ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
     if (modreview.upvotes.includes(req.user._id)) {
       // take back upvote
-      const newUpvoteArray = modreview.upvotes.filter(item => String(item) !== String(req.user._id));
-      ModReview.findOneAndUpdate(
-        { _id: req.params.modReviewId }, 
-        { upvotes: newUpvoteArray }, 
-        { new: true, useFindAndModify: false }
-      )
-        .then((modrev) => {
-          res.status(200).json({ msg: "Module review upvote removed.", content: modrev.upvotes});
-        })
-        .catch((err) => res.status(400).json({ msg: err }));
+      const newArray = modreview.upvotes.filter(item => String(item) !== String(req.user._id));
+      modreview.updateUpvotes(newArray, function(err, result) {
+        if (!err) {
+          return res.status(200).json({ msg: "Module review upvote removed.", content: result.votes});
+        }
+        res.status(400).json({ msg: err });
+      })
     } else {
       // upvote
-      const newUpvoteArray = modreview.upvotes.slice();
-      newUpvoteArray.push(req.user._id);
-      ModReview.findOneAndUpdate(
-        { _id: req.params.modReviewId }, 
-        { upvotes: newUpvoteArray }, 
-        {new: true, useFindAndModify: false}
-      )
-        .then((modrev) => {
-          res.status(200).json({ msg: "Module review upvoted.", content: modrev.upvotes});
-        })
-        .catch((err) => res.status(400).json({ msg: err }));
+      const newArray = modreview.upvotes.slice();
+      newArray.push(req.user._id);
+      modreview.updateUpvotes(newArray, function(err, result) {
+        if (!err) {
+          return res.status(200).json({ msg: "Module review upvoted.", content: result.votes});
+        }
+        res.status(400).json({ msg: err });
+      })
+    }
+  })
+  .catch((err) => res.status(400).json({ msg: err }));
+});
+
+// downvote post
+router.patch("/downvote/:modReviewId", loggedInOnly, (req, res, next) => {
+  ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
+    if (modreview.downvotes.includes(req.user._id)) {
+      // take back downvote
+      const newArray = modreview.downvotes.filter(item => String(item) !== String(req.user._id));
+      modreview.updateDownvotes(newArray, function(err, result) {
+        if (!err) {
+          return res.status(200).json({ msg: "Module review downvote removed.", content: result.votes});
+        }
+        res.status(400).json({ msg: err });
+      })
+    } else {
+      // downvote
+      const newArray = modreview.downvotes.slice();
+      newArray.push(req.user._id);
+      modreview.updateDownvotes(newArray, function(err, result) {
+        if (!err) {
+          return res.status(200).json({ msg: "Module review downvoted.", content: result.votes});
+        }
+        res.status(400).json({ msg: err });
+      })
     }
   })
   .catch((err) => res.status(400).json({ msg: err }));

@@ -17,8 +17,8 @@ export default class Registration extends Component {
       post_author: "",
       post_date: "",
       post_editedDate: "",
-      post_upvotes: [],
-      originalPoster: null
+      post_votes: 0,
+      originalPoster: null,
     };
 
   }
@@ -30,9 +30,21 @@ export default class Registration extends Component {
         {withCredentials: true}
       )
       .then((res) => {
-        this.setState({ post_upvotes: res.data.content })
+        this.setState({ post_votes: res.data.content })
       })
-      .catch((err) => console.log(err.response.data.msg));
+      .catch((err) => console.log(err));
+  }
+
+  onDownvote = () => {
+    axios
+      .patch(
+        `/api/modReviews/downvote/${this.state.post_id}`, 
+        {withCredentials: true}
+      )
+      .then((res) => {
+        this.setState({ post_votes: res.data.content })
+      })
+      .catch((err) => console.log(err));
   }
 
   componentDidMount = () => {
@@ -48,7 +60,7 @@ export default class Registration extends Component {
           post_author: post.anonymous || !post.author ? "Anonymous" : post.author.username,
           post_date: post.datePosted,
           post_editedDate: post.dateEdited,
-          post_upvotes: post.upvotes,
+          post_votes: post.upvotes.length - post.downvotes.length,
         })
       })
       .catch((err) => console.log(err));
@@ -84,7 +96,7 @@ export default class Registration extends Component {
             {new Date(this.state.post_date).toLocaleString()}
           </em>
           <br />
-          Upvotes: {this.state.post_upvotes.length}
+          Upvotes: {this.state.post_votes}
           <br />
           <br />
           <h5>
@@ -108,15 +120,16 @@ export default class Registration extends Component {
           Edit
         </Button>): (
           <></>
-        )} {''}
-        <Button
-          type="button"
-          variant="outline-primary"
-          size="sm"
-          onClick={this.onUpvote}
-        >
-          Upvote
-        </Button>{" "}
+        )}
+        {" "}
+        {this.props.loggedIn ?
+          <>
+            <Button variant="outline-primary" size="sm" onClick={this.onUpvote}>Upvote</Button>
+            {" "}
+            <Button variant="outline-primary" size="sm" onClick={this.onDownvote}>Downvote</Button>
+          </>
+        : <></> }
+        {" "}
         <Button type="button" variant="outline-secondary" size="sm" href={`/`}>
           Return to Homepage
         </Button>
