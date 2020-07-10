@@ -158,7 +158,7 @@ export default class Registration extends Component {
             <Form.Row>
               <Col>
                 <Form.Control
-                  type="text"
+                  type="email"
                   placeholder="Email Address"
                   className="form-control"
                   value={this.state.user_email}

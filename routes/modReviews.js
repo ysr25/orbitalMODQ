@@ -166,9 +166,19 @@ router.delete(
 
 // search for post
 router.get("/search", (req, res, next) => {
+  let mergereviews = (arr1, arr2) => arr1.filter(rev1 => !arr2.find(rev2 => String(rev1._id) === String(rev2._id)) ).concat(arr2);
+
+  // search using text index
   ModReview.find({ $text: { $search: req.query.q } })
     .populate("author")
-    .then((modreviews) => res.status(200).json({ content: modreviews }))
+    .then(modreviews => {
+      // partial search on first word only
+      ModReview.find({ $or: [{ title: { $regex: req.query.q.split(' ')[0] }}, { content: { $regex: req.query.q.split(' ')[0] }}] })
+        .populate("author")
+        .then(modreviews2 => mergereviews(modreviews, modreviews2))
+        .then((modreviews) => res.status(200).json({ content: modreviews }))
+        .catch((err) => res.status(400).json({ msg: err }));
+    })
     .catch((err) => res.status(400).json({ msg: err }));
 });
 
