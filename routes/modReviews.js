@@ -6,6 +6,7 @@ const ModReview = require("../models/ModReviewModel");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const AnonymousStrategy = require("passport-anonymous").Strategy;
+const sanitizeHtml = require("sanitize-html");
 const User = require("../models/UserModel");
 
 passport.use(
@@ -67,11 +68,17 @@ router.post(
   passport.authenticate(["local", "anonymous"]),
   (req, res, next) => {
     console.log("Handling POST request for mod review");
+    if (!req.body.content) {
+      return res.status(400).json({ msg: "Post cannot be empty." })
+    }
     let newPostId = new mongoose.Types.ObjectId();
     let newPost = {
       _id: newPostId,
       title: req.body.title,
-      content: req.body.content,
+      content: sanitizeHtml(req.body.content, {
+        allowedTags: [ "p", "h1", "h2", "h3", "b", "i", "em", "strong", "blockquote", "a", "li", "ol", "ul" ],
+        allowedAttributes: { "a": [ "href" ] },
+      }),
       moduleCode: req.body.moduleCode,
     };
     if (req.user) {
@@ -122,8 +129,17 @@ router.patch(
     // Double checking (so that users cannot randomly type the link and edit posts)
     ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
       if (String(modreview.author) === String(req.user._id)) {
+        if (!req.body.content) {
+          return res.status(400).json({ msg: "Post cannot be empty." })
+        }
         const updateOps = { dateEdited: Date.now() };
         for (const ops in req.body) {
+          if (ops === "content") {
+            req.body.content = sanitizeHtml(req.body.content, {
+              allowedTags: [ "p", "h1", "h2", "h3", "b", "i", "em", "strong", "blockquote", "a", "li", "ol", "ul" ],
+              allowedAttributes: { "a": [ "href" ] },
+            })
+          }
           updateOps[ops] = req.body[ops];
         }
         ModReview.updateOne({ _id: req.params.modReviewId }, updateOps)

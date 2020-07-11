@@ -186,7 +186,7 @@ export default class Registration extends Component {
                   </b>
                 </Card.Header>
                 <Card.Body>
-                  <Card.Text className="postContent">{post.content}</Card.Text>
+                  <Card.Text dangerouslySetInnerHTML={{ __html: post.content}}></Card.Text>
                   <Card.Text>
                     <em>posted by {post.anonymous || !post.author ? "Anonymous" : post.author.username}</em>
                     <br />

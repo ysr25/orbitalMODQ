@@ -106,7 +106,7 @@ export default class Registration extends Component {
             </b>
           </h5>
           <br />
-          <div className="postContent">{this.state.post_content}</div>
+          <div dangerouslySetInnerHTML={{ __html: this.state.post_content}}></div>
         </Form.Group>
         <Form.Row>
         <Col>

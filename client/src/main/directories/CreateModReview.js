@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import moduleList from "./ModuleList.js";
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default class CreateModReview extends Component {
   constructor(props) {
@@ -25,8 +27,8 @@ export default class CreateModReview extends Component {
     this.setState({ post_title: e.target.value });
   };
 
-  onChangeContent = (e) => {
-    this.setState({ post_content: e.target.value });
+  onChangeContent = (event, editor) => {
+    this.setState({ post_content: editor.getData() });
   };
 
   onChangeModuleCode = (e) => {
@@ -100,15 +102,13 @@ export default class CreateModReview extends Component {
             required
           />
           <br />
-          <Form.Control
-            type="text"
-            as="textarea"
-            rows="16"
-            placeholder="Content"
-            className="form-control"
-            value={this.state.post_content}
+          <CKEditor
+            editor={ClassicEditor}
+            data={this.state.post_content}
+            config={{
+              toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
+            }}
             onChange={this.onChangeContent}
-            required
           />
           <br />
           <Form.Check

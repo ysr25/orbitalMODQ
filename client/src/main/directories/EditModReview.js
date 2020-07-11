@@ -5,6 +5,8 @@ import axios from "axios";
 import moduleList from "./ModuleList.js";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default class EditModReview extends Component {
   constructor(props) {
@@ -15,6 +17,7 @@ export default class EditModReview extends Component {
       post_title: "",
       post_content: "",
       post_moduleCode: "",
+      postStatus: null,
     };
   }
 
@@ -36,8 +39,8 @@ export default class EditModReview extends Component {
     this.setState({ post_title: e.target.value });
   };
 
-  onChangeContent = (e) => {
-    this.setState({ post_content: e.target.value });
+  onChangeContent = (event, editor) => {
+    this.setState({ post_content: editor.getData() });
   };
 
   onChangeModuleCode = (e) => {
@@ -62,7 +65,12 @@ export default class EditModReview extends Component {
       .then((res) =>
         this.props.history.push(`/modreviews/view/${this.state.post_id}`)
       )
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+        this.setState({ 
+          postStatus: err.response.data.msg,
+        })
+      });
   };
 
   onDelete = (e) => {
@@ -116,18 +124,14 @@ export default class EditModReview extends Component {
             </Form.Control>
             </Col>
           </Form.Group>
-          <Form.Group>
-            <Form.Control
-              type="text"
-              as="textarea"
-              rows="16"
-              placeholder="Content"
-              className="form-control"
-              value={this.state.post_content}
-              onChange={this.onChangeContent}
-              required
-            />
-          </Form.Group>
+          <CKEditor
+            editor={ClassicEditor}
+            data={this.state.post_content}
+            config={{
+              toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
+            }}
+            onChange={this.onChangeContent}
+          />
           <Button variant="outline-primary" type="submit">
             Submit
           </Button>{" "}
@@ -140,6 +144,7 @@ export default class EditModReview extends Component {
           <Button variant="outline-danger" onClick={this.onDelete}>
             Delete
           </Button>
+          <p>{this.state.postStatus}</p>
         </form>
       </div>
     );
