@@ -19,11 +19,18 @@ export default class Registration extends Component {
       post_editedDate: "",
       post_votes: 0,
       originalPoster: null,
+      downvote_button: "outline-danger",
+      upvote_button: "outline-success"
     };
 
   }
 
   onUpvote = () => {
+    if(this.state.upvote_button == "outline-success") {
+      this.state.upvote_button = "success"
+    } else {
+      this.state.upvote_button = "outline-success"
+    }
     axios
       .patch(
         `/api/modReviews/upvote/${this.state.post_id}`, 
@@ -36,6 +43,11 @@ export default class Registration extends Component {
   }
 
   onDownvote = () => {
+    if(this.state.downvote_button == "outline-danger") {
+      this.state.downvote_button = "danger"
+    } else {
+      this.state.downvote_button = "outline-danger"
+    }
     axios
       .patch(
         `/api/modReviews/downvote/${this.state.post_id}`, 
@@ -124,9 +136,9 @@ export default class Registration extends Component {
         {" "}
         {this.props.loggedIn ?
           <>
-            <Button variant="outline-primary" size="sm" onClick={this.onUpvote}>Upvote</Button>
+            <Button variant={this.state.upvote_button} size="sm" onClick={this.onUpvote}>Upvote</Button>
             {" "}
-            <Button variant="outline-primary" size="sm" onClick={this.onDownvote}>Downvote</Button>
+            <Button variant={this.state.downvote_button} size="sm" onClick={this.onDownvote}>Downvote</Button>
           </>
         : <></> }
         {" "}
