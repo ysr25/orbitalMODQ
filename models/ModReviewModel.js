@@ -42,7 +42,7 @@ let modReviewSchema = new Schema({
   downvotes: {
     type: [mongoose.Schema.Types.ObjectId],
     default: [],
-  }
+  },
 });
 
 modReviewSchema.index({ title: "text", content: "text" });

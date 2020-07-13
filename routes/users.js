@@ -75,7 +75,7 @@ router.get("/:userId", (req, res, next) => {
 // POST Request, creating new user
 router.post("/signup", (req, res, next) => {
   console.log("Handling POST request for user (CREATION)");
-  if (req.body.email.indexOf("@") <= 0) {
+  if (req.body.email.indexOf("@") != 1) {
     return res.status(400).json({ msg: "Please enter a valid email address." });
   }
   const hash = bcrypt.hashSync(req.body.password, saltRounds);

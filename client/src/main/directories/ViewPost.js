@@ -29,7 +29,7 @@ export default class Registration extends Component {
     if(this.state.upvote_button == "outline-success") {
       this.state.upvote_button = "success"
     } else {
-      this.state.upvote_button = "outline-success"
+      this.state. upvote_button = "outline-success"
     }
     axios
       .patch(
