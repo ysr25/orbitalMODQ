@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -201,9 +202,9 @@ export default class Registration extends Component {
                     Upvotes: {post.upvotes.length}
                     {""}
                   </Card.Text>
-                  <Card.Link href={`/modreviews/view/${post._id}`}>
+                  <Link to={`/modreviews/view/${post._id}`} onClick={this.props.updateUser} className="card-link">
                     View
-                  </Card.Link>
+                  </Link>
                 </Card.Body>
               </Card>
               <br />

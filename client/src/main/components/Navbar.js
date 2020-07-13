@@ -34,12 +34,12 @@ class Navbar extends Component {
       <div className="collpase navbar-collapse">
         <ul className="navbar-nav mr-auto">
           <li className="navbar-item">
-            <Link to="/" className="nav-link">
+            <Link to="/" className="nav-link" onClick={this.props.updateUser}>
               Home
             </Link>
           </li>
           <li className="navbar-item">
-            <Link to="/modreviews/newpost" className="nav-link">
+            <Link to="/modreviews/newpost" className="nav-link" onClick={this.props.updateUser}>
               Create A Post
             </Link>
           </li>
@@ -51,7 +51,7 @@ class Navbar extends Component {
             </li>
           ) : (
               <li className="navbar-item">
-                <Link to="/users/signup" className="nav-link">
+                <Link to="/users/signup" className="nav-link" onClick={this.props.updateUser}>
                   Register
                 </Link>
               </li>
@@ -60,7 +60,7 @@ class Navbar extends Component {
             <></>
           ) : (
             <li className="navbar-item">
-                <Link to="/users/login" className="nav-link">
+                <Link to="/users/login" className="nav-link" onClick={this.props.updateUser}>
                   Log In
                 </Link>
               </li>

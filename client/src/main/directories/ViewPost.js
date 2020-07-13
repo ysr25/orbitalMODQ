@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -111,14 +112,13 @@ export default class Registration extends Component {
         <Form.Row>
         <Col>
         {originalPoster ? (
-          <Button
-          type="button"
-          variant="outline-primary"
-          size="sm"
-          href={`/modreviews/edit/${this.state.post_id}`}
+         <Link
+          class="btn btn-outline-primary btn-sm"
+          to={`/modreviews/edit/${this.state.post_id}`}
+          onClick={this.props.updateUser}
         >
           Edit
-        </Button>): (
+        </Link>): (
           <></>
         )}
         {" "}
@@ -130,9 +130,9 @@ export default class Registration extends Component {
           </>
         : <></> }
         {" "}
-        <Button type="button" variant="outline-secondary" size="sm" href={`/`}>
+        <Link className="btn btn-outline-secondary btn-sm" to={`/`} onClick={this.props.updateUser}>
           Return to Homepage
-        </Button>
+        </Link>
         </Col>
         </Form.Row>
         <br />

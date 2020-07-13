@@ -123,7 +123,7 @@ router.get(
 // UPDATE Request (MUST ADD USER AUTHENTICATION)
 router.patch(
   "/edit/:modReviewId",
-  passport.authenticate(["local", "anonymous"]),
+  loggedInOnly, 
   (req, res, next) => {
     console.log("Handling PATCH request for mod review");
     // Double checking (so that users cannot randomly type the link and edit posts)
@@ -161,7 +161,7 @@ router.patch(
 // DELETE Request (MUST ADD USER AUTHENTICATION)
 router.delete(
   "/delete/:modReviewId", 
-  passport.authenticate(["local", "anonymous"]),
+  loggedInOnly, 
   (req, res, next) => {
     console.log("Handling DELETE request for specific mod reviews");
     ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {

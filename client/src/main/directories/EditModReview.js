@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
@@ -132,15 +133,17 @@ export default class EditModReview extends Component {
             }}
             onChange={this.onChangeContent}
           />
+          <br />
           <Button variant="outline-primary" type="submit">
             Submit
           </Button>{" "}
-          <Button
-            variant="outline-secondary"
-            href={`/modreviews/view/${this.state.post_id}`}
+          <Link
+            class="btn btn-outline-secondary"
+            to={`/modreviews/view/${this.state.post_id}`}
+            onClick={this.props.updateUser}
           >
             Cancel
-          </Button>{" "}
+          </Link>{" "}
           <Button variant="outline-danger" onClick={this.onDelete}>
             Delete
           </Button>

@@ -50,7 +50,7 @@ class App extends Component {
       <Router>
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to="/" className="navbar-brand">
+            <Link to="/" className="navbar-brand" onClick={this.updateUser}>
               <img src={logo} width="50" height="50" alt="MODQ Logo" />
               MODQ
             </Link>
@@ -60,20 +60,30 @@ class App extends Component {
             />
           </nav>
           <br />
-          <Route exact path="/" component={Homepage} />
+          <Route 
+            exact 
+            path="/" 
+            render={props => <Homepage {...props} updateUser={this.updateUser} />}
+          />
           <Route path="/modreviews/newpost" component={CreateModReview} />
-          <Route path="/modreviews/edit/:id" component={EditModReview} />
+          <Route 
+            path="/modreviews/edit/:id"
+            render={props => <EditModReview {...props} updateUser={this.updateUser} />}
+          />
           <Route 
             path="/modreviews/view/:id" 
-            render={props => <ViewPost {...props} loggedIn={this.state.loggedIn} />} 
+            render={props => <ViewPost {...props} 
+              loggedIn={this.state.loggedIn}
+              updateUser={this.updateUser}
+            />} 
           />
           <Route 
             path="/users/signup" 
-            render={() => <Registration updateUser={this.updateUser} />}
+            render={props => <Registration {...props} updateUser={this.updateUser} />}
           />
           <Route
             path="/users/login"
-            render={() => <LoginPage updateUser={this.updateUser} />}
+            render={props => <LoginPage {...props} updateUser={this.updateUser} />}
           />
           {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateUser} />} /> */}
         </div>
