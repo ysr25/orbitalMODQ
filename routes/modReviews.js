@@ -64,34 +64,36 @@ router.get("/view/:modReviewId", (req, res, next) => {
 });
 
 // FOR COMMENT FUNCTION for specific review
-router.get("/:modReviewId/comments", (req, res, next) => {
+router.get("/view/:modReviewId/comments", (req, res, next) => {
   console.log("Handling GET request for COMMENTING on specific mod review ");
-  Comments.find((err, comments) => {
-    if(err) { res.send(err) }
-    res.json(comments)
-  });
+  Comment.find({post_id: req.params.modReviewId})
+  .populate("author")
+  .then((comments) => res.status(200).json({ content: comments }))
+  .catch((err) => res.status(400).json({ msg: err }));
 })
 
-router.post("/:modReviewId/comment", 
-passport.authenticate(["local"]), 
-(req, res, next) => {
-  console.log("Handling POST request for COMMENTING on specific mod review ");
-  let newCommentId = new mongoose.Types.ObjectId();
-  let newComment = {
-    _id: newCommentId,
-    content: sanitizeHtml(req.body.content, {
-      allowedTags: [ "p", "h1", "h2", "h3", "b", "i", "em", "strong", "blockquote", "a", "li", "ol", "ul" ],
-      allowedAttributes: { "a": [ "href" ] },
-    }),
-    author: req.user._id
-  };
+router.post(
+  "/:modReviewId/comment", 
+  loggedInOnly,
+  (req, res, next) => {
+    console.log("Handling POST request for COMMENTING on specific mod review ");
+    let newCommentId = new mongoose.Types.ObjectId();
+    let newComment = {
+      _id: newCommentId,
+      content: sanitizeHtml(req.body.content, {
+        allowedTags: [ "p", "h1", "h2", "h3", "b", "i", "em", "strong", "blockquote", "a", "li", "ol", "ul" ],
+        allowedAttributes: { "a": [ "href" ] },
+      }),
+      author: req.user._id,
+      post_id: req.params.modReviewId
+    };
 
-  Comment.create(newComment)
-      .then(() => res.status(200).json({
-        msg: "New comment added successfully.",
-        content: newCommentId,
-      }))
-      .catch((err) => res.status(400).json({ msg: err }));
+    Comment.create(newComment)
+        .then(() => res.status(200).json({
+          msg: "New comment added successfully.",
+          // content: newCommentId,
+        }))
+        .catch((err) => res.status(400).json({ msg: err }));
   }
 );
 

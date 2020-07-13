@@ -2,9 +2,12 @@ import axios from "axios";
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-export default class Registration extends Component {
+export default class ViewPost extends Component {
   constructor(props) {
     super(props);
   
@@ -20,7 +23,9 @@ export default class Registration extends Component {
       post_votes: 0,
       originalPoster: null,
       downvote_button: "outline-danger",
-      upvote_button: "outline-success"
+      upvote_button: "outline-success",
+      post_comments: [],
+      post_new_comment: ""
     };
 
   }
@@ -59,6 +64,31 @@ export default class Registration extends Component {
       .catch((err) => console.log(err));
   }
 
+  onChangeContent = (event, editor) => {
+    this.setState({ post_new_comment: editor.getData() });
+  };
+
+  onComment = (e) => {
+    e.preventDefault();
+
+    const newComment = {
+      content: this.state.post_new_comment,
+    };
+
+    axios
+    .post(
+      `/api/modReviews/${this.state.post_id}/comment`, newComment, {
+        withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res);
+      this.props.history.push(`/modreviews/view/${this.state.post_id}`);
+      this.setState.post_new_comment = ""
+      //onComment()
+    })
+    .catch((err) => console.log(err));
+  }
+
   componentDidMount = () => {
     axios
       .get(`/api/modReviews/view/${this.state.post_id}`)
@@ -87,70 +117,127 @@ export default class Registration extends Component {
           this.setState({ originalPoster: res.data.content })
         })
         .catch((err) => console.log(err));
+
+      axios.
+        get(`/api/modReviews/view/${this.state.post_id}/comments`)
+        .then((res) => {
+          this.setState({ 
+            post_comments: res.data.content
+          })
+          console.log(this.state.post_comments)
+        })
+        .catch((err) => console.log(err))
   };
 
   render() {
     const originalPoster = this.state.originalPoster;
-    
     return (
       <div style={{ marginTop: 10 }}>
-        <h6>Post #{this.state.post_id}</h6>
-        <em>
-          Last edited on {new Date(this.state.post_editedDate).toLocaleString()}
-        </em>
-        <br />
-        <Form.Group>
-          <br />
-          <h2>{this.state.post_title}</h2>
-          Posted by{" "}
+        <div>
+          <h6>Post #{this.state.post_id}</h6>
           <em>
-            {this.state.post_author} on{" "}
-            {new Date(this.state.post_date).toLocaleString()}
+            Last edited on {new Date(this.state.post_editedDate).toLocaleString()}
           </em>
           <br />
-          Upvotes: {this.state.post_votes}
+          <Form.Group>
+            <br />
+            <h2>{this.state.post_title}</h2>
+            Posted by{" "}
+            <em>
+              {this.state.post_author} on{" "}
+              {new Date(this.state.post_date).toLocaleString()}
+            </em>
+            <br />
+            Upvotes: {this.state.post_votes}
+            <br />
+            <br />
+            <h5>
+              Review for:{" "}
+              <b>
+                <em>{this.state.post_moduleCode}</em>
+              </b>
+            </h5>
+            <br />
+            <div dangerouslySetInnerHTML={{ __html: this.state.post_content}}></div>
+          </Form.Group>
           <br />
           <br />
-          <h5>
-            Review for:{" "}
-            <b>
-              <em>{this.state.post_moduleCode}</em>
-            </b>
-          </h5>
+          <Form.Row>
+          <Col>
+          {originalPoster ? (
+            <Button
+            type="button"
+            variant="outline-primary"
+            size="sm"
+            href={`/modreviews/edit/${this.state.post_id}`}
+          >
+            Edit
+          </Button>): (
+            <></>
+          )}
+          {" "}
+          {this.props.loggedIn ?
+            <>
+              <Button variant={this.state.upvote_button} size="sm" onClick={this.onUpvote}>Upvote</Button>
+              {" "}
+              <Button variant={this.state.downvote_button} size="sm" onClick={this.onDownvote}>Downvote</Button>
+            </>
+          : <></> }
+          {" "}
+          <Button type="button" variant="outline-secondary" size="sm" href={`/`}>
+            Return to Homepage
+          </Button>
+          </Col>
+          </Form.Row>
           <br />
-          <div dangerouslySetInnerHTML={{ __html: this.state.post_content}}></div>
-        </Form.Group>
-        <Form.Row>
-        <Col>
-        {originalPoster ? (
-          <Button
-          type="button"
-          variant="outline-primary"
-          size="sm"
-          href={`/modreviews/edit/${this.state.post_id}`}
-        >
-          Edit
-        </Button>): (
-          <></>
-        )}
-        {" "}
-        {this.props.loggedIn ?
-          <>
-            <Button variant={this.state.upvote_button} size="sm" onClick={this.onUpvote}>Upvote</Button>
-            {" "}
-            <Button variant={this.state.downvote_button} size="sm" onClick={this.onDownvote}>Downvote</Button>
-          </>
-        : <></> }
-        {" "}
-        <Button type="button" variant="outline-secondary" size="sm" href={`/`}>
-          Return to Homepage
-        </Button>
-        </Col>
-        </Form.Row>
+          <br />
+            <Form onSubmit={this.onComment}>
+            <h5>Post a new comment: </h5>
+            {this.props.loggedIn ? (
+              <>
+            <CKEditor
+              editor={ClassicEditor}
+              data={this.state.post_new_comment}
+              config={{
+                toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
+              }}
+              onChange={this.onChangeContent}
+            />
+            <br  />
+              <Button
+                // class="float-sm-right"
+                type = "comment"
+                variant="outline-primary"
+                size="sm">
+                Comment
+              </Button>
+              </>
+            ) : (
+              <h6>Create an account or login to an existing account to make a comment.</h6>
+            )}
+            </Form>
+        </div>
+            <br />
+            {this.state.post_comments
+            .map((comment) => (
+              <div key={comment._id}>
+                <Card border='light'>
+                  <Card.Body>
+                    <Card.Text dangerouslySetInnerHTML={{ __html: comment.content}}></Card.Text>
+                    <Card.Text>
+                      <em>posted by {comment.author.username}</em>
+                      <br  />
+                      <em>
+                        date posted {new Date(comment.datePosted).toLocaleString()}
+                      </em>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
         <br />
         <br />
-        <br />
-      </div>
+        </div>
     );
   }
 }
