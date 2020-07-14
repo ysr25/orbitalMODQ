@@ -8,6 +8,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const AnonymousStrategy = require("passport-anonymous").Strategy;
 const sanitizeHtml = require("sanitize-html");
 const User = require("../models/UserModel");
+const Comment = require("../models/CommentModel")
 
 passport.use(
   new LocalStrategy((username, password, done) => {
@@ -61,6 +62,40 @@ router.get("/view/:modReviewId", (req, res, next) => {
     .then((modReview) => res.status(200).json({ content: modReview }))
     .catch((err) => res.status(400).json({ msg: err }));
 });
+
+// FOR COMMENT FUNCTION for specific review
+router.get("/view/:modReviewId/comments", (req, res, next) => {
+  console.log("Handling GET request for COMMENTING on specific mod review ");
+  Comment.find({post_id: req.params.modReviewId})
+  .populate("author")
+  .then((comments) => res.status(200).json({ content: comments }))
+  .catch((err) => res.status(400).json({ msg: err }));
+})
+
+router.post(
+  "/:modReviewId/comment", 
+  loggedInOnly,
+  (req, res, next) => {
+    console.log("Handling POST request for COMMENTING on specific mod review ");
+    let newCommentId = new mongoose.Types.ObjectId();
+    let newComment = {
+      _id: newCommentId,
+      content: sanitizeHtml(req.body.content, {
+        allowedTags: [ "p", "h1", "h2", "h3", "b", "i", "em", "strong", "blockquote", "a", "li", "ol", "ul" ],
+        allowedAttributes: { "a": [ "href" ] },
+      }),
+      author: req.user._id,
+      post_id: req.params.modReviewId
+    };
+
+    Comment.create(newComment)
+        .then(() => res.status(200).json({
+          msg: "New comment added successfully.",
+          // content: newCommentId,
+        }))
+        .catch((err) => res.status(400).json({ msg: err }));
+  }
+);
 
 // Post Request
 router.post(
