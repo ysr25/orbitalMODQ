@@ -7,6 +7,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Redirect } from "react-router-dom";
 
 export default class ViewPost extends Component {
   constructor(props) {
@@ -23,13 +24,29 @@ export default class ViewPost extends Component {
       post_editedDate: "",
       post_votes: 0,
       originalPoster: null,
+
       downvote_button: "outline-danger",
       upvote_button: "outline-success",
       post_comments: [],
-      post_new_comment: ""
+      post_new_comment: "",
+      commentButton: "primary",
+      commentStatus: "Post Comment",
+      commentButtonDisabled: false,
+      sort_property: "datePosted",
+      sort_direction: 1,
     };
 
   }
+
+  compare = (property, direction) => {
+    if (property === "datePosted") {
+      return (a, b) => {
+        return (
+          (new Date(a[property]) < new Date(b[property]) ? 1 : -1) * direction
+        );
+      };
+    }
+  };
 
   onUpvote = () => {
     if(this.state.upvote_button == "outline-success") {
@@ -76,16 +93,25 @@ export default class ViewPost extends Component {
       content: this.state.post_new_comment,
     };
 
+    // this.setState({
+    //   commentButtonDisabled: true,
+    //   commentButton: "dark",
+    //   commentStatus: "Posting Comment...",
+    // });
+
     axios
     .post(
       `/api/modReviews/${this.state.post_id}/comment`, newComment, {
         withCredentials: true,
     })
     .then((res) => {
-      console.log(res);
-      this.props.history.push(`/modreviews/view/${this.state.post_id}`);
-      this.setState.post_new_comment = ""
-      //onComment()
+      this.setState({
+        commentButton: "primary",
+        commentStatus: "Post Comment",
+        commentButtonDisabled: false,
+        post_new_comment: ""
+      })
+      window.location.reload(true);
     })
     .catch((err) => console.log(err));
   }
@@ -125,7 +151,6 @@ export default class ViewPost extends Component {
           this.setState({ 
             post_comments: res.data.content
           })
-          console.log(this.state.post_comments)
         })
         .catch((err) => console.log(err))
   };
@@ -193,9 +218,9 @@ export default class ViewPost extends Component {
           <br />
           <br />
             <Form onSubmit={this.onComment}>
-            <h5>Post a new comment: </h5>
             {this.props.loggedIn ? (
-              <>
+            <>
+            <h5>Post a new comment: </h5>
             <CKEditor
               editor={ClassicEditor}
               data={this.state.post_new_comment}
@@ -209,17 +234,21 @@ export default class ViewPost extends Component {
                 // class="float-sm-right"
                 type = "comment"
                 variant="outline-primary"
-                size="sm">
+                size="sm"
+              >
                 Comment
               </Button>
               </>
             ) : (
-              <h6>Create an account or login to an existing account to make a comment.</h6>
+              <h6><a href={`/users/signup`}>Create an account</a> or <a href={`/users/login`}>login to an existing account</a> to make a comment.</h6>
             )}
             </Form>
         </div>
             <br />
             {this.state.post_comments
+              .sort(
+            this.compare(this.state.sort_property, this.state.sort_direction)
+          )
             .map((comment) => (
               <div key={comment._id}>
                 <Card border='light'>
