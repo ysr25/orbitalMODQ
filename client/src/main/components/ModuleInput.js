@@ -11,15 +11,10 @@ class ModuleInput extends Component {
 
     this.state = {
       showOptions: false,
-      filteredOptions: modulesWithRef,
+      filteredOptions: this.filterOptions(props.value),
       currentOption: 0,
-      displayedInput: this.props.value,
+      displayedInput: props.value,
     };
-  }
-
-  componentDidMount = () => {
-    console.log("test")
-    console.log(this.state.displayedInput)
   }
 
   filterOptions = (input) => {
@@ -65,6 +60,7 @@ class ModuleInput extends Component {
       const key = e.keyCode
       if (key === 13) {
         // enter
+        e.preventDefault()
         const option = this.state.currentOption
         this.props.onChange(this.state.filteredOptions[option].code)
         this.changeInput(this.state.filteredOptions[option].name)
@@ -77,9 +73,11 @@ class ModuleInput extends Component {
           const newOption = key === 38
             ? (oldOption === 0 ? prevState.filteredOptions.length - 1 : oldOption - 1)
             : (oldOption === prevState.filteredOptions.length - 1 ? 0 : oldOption + 1)
-          prevState.filteredOptions[newOption].ref.current.scrollIntoView({
-            block: "center",
-          })
+          if (prevState.showOptions) {
+            prevState.filteredOptions[newOption].ref.current.scrollIntoView({
+              block: "center",
+            })
+          }
           return { currentOption: newOption }
         })
       }

@@ -78,7 +78,11 @@ export default class CreateModReview extends Component {
       <div style={{ marginTop: 10 }}>
         <h3>New Post</h3>
         <Form onSubmit={this.onSubmit}>
-          <ModuleInput value={this.state.post_moduleCode} onChange={this.onChangeModuleCode} />
+          <ModuleInput 
+            key={this.state.post_moduleCode} 
+            value={this.state.post_moduleCode} 
+            onChange={this.onChangeModuleCode}
+          />
           <br />
           <Form.Control
             type="text"

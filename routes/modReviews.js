@@ -103,8 +103,8 @@ router.post(
   passport.authenticate(["local", "anonymous"]),
   (req, res, next) => {
     console.log("Handling POST request for mod review");
-    if (!req.body.content) {
-      return res.status(400).json({ msg: "Post cannot be empty." })
+    if (!req.body.moduleCode || !req.body.title || !req.body.content) {
+      return res.status(400).json({ msg: "Module code, title, and content cannot be empty." })
     }
     let newPostId = new mongoose.Types.ObjectId();
     let newPost = {
@@ -164,8 +164,8 @@ router.patch(
     // Double checking (so that users cannot randomly type the link and edit posts)
     ModReview.findOne({ _id: req.params.modReviewId }).then((modreview) => {
       if (String(modreview.author) === String(req.user._id)) {
-        if (!req.body.content) {
-          return res.status(400).json({ msg: "Post cannot be empty." })
+        if (!req.body.moduleCode || !req.body.title || !req.body.content) {
+          return res.status(400).json({ msg: "Module code, title, and content cannot be empty." })
         }
         const updateOps = { dateEdited: Date.now() };
         for (const ops in req.body) {

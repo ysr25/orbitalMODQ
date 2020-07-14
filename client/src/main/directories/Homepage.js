@@ -42,7 +42,9 @@ export default class Registration extends Component {
       };
     } else if (property === "upvotes") {
       return (a, b) => {
-        return (a.upvotes.length < b.upvotes.length ? 1 : -1) * direction;
+        const avotes = a.upvotes.length - a.downvotes.length
+        const bvotes = b.upvotes.length - b.downvotes.length
+        return (avotes < bvotes ? 1 : -1) * direction;
       };
     }
   };
@@ -129,7 +131,11 @@ export default class Registration extends Component {
           </ToggleButtonGroup>
           <br />
           <br />
-          <ModuleInput value={this.state.filter_moduleCode} onChange={this.changeFilter} />
+          <ModuleInput 
+            key={this.state.filter_moduleCode} 
+            value={this.state.filter_moduleCode}
+            onChange={this.changeFilter} 
+          />
           <br />
           <Form onSubmit={this.submitSearch}>
             <Form.Row>
@@ -184,7 +190,7 @@ export default class Registration extends Component {
                       date edited {new Date(post.dateEdited).toLocaleString()}
                     </em>
                     <br />
-                    Upvotes: {post.upvotes.length}
+                    Upvotes: {post.upvotes.length - post.downvotes.length}
                     {""}
                   </Card.Text>
                   <Link to={`/modreviews/view/${post._id}`} onClick={this.props.updateUser} className="card-link">

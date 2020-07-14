@@ -110,7 +110,11 @@ export default class EditModReview extends Component {
           Module
           </Form.Label>
           <Col sm={11}>
-            <ModuleInput value={this.state.post_moduleCode} onChange={this.onChangeModuleCode} />
+            <ModuleInput 
+              key={this.state.post_moduleCode}
+              value={this.state.post_moduleCode}
+              onChange={this.onChangeModuleCode}
+            />
           </Col>
           </Form.Group>
           <CKEditor
