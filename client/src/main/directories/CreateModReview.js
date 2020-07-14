@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import moduleList from "./ModuleList.js";
+import ModuleInput from "../components/ModuleInput.js"
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -13,7 +13,7 @@ export default class CreateModReview extends Component {
     this.state = {
       post_title: "",
       post_content: "",
-      post_moduleCode: "ACC1002",
+      post_moduleCode: "",
       isButtonDisabled: false,
       buttonVariant: "primary",
       post_id: "",
@@ -32,7 +32,7 @@ export default class CreateModReview extends Component {
   };
 
   onChangeModuleCode = (e) => {
-    this.setState({ post_moduleCode: e.target.value });
+    this.setState({ post_moduleCode: e });
   };
 
   onChangeAnonymous = (e) => {
@@ -78,20 +78,7 @@ export default class CreateModReview extends Component {
       <div style={{ marginTop: 10 }}>
         <h3>New Post</h3>
         <Form onSubmit={this.onSubmit}>
-          <Form.Label>Module: </Form.Label>
-          <Form.Control
-            as="select"
-            className="form-control"
-            value={this.state.post_moduleCode}
-            onChange={this.onChangeModuleCode}
-            required
-          >
-            {moduleList.map((module) => (
-              <option key={module.code} value={module.code}>
-                {module.code + ": " + module.title}
-              </option>
-            ))}
-          </Form.Control>
+          <ModuleInput value={this.state.post_moduleCode} onChange={this.onChangeModuleCode} />
           <br />
           <Form.Control
             type="text"

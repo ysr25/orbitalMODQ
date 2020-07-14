@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import moduleList from "./ModuleList.js";
+import ModuleInput from "../components/ModuleInput.js"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CKEditor from '@ckeditor/ckeditor5-react';
@@ -25,14 +25,14 @@ export default class EditModReview extends Component {
   componentDidMount = () => {
     axios
       .get(`/api/modReviews/view/${this.state.post_id}`)
-      .then((res) =>
-        this.setState({
+      .then((res) => {
+        return this.setState({
           post_id: res.data.content._id,
           post_title: res.data.content.title,
           post_content: res.data.content.content,
           post_moduleCode: res.data.content.moduleCode,
         })
-      )
+      })
       .catch((err) => console.log(err));
   };
 
@@ -45,7 +45,7 @@ export default class EditModReview extends Component {
   };
 
   onChangeModuleCode = (e) => {
-    this.setState({ post_moduleCode: e.target.value });
+    this.setState({ post_moduleCode: e });
   };
 
   onSubmit = (e) => {
@@ -109,21 +109,9 @@ export default class EditModReview extends Component {
           <Form.Label column sm={1}>
           Module
           </Form.Label>
-    <Col sm={11}>
-            <Form.Control
-              as="select"
-              className="form-control"
-              value={this.state.post_moduleCode}
-              onChange={this.onChangeModuleCode}
-              required
-            >
-              {moduleList.map((module) => (
-                <option key={module.code} value={module.code}>
-                  {module.code + ": " + module.title}
-                </option>
-              ))}
-            </Form.Control>
-            </Col>
+          <Col sm={11}>
+            <ModuleInput value={this.state.post_moduleCode} onChange={this.onChangeModuleCode} />
+          </Col>
           </Form.Group>
           <CKEditor
             editor={ClassicEditor}
@@ -138,7 +126,7 @@ export default class EditModReview extends Component {
             Submit
           </Button>{" "}
           <Link
-            class="btn btn-outline-secondary"
+            className="btn btn-outline-secondary"
             to={`/modreviews/view/${this.state.post_id}`}
             onClick={this.props.updateUser}
           >

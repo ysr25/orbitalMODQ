@@ -6,8 +6,8 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import moduleList from "./ModuleList.js";
 import Col from "react-bootstrap/Col";
+import ModuleInput from "../components/ModuleInput.js"
 
 export default class Registration extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ export default class Registration extends Component {
   };
 
   changeFilter = (e) => {
-    this.setState({ filter_moduleCode: e.target.value });
+    this.setState({ filter_moduleCode: e });
   };
 
   changeSearch = (e) => {
@@ -129,22 +129,7 @@ export default class Registration extends Component {
           </ToggleButtonGroup>
           <br />
           <br />
-          <Form.Control
-            as="select"
-            className="form-control"
-            value={this.state.filter_moduleCode}
-            onChange={this.changeFilter}
-          >
-            <option key="all" value="">
-              Find with module code
-            </option>
-            {moduleList.map((module) => (
-              <option
-                key={module.code}
-                value={module.code}
-              >{`${module.code}: ${module.title}`}</option>
-            ))}
-          </Form.Control>
+          <ModuleInput value={this.state.filter_moduleCode} onChange={this.changeFilter} />
           <br />
           <Form onSubmit={this.submitSearch}>
             <Form.Row>
