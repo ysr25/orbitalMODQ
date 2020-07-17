@@ -11,6 +11,7 @@ import LoginPage from "./directories/LoginPage";
 import ViewPost from "./directories/ViewPost";
 //import UserPage from "./directories/UserPage";
 import Navbar from "./components/Navbar";
+import EditUser from "./directories/EditUser";
 import logo from "./logo.jpg";
 
 class App extends Component {
@@ -77,13 +78,19 @@ class App extends Component {
               updateUser={this.updateUser}
             />} 
           />
-          <Route 
+          <Route
+            exact 
             path="/users/signup" 
             render={props => <Registration {...props} updateUser={this.updateUser} />}
           />
           <Route
             path="/users/login"
             render={props => <LoginPage {...props} updateUser={this.updateUser} />}
+          />
+          <Route
+            exact
+            path="/users/edit"
+            render={props => <EditUser {...props} updateUser={this.updateUser} />}
           />
           {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateUser} />} /> */}
         </div>

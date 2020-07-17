@@ -7,6 +7,7 @@ const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
 const router = express.Router();
 const User = require("./models/UserModel");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Assigning directory to respective var names
 const usersRoutes = require("./routes/users");
@@ -46,6 +47,37 @@ app.use(
 // passport (for logging in and out)
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.use(
+  new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/api/users/login/google/redirect",
+  }, (accessToken, refreshToken, profile, done) => {
+    User.findOne({ googleId: profile.id }).then(user => {
+      if (user) {
+        // user exists
+        done(null, user);
+      } else {
+        // user does not exist, create new user
+        User.create({ 
+          _id: new mongoose.Types.ObjectId(),
+          username: profile._json.name,
+          password: "",
+          course: "notSelected",
+          yearOfStudy: "notSelected",
+          firstName: profile._json.given_name,
+          lastName: profile._json.family_name,
+          email: profile._json.email,
+          googleId: profile.id,
+        })
+        .then(user => done(null, user))
+        .catch(err => console.log(err))
+      }
+    })
+    .catch(err => console.log(err))
+  })
+);
 
 passport.serializeUser((user, done) => {
   done(null, user._id);

@@ -45,25 +45,29 @@ class Navbar extends Component {
           </li>
           {loggedIn ? (
             <li className="navbar-item">
+              <Link to="/users/edit/" className="nav-link" onClick={this.props.updateUser}>
+                Edit Account Details
+              </Link>
+            </li>
+          ) : (
+            <li className="navbar-item">
+              <Link to="/users/signup" className="nav-link" onClick={this.props.updateUser}>
+                Register
+              </Link>
+            </li>
+          )}
+          {loggedIn ? (
+            <li className="navbar-item">
               <Link to="#" className="nav-link" onClick={this.logout}>
                 Log Out
               </Link>
             </li>
           ) : (
-              <li className="navbar-item">
-                <Link to="/users/signup" className="nav-link" onClick={this.props.updateUser}>
-                  Register
-                </Link>
-              </li>
-          )}
-          {loggedIn ? (
-            <></>
-          ) : (
             <li className="navbar-item">
-                <Link to="/users/login" className="nav-link" onClick={this.props.updateUser}>
-                  Log In
-                </Link>
-              </li>
+              <Link to="/users/login" className="nav-link" onClick={this.props.updateUser}>
+                Log In
+              </Link>
+            </li>
           )}
         </ul>
       </div>

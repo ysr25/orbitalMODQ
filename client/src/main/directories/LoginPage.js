@@ -92,6 +92,7 @@ export default class LoginPage extends Component {
               className="form-control"
               value={this.state.user_username}
               onChange={this.onChangeUsername}
+              required
             />
             <br></br>
             <input
@@ -100,6 +101,7 @@ export default class LoginPage extends Component {
               className="form-control"
               value={this.state.user_password}
               onChange={this.onChangePassword}
+              required
             />
             <br />
             <div className="form-group">
@@ -111,6 +113,13 @@ export default class LoginPage extends Component {
               >
                 {this.state.loginStatus}
               </Button>
+              {" "}
+              <a
+                href="http://localhost:3001/api/users/login/google"
+                className="btn btn-primary"
+              >
+                Log in with Google
+              </a>
               <p>{this.state.loginError}</p>
             </div>
           </form>

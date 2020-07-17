@@ -8,6 +8,7 @@ const yearOfStudyOptions = [
   "masters",
   "doctorate",
   "others",
+  "notSelected"
 ];
 
 let UserSchema = new Schema(
@@ -22,7 +23,7 @@ let UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      //required: true,
       trim: true,
      // minlength: 6
     },
@@ -48,6 +49,9 @@ let UserSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    googleId: {
+      type: String,
     },
   },
   {
