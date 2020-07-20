@@ -1,16 +1,15 @@
 import React from 'react';
 import { MemoryRouter } from "react-router-dom";
 import renderer from 'react-test-renderer';
-import App from './App';
+import LoginPage from './LoginPage';
 
-test("renders app", () => {
-  //const { getByText } = render(<App />);
-  //const linkElement = getByText(/learn react/i);
-  //expect(linkElement).toBeInTheDocument();
+const mockUpdateUser = jest.fn(() => false)
+
+it("renders login page", () => {
   const tree = renderer
     .create(
       <MemoryRouter>
-        <App />
+        <LoginPage updateUser={mockUpdateUser} />
       </MemoryRouter>
     )
     .toJSON()

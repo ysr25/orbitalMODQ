@@ -40,7 +40,8 @@
     ]
   },
   "devDependencies": {
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-test-renderer": "^16.13.1"
   },
   "babel": {
     "presets": [

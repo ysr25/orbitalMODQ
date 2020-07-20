@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders navigation bar (logged in) 1`] = `
+<div
+  className="collpase navbar-collapse"
+>
+  <ul
+    className="navbar-nav mr-auto"
+  >
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/modreviews/newpost"
+        onClick={[Function]}
+      >
+        Create A Post
+      </a>
+    </li>
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/users/edit/"
+        onClick={[Function]}
+      >
+        Edit Account Details
+      </a>
+    </li>
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/"
+        onClick={[Function]}
+      >
+        Log Out
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`renders navigation bar (not logged in) 1`] = `
+<div
+  className="collpase navbar-collapse"
+>
+  <ul
+    className="navbar-nav mr-auto"
+  >
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/"
+        onClick={[Function]}
+      >
+        Home
+      </a>
+    </li>
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/modreviews/newpost"
+        onClick={[Function]}
+      >
+        Create A Post
+      </a>
+    </li>
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/users/signup"
+        onClick={[Function]}
+      >
+        Register
+      </a>
+    </li>
+    <li
+      className="navbar-item"
+    >
+      <a
+        className="nav-link"
+        href="/users/login"
+        onClick={[Function]}
+      >
+        Log In
+      </a>
+    </li>
+  </ul>
+</div>
+`;

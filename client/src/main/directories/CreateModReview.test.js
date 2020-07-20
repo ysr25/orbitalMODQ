@@ -1,16 +1,13 @@
 import React from 'react';
 import { MemoryRouter } from "react-router-dom";
 import renderer from 'react-test-renderer';
-import App from './App';
+import CreateModReview from './CreateModReview';
 
-test("renders app", () => {
-  //const { getByText } = render(<App />);
-  //const linkElement = getByText(/learn react/i);
-  //expect(linkElement).toBeInTheDocument();
+it("renders create module review page", () => {
   const tree = renderer
     .create(
       <MemoryRouter>
-        <App />
+        <CreateModReview />
       </MemoryRouter>
     )
     .toJSON()
