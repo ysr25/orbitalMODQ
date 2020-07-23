@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js --ignore client/",
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "repository": {
@@ -39,8 +39,12 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "node-mocks-http": "^1.8.1",
     "nodemon": "^2.0.4",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "sinon": "^9.0.2"
   },
   "engines": {
     "node": "14.1.0"
