@@ -119,6 +119,7 @@ export default class Registration extends Component {
   }
 
   render() {
+  const url = process.env.NODE_ENV === "development" ? "http://localhost:3001/api/users/login/google" : "/api/users/login/google"
     if (this.state.redirectTo) {
       return <Redirect to={{ pathname: this.state.redirectTo }} />;
     } else {
@@ -227,7 +228,7 @@ export default class Registration extends Component {
               </Button>
               {" "}
               <a
-                href="http://localhost:3001/api/users/login/google"
+                href={url}
                 className="btn btn-primary"
               >
                 Sign up with Google

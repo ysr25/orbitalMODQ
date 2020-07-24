@@ -130,12 +130,20 @@ exports.signIn = (req, res, next) => {
   })(req, res, next);
 }
 
-exports.googleRedirect = (req, res) => { // remove "http://localhost:3000" when deploying
+exports.googleRedirect = (req, res) => {
+  if (process.env.NODE_ENV === "development") {
     if (req.user.course === "notSelected" || req.user.yearOfStudy === "notSelected") {
       res.redirect("http://localhost:3000/users/edit/")
     } else {
       res.redirect("http://localhost:3000/")
     }
+  } else {
+    if (req.user.course === "notSelected" || req.user.yearOfStudy === "notSelected") {
+      res.redirect("/users/edit/")
+    } else {
+      res.redirect("/")
+    }
+  }
 }
 
 // POST Request, user sign out verification
