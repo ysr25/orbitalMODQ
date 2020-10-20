@@ -1,11 +1,11 @@
-import React from 'react';
-import { MemoryRouter } from "react-router-dom";
-import renderer from 'react-test-renderer';
-import Registration from './Registration';
+import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
+import renderer from 'react-test-renderer'
+import Registration from './Registration'
 
 const mockUpdateUser = jest.fn(() => false)
 
-it("renders login page", () => {
+it('renders login page', () => {
   const tree = renderer
     .create(
       <MemoryRouter>
@@ -14,4 +14,4 @@ it("renders login page", () => {
     )
     .toJSON()
   expect(tree).toMatchSnapshot()
-});
+})

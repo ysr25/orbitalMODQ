@@ -1,73 +1,72 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const moduleList = require("./ModuleList");
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const moduleList = require('./ModuleList')
 
-let modReviewSchema = new Schema({
+const modReviewSchema = new Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User'
   },
   datePosted: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
   dateEdited: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
   title: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 100,
+    maxlength: 100
   },
   content: {
     type: String,
     required: true,
-    trim: true,
+    trim: true
   },
   moduleCode: {
     type: String,
     required: true,
-    enum: moduleList,
+    enum: moduleList
   },
   anonymous: {
     type: Boolean,
-    required: true,
+    required: true
   },
   upvotes: {
     type: [mongoose.Schema.Types.ObjectId],
-    default: [],
+    default: []
   },
   downvotes: {
     type: [mongoose.Schema.Types.ObjectId],
-    default: [],
-  },
-});
-
-modReviewSchema.index({ title: "text", content: "text" });
-
-modReviewSchema.virtual("votes").get(function() {
-  return this.upvotes.length - this.downvotes.length;
+    default: []
+  }
 })
 
-modReviewSchema.methods.updateUpvotes = function(newArray, next) {
-  return mongoose.model("ModReview").findOneAndUpdate(
-    { _id: this._id }, 
-    { upvotes: newArray }, 
+modReviewSchema.index({ title: 'text', content: 'text' })
+
+modReviewSchema.virtual('votes').get(function () {
+  return this.upvotes.length - this.downvotes.length
+})
+
+modReviewSchema.methods.updateUpvotes = function (newArray, next) {
+  return mongoose.model('ModReview').findOneAndUpdate(
+    { _id: this._id },
+    { upvotes: newArray },
     { new: true, useFindAndModify: false },
     next
   )
 }
 
-modReviewSchema.methods.updateDownvotes = function(newArray, next) {
-  return mongoose.model("ModReview").findOneAndUpdate(
-    { _id: this._id }, 
-    { downvotes: newArray }, 
+modReviewSchema.methods.updateDownvotes = function (newArray, next) {
+  return mongoose.model('ModReview').findOneAndUpdate(
+    { _id: this._id },
+    { downvotes: newArray },
     { new: true, useFindAndModify: false },
     next
   )
 }
 
-
-module.exports = mongoose.model("ModReview", modReviewSchema);
+module.exports = mongoose.model('ModReview', modReviewSchema)
