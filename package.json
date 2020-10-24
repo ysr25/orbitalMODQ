@@ -44,7 +44,8 @@
     "node-mocks-http": "^1.8.1",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
-    "sinon": "^9.0.2"
+    "sinon": "^9.0.2",
+    "standard": "*"
   },
   "engines": {
     "node": "14.1.0"

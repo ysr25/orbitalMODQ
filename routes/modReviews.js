@@ -1,40 +1,7 @@
-const bcrypt = require('bcryptjs')
 const express = require('express')
 const router = express.Router()
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
-const AnonymousStrategy = require('passport-anonymous').Strategy
-const User = require('../models/UserModel')
+const passport = require('../config/passport')
 const modReviewController = require('../controllers/modReviewController')
-
-passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username })
-      .then((user) => {
-        if (!user) {
-          return done(null, false, {
-            msg:
-              'No user with entered username found, please create an account.'
-          })
-        } else {
-          bcrypt.compare(password, user.password)
-            .then(res => {
-              if (res) {
-                return done(null, user)
-              } else {
-                return done(null, false, {
-                  msg: 'Incorrect password, please try again.'
-                })
-              }
-            })
-            .catch(err => done(err))
-        }
-      })
-      .catch((err) => console.log(err))
-  })
-)
-
-passport.use(new AnonymousStrategy())
 
 const loggedInOnly = (req, res, next) => {
   console.log('checking if logged in')

@@ -80,7 +80,6 @@ exports.postUser = (req, res, next) => {
   }
   const hash = bcrypt.hashSync(req.body.password, saltRounds)
   User.create({
-    _id: new mongoose.Types.ObjectId(),
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     username: req.body.username,
@@ -111,7 +110,7 @@ exports.postUser = (req, res, next) => {
 // POST Request, user sign in verification
 exports.signIn = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
-    console.log(user)
+    console.log('user:' + user)
     if (err) {
       return next(err)
     } if (!user) {
