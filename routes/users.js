@@ -1,43 +1,42 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('../config/passport')
-const userController = require('../controllers/userController')
+const users = require('../controllers/users')
 
-const loggedInOnly = (req, res, next) => {
-  console.log('checking if logged in')
-  if (req.isAuthenticated()) next()
-  else res.status(403).json({ msg: 'You need to be logged in to do this.' })
-}
+const loggedInOnly = require('./auth').loggedInOnly
+const loggedOutOnly = require('./auth').loggedOutOnly
+const sendResponse = require('./utils').sendResponse
 
-const loggedOutOnly = (req, res, next) => {
-  console.log('checking if logged out')
-  if (req.isUnauthenticated()) next()
-  else res.status(403).json({ msg: 'You need to be logged out to do this.' })
-}
+router.get('/', sendResponse)
 
-// // GET Request -- For admin
-// router.get("/", (req, res, next) => {
-//   console.log("Handling GET request for user");
-//   User.find()
-//     .then((users) => res.json(users))
-//     .catch((err) => res.status(400).json("Error: " + err));
-// });
+// Get user details
+router.get('/view',
+  loggedInOnly,
+  users.getUser,
+  sendResponse
+)
 
-router.get('/', userController.checkIfLoggedIn)
+// Edit user details
+router.patch('/edit',
+  loggedInOnly,
+  users.editUser,
+  sendResponse
+)
 
-// GET Request, view user page
-router.get('/view', loggedInOnly, userController.getUser)
+// Create new user
+router.post('/signup',
+  users.createUser,
+  sendResponse
+)
 
-// PATCH Request, edit user details
-router.patch('/edit', loggedInOnly, userController.editUser)
+// Sign user in
+router.post('/login',
+  loggedOutOnly,
+  users.signIn,
+  sendResponse
+)
 
-// POST Request, creating new user
-router.post('/signup', userController.postUser)
-
-// POST Request, user sign in verification
-router.post('/login', loggedOutOnly, userController.signIn)
-
-// POST Request, user sign in verification with google
+// Sign user in with google
 router.get(
   '/login/google',
   passport.authenticate('google', {
@@ -48,13 +47,21 @@ router.get(
 router.get(
   '/login/google/redirect',
   passport.authenticate('google'),
-  userController.googleRedirect
+  users.googleRedirect
 )
 
-// POST Request, user sign out verification
-router.post('/logout', loggedInOnly, userController.signOut)
+// Sign user out
+router.post('/logout',
+  loggedInOnly,
+  users.signOut,
+  sendResponse
+)
 
-// FOR ADMIN
-router.delete('/delete/:userId', userController.deleteUser)
+// Delete user account
+router.delete('/delete',
+  loggedInOnly,
+  users.deleteUser,
+  sendResponse
+)
 
 module.exports = router

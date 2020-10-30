@@ -1,19 +1,12 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const moduleList = require('./ModuleList')
+const moduleList = require('./module-list')
 
-const modReviewSchema = new Schema({
+const sanitize = require('./utils').sanitize
+
+const ReviewSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  },
-  datePosted: {
-    type: Date,
-    default: Date.now
-  },
-  dateEdited: {
-    type: Date,
-    default: Date.now
   },
   title: {
     type: String,
@@ -45,13 +38,32 @@ const modReviewSchema = new Schema({
   }
 })
 
-modReviewSchema.index({ title: 'text', content: 'text' })
+ReviewSchema.index({ title: 'text', content: 'text' })
 
-modReviewSchema.virtual('votes').get(function () {
+ReviewSchema.virtual('votes').get(function () {
   return this.upvotes.length - this.downvotes.length
 })
 
-modReviewSchema.methods.updateUpvotes = function (newArray, next) {
+ReviewSchema.pre('save', function (next) {
+  const review = this
+
+  // not sure what i need this for
+  if (!review.moduleCode || !review.title || !review.content) {
+    const error = new Error('Module code, title, and content cannot be empty.')
+    error.status = 400
+    return next(error)
+  }
+
+  if (review.isModified('content')) {
+    review.content = sanitize(review.content)
+  }
+
+  review.dateEdited = Date.now()
+
+  return next()
+})
+
+ReviewSchema.methods.updateUpvotes = function (newArray, next) {
   return mongoose.model('ModReview').findOneAndUpdate(
     { _id: this._id },
     { upvotes: newArray },
@@ -60,7 +72,7 @@ modReviewSchema.methods.updateUpvotes = function (newArray, next) {
   )
 }
 
-modReviewSchema.methods.updateDownvotes = function (newArray, next) {
+ReviewSchema.methods.updateDownvotes = function (newArray, next) {
   return mongoose.model('ModReview').findOneAndUpdate(
     { _id: this._id },
     { downvotes: newArray },
@@ -69,4 +81,4 @@ modReviewSchema.methods.updateDownvotes = function (newArray, next) {
   )
 }
 
-module.exports = mongoose.model('ModReview', modReviewSchema)
+module.exports = mongoose.model('ModReview', ReviewSchema)

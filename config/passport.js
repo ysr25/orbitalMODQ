@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 const AnonymousStrategy = require('passport-anonymous').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 
-const User = require('../models/UserModel')
+const User = require('../models/user-model')
 const settings = require('./settings')
 
 passport.use(
@@ -43,8 +43,8 @@ passport.use(
         email: profile._json.email,
         googleId: profile.id
       }, (err, user) => {
-      	if (err) return next(err)
-      	next(null, user)
+        if (err) return next(err)
+        next(null, user)
       })
     })
   })

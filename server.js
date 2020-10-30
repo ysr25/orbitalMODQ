@@ -1,15 +1,15 @@
-const cors = require('cors')
-const path = require('path')
 const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const cors = require('cors')
+const path = require('path')
 
 const settings = require('./config/settings')
 const mongoose = require('./config/mongoose')
 const passport = require('./config/passport')
 
 const users = require('./routes/users')
-const moduleReviews = require('./routes/modReviews')
+const reviews = require('./routes/reviews')
 
 const app = express()
 
@@ -32,9 +32,22 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Logging routes
+app.use((req, res, next) => {
+  console.log(req.method, 'request to', req.originalUrl)
+  next()
+})
+
+// Check if user is logged in
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = !!req.isAuthenticated()
+  console.log('isLoggedIn: ', res.locals.isLoggedIn)
+  next()
+})
+
 // Routes
 app.use('/api/users', users)
-app.use('/api/modReviews', moduleReviews)
+app.use('/api/modReviews', reviews)
 
 // Reaches this when no routes are found
 app.use((req, res, next) => {
@@ -44,13 +57,11 @@ app.use((req, res, next) => {
 })
 
 // Reaches this when other parts of code throws error
-app.use((error, req, res, next) => {
-  res.status(error.status || 500)
+app.use((err, req, res, next) => {
+  res.status(err.status || 500)
   res.json({
-    error: {
-      status: error.status,
-      message: error.message
-    }
+    isLoggedIn: res.locals.isLoggedIn,
+    msg: err.message || 'An unknown error occured'
   })
 })
 
