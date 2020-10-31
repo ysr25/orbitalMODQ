@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 const settings = require('./settings')
 
 const uri = settings.mongoUrl
-const options = { useNewUrlParser: true, useUnifiedTopology: true }
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+}
 
 mongoose.connect(uri, options)
   .then(console.log('Connected to MongoDB'))

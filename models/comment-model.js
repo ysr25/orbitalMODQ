@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const sanitize = require('./utils').sanitize
 
 const CommentSchema = new mongoose.Schema({
   author: {

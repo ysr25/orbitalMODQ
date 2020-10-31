@@ -75,7 +75,7 @@ exports.checkIfUserIsPoster = (req, res, next) => {
     res.locals.content = false
     return next()
   }
-  Review.findOne({ _id: req.params.modReviewId }, (err, review) => {
+  Review.findById(req.params.modReviewId, (err, review) => {
     if (err) return next(err)
     res.locals.content = String(review.author) === String(req.user._id)
     next()
@@ -83,7 +83,7 @@ exports.checkIfUserIsPoster = (req, res, next) => {
 }
 
 exports.editReview = (req, res, next) => {
-  Review.findOne({ _id: req.params.modReviewId }, (err, review) => {
+  Review.findById(req.params.modReviewId, (err, review) => {
     if (err) return next(err)
     if (String(review.author) !== String(req.user._id)) {
       const error = new Error('You can only edit your own post.')
@@ -103,7 +103,7 @@ exports.editReview = (req, res, next) => {
 }
 
 exports.deleteReview = (req, res, next) => {
-  Review.findOne({ _id: req.params.modReviewId }, (err, review) => {
+  Review.findById(req.params.modReviewId, (err, review) => {
     if (err) return next(err)
     if (String(review.author) !== String(req.user._id)) {
       const error = new Error('You can only delete your own post.')
@@ -120,26 +120,37 @@ exports.deleteReview = (req, res, next) => {
 }
 
 exports.searchReviews = (req, res, next) => {
-  const mergereviews = (arr1, arr2) => arr1.filter(rev1 => !arr2.find(rev2 => String(rev1._id) === String(rev2._id))).concat(arr2)
+  const mergeReviews = (arr1, arr2) => {
+    return arr1
+      .filter(rev1 => !arr2.find(rev2 => String(rev1._id) === String(rev2._id)))
+      .concat(arr2)
+  }
 
-  // search using text index
+  // Full search using text indexes
   Review.find({ $text: { $search: req.query.q } })
     .populate('author')
     .exec((err, reviews) => {
       if (err) return next(err)
-      // partial search on first word only
-      Review.find({ $or: [{ title: { $regex: req.query.q.split(' ')[0] } }, { content: { $regex: req.query.q.split(' ')[0] } }] })
+      // Partial search on last word only
+      const keywords = req.query.q.split(' ')
+      const lastWord = keywords[keywords.length - 1]
+      Review.find({
+        $or: [
+          { title: { $regex: lastWord, $options: 'i' } },
+          { content: { $regex: lastWord, $options: 'i' } }
+        ]
+      })
         .populate('author')
         .exec((err, result) => {
           if (err) return next(err)
-          res.locals.content = mergereviews(reviews, result)
+          res.locals.content = mergeReviews(reviews, result)
           next()
         })
     })
 }
 
 exports.vote = (req, res, next) => {
-  Review.findOne({ _id: req.params.modReviewId }, (err, review) => {
+  Review.findById(req.params.modReviewId, (err, review) => {
     if (err) return next(err)
 
     const voteArray = review[res.locals.vote]

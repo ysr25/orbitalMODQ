@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const moduleList = require('./module-list')
-
 const sanitize = require('./utils').sanitize
 
 const ReviewSchema = new mongoose.Schema({
@@ -50,15 +49,14 @@ ReviewSchema.pre('save', function (next) {
   if (review.isModified('content')) {
     review.content = sanitize(review.content)
   }
-
   review.dateEdited = Date.now()
 
   return next()
 })
 
 ReviewSchema.methods.updateVotes = function (direction, newArray, next) {
-  return mongoose.model('ModReview').findOneAndUpdate(
-    { _id: this._id },
+  return mongoose.model('ModReview').findByIdAndUpdate(
+    this._id,
     { [direction]: newArray },
     { new: true, useFindAndModify: false },
     next

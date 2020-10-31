@@ -91,5 +91,4 @@ router.patch('/downvote/:modReviewId',
   sendResponse
 )
 
-
 module.exports = router
