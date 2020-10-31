@@ -47,13 +47,6 @@ ReviewSchema.virtual('votes').get(function () {
 ReviewSchema.pre('save', function (next) {
   const review = this
 
-  // not sure what i need this for
-  if (!review.moduleCode || !review.title || !review.content) {
-    const error = new Error('Module code, title, and content cannot be empty.')
-    error.status = 400
-    return next(error)
-  }
-
   if (review.isModified('content')) {
     review.content = sanitize(review.content)
   }
@@ -63,19 +56,10 @@ ReviewSchema.pre('save', function (next) {
   return next()
 })
 
-ReviewSchema.methods.updateUpvotes = function (newArray, next) {
+ReviewSchema.methods.updateVotes = function (direction, newArray, next) {
   return mongoose.model('ModReview').findOneAndUpdate(
     { _id: this._id },
-    { upvotes: newArray },
-    { new: true, useFindAndModify: false },
-    next
-  )
-}
-
-ReviewSchema.methods.updateDownvotes = function (newArray, next) {
-  return mongoose.model('ModReview').findOneAndUpdate(
-    { _id: this._id },
-    { downvotes: newArray },
+    { [direction]: newArray },
     { new: true, useFindAndModify: false },
     next
   )

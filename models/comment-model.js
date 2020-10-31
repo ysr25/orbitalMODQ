@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const CommentsSchema = new mongoose.Schema({
+const CommentSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -21,4 +21,10 @@ const CommentsSchema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('Comment', CommentsSchema)
+CommentSchema.pre('save', function (next) {
+  const comment = this
+  comment.content = sanitize(comment.content)
+  return next()
+})
+
+module.exports = mongoose.model('Comment', CommentSchema)

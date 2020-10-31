@@ -1,8 +1,6 @@
 const Review = require('../models/review-model')
 const Comment = require('../models/comment-model')
 
-const sanitize = require('./utils').sanitize
-
 exports.getAllReviews = async (req, res, next) => {
   Review.find()
     .populate('author')
@@ -35,7 +33,7 @@ exports.getComments = (req, res, next) => {
 
 exports.postComment = (req, res, next) => {
   const newComment = new Comment({
-    content: sanitize(req.body.content),
+    content: req.body.content,
     author: req.user._id,
     post_id: req.params.modReviewId
   })
@@ -140,54 +138,30 @@ exports.searchReviews = (req, res, next) => {
     })
 }
 
-exports.upvoteReview = (req, res, next) => {
+exports.vote = (req, res, next) => {
   Review.findOne({ _id: req.params.modReviewId }, (err, review) => {
     if (err) return next(err)
-    if (review.upvotes.includes(req.user._id)) {
-      // Take back upvote
-      const newArray = review.upvotes.filter(item => String(item) !== String(req.user._id))
-      review.updateUpvotes(newArray, (err, result) => {
-        if (err) return next(err)
-        res.locals.msg = 'Module review upvote removed.'
-        res.locals.content = result.votes
-        next()
-      })
-    } else {
-      // Upvote
-      const newArray = review.upvotes.slice()
-      newArray.push(req.user._id)
-      review.updateUpvotes(newArray, (err, result) => {
-        if (err) return next(err)
-        res.locals.msg = 'Module review upvoted.'
-        res.locals.content = result.votes
-        next()
-      })
-    }
-  })
-}
 
-exports.downvoteReview = (req, res, next) => {
-  Review.findOne({ _id: req.params.modReviewId }, (err, review) => {
-    if (err) return next(err)
-    if (review.downvotes.includes(req.user._id)) {
-      // Take back downvote
-      const newArray = review.downvotes.filter(item => String(item) !== String(req.user._id))
-      review.updateDownvotes(newArray, (err, result) => {
-        if (err) return next(err)
-        res.locals.msg = 'Module review downvote removed.'
-        res.locals.content = result.votes
-        next()
-      })
+    const voteArray = review[res.locals.vote]
+    let newArray
+    let message
+
+    if (voteArray.includes(req.user._id)) {
+      // Take back up/downvote
+      newArray = voteArray.filter(item => String(item) !== String(req.user._id))
+      message = `Module review ${res.locals.vote} removed.`
     } else {
-      // Downvote
-      const newArray = review.downvotes.slice()
+      // Up/downvote
+      newArray = voteArray.slice()
       newArray.push(req.user._id)
-      review.updateDownvotes(newArray, (err, result) => {
-        if (err) return next(err)
-        res.locals.msg = 'Module review downvoted.'
-        res.locals.content = result.votes
-        next()
-      })
+      message = `Module review ${res.locals.vote} added.`
     }
+
+    review.updateVotes(res.locals.vote, newArray, (err, result) => {
+      if (err) return next(err)
+      res.locals.msg = message
+      res.locals.content = result.votes
+      next()
+    })
   })
 }

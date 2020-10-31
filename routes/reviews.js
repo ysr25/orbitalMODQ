@@ -72,15 +72,24 @@ router.get('/search',
 // Upvote review
 router.patch('/upvote/:modReviewId',
   loggedInOnly,
-  reviews.upvoteReview,
+  (req, res, next) => {
+    res.locals.vote = 'upvotes'
+    next()
+  },
+  reviews.vote,
   sendResponse
 )
 
 // Downvote review
 router.patch('/downvote/:modReviewId',
   loggedInOnly,
-  reviews.downvoteReview,
+  (req, res, next) => {
+    res.locals.vote = 'downvotes'
+    next()
+  },
+  reviews.vote,
   sendResponse
 )
+
 
 module.exports = router
