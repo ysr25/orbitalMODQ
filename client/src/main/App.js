@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   updateUser () {
-    axios.get('/api/users', {
+    axios.get('/api', {
       withCredentials: true
     })
       .then((response) => {

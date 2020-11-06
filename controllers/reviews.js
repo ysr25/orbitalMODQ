@@ -12,7 +12,7 @@ exports.getAllReviews = async (req, res, next) => {
 }
 
 exports.getOneReview = (req, res, next) => {
-  Review.findById(req.params.modReviewId)
+  Review.findById(req.params.reviewId)
     .populate('author')
     .exec((err, review) => {
       if (err) return next(err)
@@ -22,7 +22,7 @@ exports.getOneReview = (req, res, next) => {
 }
 
 exports.getComments = (req, res, next) => {
-  Comment.find({ post_id: req.params.modReviewId })
+  Comment.find({ reviewId: req.params.reviewId })
     .populate('author')
     .exec((err, comments) => {
       if (err) return next(err)
@@ -35,7 +35,7 @@ exports.postComment = (req, res, next) => {
   const newComment = new Comment({
     content: req.body.content,
     author: req.user._id,
-    post_id: req.params.modReviewId
+    reviewId: req.params.reviewId
   })
 
   newComment.save((err, result) => {
@@ -65,7 +65,7 @@ exports.postReview = (req, res, next) => {
   newPost.save((err, result) => {
     if (err) return next(err)
     res.locals.msg = 'Module review created successfully.'
-    res.locals.content = result
+    res.locals.content = result._id
     next()
   })
 }
@@ -75,7 +75,7 @@ exports.checkIfUserIsPoster = (req, res, next) => {
     res.locals.content = false
     return next()
   }
-  Review.findById(req.params.modReviewId, (err, review) => {
+  Review.findById(req.params.reviewId, (err, review) => {
     if (err) return next(err)
     res.locals.content = String(review.author) === String(req.user._id)
     next()
@@ -83,7 +83,7 @@ exports.checkIfUserIsPoster = (req, res, next) => {
 }
 
 exports.editReview = (req, res, next) => {
-  Review.findById(req.params.modReviewId, (err, review) => {
+  Review.findById(req.params.reviewId, (err, review) => {
     if (err) return next(err)
     if (String(review.author) !== String(req.user._id)) {
       const error = new Error('You can only edit your own post.')
@@ -103,14 +103,14 @@ exports.editReview = (req, res, next) => {
 }
 
 exports.deleteReview = (req, res, next) => {
-  Review.findById(req.params.modReviewId, (err, review) => {
+  Review.findById(req.params.reviewId, (err, review) => {
     if (err) return next(err)
     if (String(review.author) !== String(req.user._id)) {
       const error = new Error('You can only delete your own post.')
       error.status = 403
       next(error)
     }
-    Review.findByIdAndDelete(req.params.modReviewId, (err, result) => {
+    Review.findByIdAndDelete(req.params.reviewId, (err, result) => {
       if (err) return next(err)
       res.locals.msg = 'Module review deleted successfully.'
       res.locals.content = result
@@ -120,6 +120,7 @@ exports.deleteReview = (req, res, next) => {
 }
 
 exports.searchReviews = (req, res, next) => {
+  // Reused from https://stackoverflow.com/a/41919138 with minor modifications
   const mergeReviews = (arr1, arr2) => {
     return arr1
       .filter(rev1 => !arr2.find(rev2 => String(rev1._id) === String(rev2._id)))
@@ -150,25 +151,25 @@ exports.searchReviews = (req, res, next) => {
 }
 
 exports.vote = (req, res, next) => {
-  Review.findById(req.params.modReviewId, (err, review) => {
+  Review.findById(req.params.reviewId, (err, review) => {
     if (err) return next(err)
 
-    const voteArray = review[res.locals.vote]
-    let newArray
+    const prevVotes = review[res.locals.vote]
+    let newVotes
     let message
 
-    if (voteArray.includes(req.user._id)) {
+    if (prevVotes.includes(req.user._id)) {
       // Take back up/downvote
-      newArray = voteArray.filter(item => String(item) !== String(req.user._id))
+      newVotes = prevVotes.filter(item => String(item) !== String(req.user._id))
       message = `Module review ${res.locals.vote} removed.`
     } else {
       // Up/downvote
-      newArray = voteArray.slice()
-      newArray.push(req.user._id)
+      newVotes = prevVotes.slice()
+      newVotes.push(req.user._id)
       message = `Module review ${res.locals.vote} added.`
     }
 
-    review.updateVotes(res.locals.vote, newArray, (err, result) => {
+    review.updateVotes(res.locals.vote, newVotes, (err, result) => {
       if (err) return next(err)
       res.locals.msg = message
       res.locals.content = result.votes

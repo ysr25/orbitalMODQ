@@ -34,7 +34,13 @@ const ReviewSchema = new mongoose.Schema({
   downvotes: {
     type: [mongoose.Schema.Types.ObjectId],
     default: []
+  },
+  editedAt: {
+    type: Date,
+    default: Date.now()
   }
+}, {
+  timestamps: true
 })
 
 ReviewSchema.index({ title: 'text', content: 'text' })
@@ -43,24 +49,27 @@ ReviewSchema.virtual('votes').get(function () {
   return this.upvotes.length - this.downvotes.length
 })
 
+ReviewSchema.post('find', function (next) {
+
+})
+
 ReviewSchema.pre('save', function (next) {
-  const review = this
-
-  if (review.isModified('content')) {
-    review.content = sanitize(review.content)
+  if (this.isModified('content')) {
+    this.content = sanitize(this.content)
   }
-  review.dateEdited = Date.now()
-
+  if (this.isModified('title') || this.isModified('content') || this.isModified('moduleCode')) {
+    this.editedAt = Date.now()
+  }
   return next()
 })
 
 ReviewSchema.methods.updateVotes = function (direction, newArray, next) {
-  return mongoose.model('ModReview').findByIdAndUpdate(
-    this._id,
-    { [direction]: newArray },
-    { new: true, useFindAndModify: false },
-    next
-  )
+  this[direction] = newArray
+  console.log(this)
+  this.save(function (err, review) {
+    if (err) return next(err)
+    return next(null, review)
+  })
 }
 
-module.exports = mongoose.model('ModReview', ReviewSchema)
+module.exports = mongoose.model('Review', ReviewSchema)

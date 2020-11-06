@@ -63,7 +63,7 @@ export default class LoginPage extends Component {
       .catch((err) => {
         console.log(err)
         this.setState({
-          loginError: err.response.data.msg,
+          loginError: err.response.data.message,
           buttonVariant: 'primary',
           loginStatus: 'Log In',
           isButtonDisabled: false

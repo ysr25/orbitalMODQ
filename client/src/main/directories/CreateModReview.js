@@ -50,19 +50,19 @@ export default class CreateModReview extends Component {
     };
 
     axios
-      .post('/api/modReviews/newpost', newPost, {
+      .post('/api/reviews', newPost, {
         withCredentials: true,
       })
       .then((res) => {
         console.log(res.data);
         console.log(res);
-        this.setState({ postStatus: res.data.msg });
+        this.setState({ postStatus: res.data.message });
         this.props.history.push(`/modreviews/view/${res.data.content}`);
       })
       .catch((err) => {
         console.log(err);
         this.setState({ 
-          postStatus: err.response.data.msg,
+          postStatus: err.response.data.message,
           postButton: "Try Again"
         })
       });

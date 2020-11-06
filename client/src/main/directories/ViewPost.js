@@ -32,14 +32,14 @@ export default class ViewPost extends Component {
       commentButton: "primary",
       commentStatus: "Post Comment",
       commentButtonDisabled: false,
-      sort_property: "datePosted",
+      sort_property: "createdAt",
       sort_direction: 1,
     };
 
   }
 
   compare = (property, direction) => {
-    if (property === "datePosted") {
+    if (property === "createdAt") {
       return (a, b) => {
         return (
           (new Date(a[property]) < new Date(b[property]) ? 1 : -1) * direction
@@ -56,7 +56,7 @@ export default class ViewPost extends Component {
     }
     axios
       .patch(
-        `/api/modReviews/upvote/${this.state.post_id}`, 
+        `/api/reviews/${this.state.post_id}/upvote`, 
         {withCredentials: true}
       )
       .then((res) => {
@@ -73,7 +73,7 @@ export default class ViewPost extends Component {
     }
     axios
       .patch(
-        `/api/modReviews/downvote/${this.state.post_id}`, 
+        `/api/reviews/${this.state.post_id}/downvote`, 
         {withCredentials: true}
       )
       .then((res) => {
@@ -101,7 +101,7 @@ export default class ViewPost extends Component {
 
     axios
     .post(
-      `/api/modReviews/${this.state.post_id}/comment`, newComment, {
+      `/api/reviews/${this.state.post_id}/comments`, newComment, {
         withCredentials: true,
     })
     .then((res) => {
@@ -118,7 +118,7 @@ export default class ViewPost extends Component {
 
   componentDidMount = () => {
     axios
-      .get(`/api/modReviews/view/${this.state.post_id}`)
+      .get(`/api/reviews/${this.state.post_id}`)
       .then((res) => {
         const post = res.data.content;
         this.setState({
@@ -127,8 +127,8 @@ export default class ViewPost extends Component {
           post_content: post.content,
           post_moduleCode: post.moduleCode,
           post_author: post.anonymous || !post.author ? "Anonymous" : post.author.username,
-          post_date: post.datePosted,
-          post_editedDate: post.dateEdited,
+          post_date: post.createdAt,
+          post_editedDate: post.editedAt,
           post_votes: post.upvotes.length - post.downvotes.length,
         })
       })
@@ -137,7 +137,7 @@ export default class ViewPost extends Component {
       console.log("checking if original poster");
       axios
         .get(
-          `/api/modReviews/checkPoster/${this.state.post_id}`, 
+          `/api/reviews/${this.state.post_id}/poster`, 
           {withCredentials: true}
         )
         .then((res) => {
@@ -146,7 +146,7 @@ export default class ViewPost extends Component {
         .catch((err) => console.log(err));
 
       axios.
-        get(`/api/modReviews/view/${this.state.post_id}/comments`)
+        get(`/api/reviews/${this.state.post_id}/comments`)
         .then((res) => {
           this.setState({ 
             post_comments: res.data.content
@@ -258,7 +258,7 @@ export default class ViewPost extends Component {
                       <em>posted by {comment.author.username}</em>
                       <br  />
                       <em>
-                        date posted {new Date(comment.datePosted).toLocaleString()}
+                        date posted {new Date(comment.createdAt).toLocaleString()}
                       </em>
                     </Card.Text>
                   </Card.Body>

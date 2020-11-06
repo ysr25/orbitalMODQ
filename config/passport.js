@@ -11,9 +11,7 @@ passport.use(
     User.findOne({ username: username }, (err, user) => {
       if (err) return next(err)
       if (!user) {
-        return next(null, false, {
-          msg: 'No user with entered username found.'
-        })
+        return next(null, false, 'No user with entered username found.')
       }
       user.comparePassword(password, next)
     })
@@ -35,11 +33,8 @@ passport.use(
       // User does not exist, create new user
       User.create({
         username: profile._json.name,
-        password: '',
         course: 'notSelected',
         yearOfStudy: 'notSelected',
-        firstName: profile._json.given_name,
-        lastName: profile._json.family_name,
         email: profile._json.email,
         googleId: profile.id
       }, (err, user) => {

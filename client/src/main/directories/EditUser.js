@@ -10,8 +10,6 @@ export default class EditDetailsGoogle extends Component {
     super(props);
 
     this.state = {
-      user_firstName: "",
-      user_lastName: "",
       user_email: "",
       user_course: "",
       user_yearOfStudy: "matriculatingSoon", // default option
@@ -26,12 +24,10 @@ export default class EditDetailsGoogle extends Component {
 
   componentDidMount = () => {
     axios
-      .get("/api/users/view", { withCredentials: true })
+      .get("/api/users/", { withCredentials: true })
       .then((res) => {
         const user = res.data.content
         return this.setState({
-          user_firstName: user.firstName,
-          user_lastName: user.lastName,
           user_email: user.email,
           user_course: user.course === "notSelected" ? "" : user.course,
           user_yearOfStudy: user.yearOfStudy === "notSelected" ? "matriculatingSoon" : user.yearOfStudy,
@@ -41,18 +37,6 @@ export default class EditDetailsGoogle extends Component {
       })
       .catch((err) => console.log(err));
   };
-
-  onChangeFirstName = (e) => {
-    this.setState({
-      user_firstName: e.target.value,
-    });
-  }
-
-  onChangeLastName = (e) => {
-    this.setState({
-      user_lastName: e.target.value,
-    });
-  }
 
   onChangeEmail = (e) => {
     this.setState({
@@ -82,8 +66,6 @@ export default class EditDetailsGoogle extends Component {
     e.preventDefault();
 
     const newUser = {
-      firstName: this.state.user_firstName,
-      lastName: this.state.user_lastName,
       email: this.state.user_email,
       course: this.state.user_course,
       yearOfStudy: this.state.user_yearOfStudy,
@@ -97,7 +79,7 @@ export default class EditDetailsGoogle extends Component {
     });
 
     axios
-      .patch("/api/users/edit", newUser, {
+      .patch("/api/users", newUser, {
         withCredentials: true,
       })
       .then((res) => {
@@ -107,7 +89,7 @@ export default class EditDetailsGoogle extends Component {
       .catch((err) => {
         console.log(err);
         this.setState({
-          errorMessage: err.response.data.msg,
+          errorMessage: err.response.data.message,
           isButtonDisabled: false,
           buttonVariant: "primary",
           regStatus: "Confirm details",
@@ -125,29 +107,6 @@ export default class EditDetailsGoogle extends Component {
             <h3>Edit user details</h3>
           </div>
           <form onSubmit={this.onSubmit}>
-            <Form.Row>
-              <Col>
-                <Form.Control
-                  type="text"
-                  placeholder="First Name"
-                  className="form-control"
-                  value={this.state.user_firstName}
-                  onChange={this.onChangeFirstName}
-                  disabled={this.state.user_googleAccount}
-                />
-              </Col>
-              <Col>
-                <Form.Control
-                  type="text"
-                  placeholder="Last Name"
-                  className="form-control"
-                  value={this.state.user_lastName}
-                  onChange={this.onChangeLastName}
-                  disabled={this.state.user_googleAccount}
-                />
-              </Col>
-            </Form.Row>
-            <br></br>
             <Form.Row>
               <Col>
                 <Form.Control
@@ -180,7 +139,7 @@ export default class EditDetailsGoogle extends Component {
                 onChange={this.onChangeYearOfStudy}
               >
                 <option value="matriculatingSoon">Matriculating Soon</option>
-                <option value="undergrad">Undergrad</option>
+                <option value="undergraduate">Undergraduate</option>
                 <option value="masters">Masters</option>
                 <option value="doctorate">Doctorate</option>
                 <option value="others">Others</option>

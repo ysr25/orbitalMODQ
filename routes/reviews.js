@@ -7,59 +7,8 @@ const loggedInOnly = require('./auth').loggedInOnly
 const sendResponse = require('./utils').sendResponse
 
 // Get all module reviews
-router.get('/view/all',
+router.get('/',
   reviews.getAllReviews,
-  sendResponse
-)
-
-// Get a specific module review
-router.get('/view/:modReviewId',
-  reviews.getOneReview,
-  sendResponse
-)
-
-// Get comments for a specific review
-router.get('/view/:modReviewId/comments',
-  reviews.getComments,
-  sendResponse
-)
-
-// Post comment
-router.post('/:modReviewId/comment',
-  loggedInOnly,
-  reviews.postComment,
-  sendResponse
-)
-
-// Post module review
-router.post(
-  '/newpost',
-  passport.authenticate(['local', 'anonymous']),
-  reviews.postReview,
-  sendResponse
-)
-
-// Check if user is poster
-router.get(
-  '/checkPoster/:modReviewId',
-  passport.authenticate(['local', 'anonymous']),
-  reviews.checkIfUserIsPoster,
-  sendResponse
-)
-
-// Edit module review
-router.patch(
-  '/edit/:modReviewId',
-  loggedInOnly,
-  reviews.editReview,
-  sendResponse
-)
-
-// Delete module review
-router.delete(
-  '/delete/:modReviewId',
-  loggedInOnly,
-  reviews.deleteReview,
   sendResponse
 )
 
@@ -69,8 +18,55 @@ router.get('/search',
   sendResponse
 )
 
+// Get a specific module review
+router.get('/:reviewId',
+  reviews.getOneReview,
+  sendResponse
+)
+
+// Get comments for a specific review
+router.get('/:reviewId/comments',
+  reviews.getComments,
+  sendResponse
+)
+
+// Post comment
+router.post('/:reviewId/comments',
+  loggedInOnly,
+  reviews.postComment,
+  sendResponse
+)
+
+// Post module review
+router.post('/',
+  passport.authenticate(['local', 'anonymous']),
+  reviews.postReview,
+  sendResponse
+)
+
+// Check if user is poster
+router.get('/:reviewId/poster',
+  passport.authenticate(['local', 'anonymous']),
+  reviews.checkIfUserIsPoster,
+  sendResponse
+)
+
+// Edit module review
+router.patch('/:reviewId',
+  loggedInOnly,
+  reviews.editReview,
+  sendResponse
+)
+
+// Delete module review
+router.delete('/:reviewId',
+  loggedInOnly,
+  reviews.deleteReview,
+  sendResponse
+)
+
 // Upvote review
-router.patch('/upvote/:modReviewId',
+router.patch('/:reviewId/upvote',
   loggedInOnly,
   (req, res, next) => {
     res.locals.vote = 'upvotes'
@@ -81,7 +77,7 @@ router.patch('/upvote/:modReviewId',
 )
 
 // Downvote review
-router.patch('/downvote/:modReviewId',
+router.patch('/:reviewId/downvote',
   loggedInOnly,
   (req, res, next) => {
     res.locals.vote = 'downvotes'

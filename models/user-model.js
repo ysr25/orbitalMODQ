@@ -3,9 +3,9 @@ const bcrypt = require('bcryptjs')
 
 const saltRounds = 12
 
-const yearOfStudyOptions = [
+const yearOfStudy = [
   'matriculatingSoon',
-  'undergrad',
+  'undergraduate',
   'masters',
   'doctorate',
   'others',
@@ -18,13 +18,12 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true
-    // minlength: 5,
   },
   password: {
-    type: String,
     // Not required if signing up with Google
-    trim: true
-    // minlength: 6
+    type: String,
+    trim: true,
+    minlength: 6
   },
   course: {
     type: String,
@@ -34,15 +33,7 @@ const UserSchema = new mongoose.Schema({
   yearOfStudy: {
     type: String,
     required: true,
-    enum: yearOfStudyOptions
-  },
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
+    enum: yearOfStudy
   },
   email: {
     type: String,
@@ -65,24 +56,22 @@ UserSchema.methods.comparePassword = function (password, next) {
     } else if (result) {
       return next(null, user)
     } else {
-      return next(null, false, {
-        msg: 'Incorrect password, please try again.'
-      })
+      return next(null, false, 'Incorrect password, please try again.')
     }
   })
 }
 
+// Reused from http://devsmash.com/blog/password-authentication-with-mongoose-and-bcrypt
 UserSchema.pre('save', function (next) {
   const user = this
 
-  if (user.isModified('password')) {
-    bcrypt.hash(user.password, saltRounds, function (err, hash) {
-      if (err) return next(err)
-      user.password = hash
-      return next()
-    })
-  }
-  return next()
+  if (!user.isModified('password')) return next()
+
+  bcrypt.hash(user.password, saltRounds, function (err, hash) {
+    if (err) return next(err)
+    user.password = hash
+    return next()
+  })
 })
 
 UserSchema.methods.saveUser = function (next) {

@@ -15,7 +15,7 @@ export default class Registration extends Component {
 
     this.state = {
       post_list: [],
-      sort_property: "datePosted",
+      sort_property: "createdAt",
       sort_direction: 1,
       filter_moduleCode: "",
       search: "",
@@ -24,7 +24,7 @@ export default class Registration extends Component {
 
   componentDidMount = () => {
     axios
-      .get("/api/modReviews/view/all")
+      .get("/api/reviews")
       .then((res) =>
         this.setState({
           post_list: res.data.content,
@@ -34,7 +34,7 @@ export default class Registration extends Component {
   };
 
   compare = (property, direction) => {
-    if (property === "datePosted" || property === "dateEdited") {
+    if (property === "createdAt" || property === "editedAt") {
       return (a, b) => {
         return (
           (new Date(a[property]) < new Date(b[property]) ? 1 : -1) * direction
@@ -68,7 +68,7 @@ export default class Registration extends Component {
   submitSearch = (e) => {
     e.preventDefault();
     axios
-      .get("/api/modReviews/search", {
+      .get("/api/reviews/search", {
         params: { q: this.state.search },
       })
       .then((res) =>
@@ -81,12 +81,12 @@ export default class Registration extends Component {
 
   reset = () => {
     axios
-      .get("/api/modReviews/view/all")
+      .get("/api/reviews")
       .then((res) => {
         this.setState({
           post_list: res.data.content,
           search: "",
-          sort_property: "datePosted",
+          sort_property: "createdAt",
           sort_direction: 1,
           filter_moduleCode: "",
         });
@@ -101,14 +101,14 @@ export default class Registration extends Component {
           <ToggleButtonGroup
             type="radio"
             name="sort_by"
-            defaultValue="datePosted"
+            defaultValue="createdAt"
             onChange={this.changeSort}
             value={this.state.sort_property}
           >
-            <ToggleButton variant="outline-info" value="datePosted">
+            <ToggleButton variant="outline-info" value="createdAt">
               Date posted
             </ToggleButton>
-            <ToggleButton variant="outline-info" value="dateEdited">
+            <ToggleButton variant="outline-info" value="editedAt">
               Date edited
             </ToggleButton>
             <ToggleButton variant="outline-info" value="upvotes">
@@ -183,11 +183,11 @@ export default class Registration extends Component {
                     <em>posted by {post.anonymous || !post.author ? "Anonymous" : post.author.username}</em>
                     <br />
                     <em>
-                      date posted {new Date(post.datePosted).toLocaleString()}
+                      date posted {new Date(post.createdAt).toLocaleString()}
                     </em>
                     <br />
                     <em>
-                      date edited {new Date(post.dateEdited).toLocaleString()}
+                      date edited {new Date(post.editedAt).toLocaleString()}
                     </em>
                     <br />
                     Upvotes: {post.upvotes.length - post.downvotes.length}

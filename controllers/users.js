@@ -1,6 +1,8 @@
 const passport = require('../config/passport')
 const User = require('../models/user-model')
 
+const redirectUrl = require('../config/settings').clientUrl
+
 exports.getUser = (req, res, next) => {
   User.findById(req.user._id, (err, user) => {
     if (err) return next(err)
@@ -48,8 +50,6 @@ exports.createUser = (req, res, next) => {
   }
 
   const user = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
     username: req.body.username,
     course: req.body.course,
     yearOfStudy: req.body.yearOfStudy,
@@ -84,18 +84,10 @@ exports.signIn = (req, res, next) => {
 }
 
 exports.googleRedirect = (req, res) => {
-  if (process.env.NODE_ENV === 'development') {
-    if (req.user.course === 'notSelected' || req.user.yearOfStudy === 'notSelected') {
-      res.redirect('http://localhost:3000/users/edit/')
-    } else {
-      res.redirect('http://localhost:3000/')
-    }
+  if (req.user.course === 'notSelected' || req.user.yearOfStudy === 'notSelected') {
+    res.redirect(redirectUrl + 'users/edit/')
   } else {
-    if (req.user.course === 'notSelected' || req.user.yearOfStudy === 'notSelected') {
-      res.redirect('/users/edit/')
-    } else {
-      res.redirect('/')
-    }
+    res.redirect(redirectUrl)
   }
 }
 
@@ -106,7 +98,7 @@ exports.signOut = (req, res, next) => {
 }
 
 exports.deleteUser = (req, res, next) => {
-  User.findByIdAndDelete(req.params.userId, (err, user) => {
+  User.findByIdAndDelete(req.user._id, (err, user) => {
     if (err) return next(err)
     res.locals.msg = 'User deleted successfully.'
     return next()

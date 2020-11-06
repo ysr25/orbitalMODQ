@@ -8,8 +8,7 @@ const settings = require('./config/settings')
 const mongoose = require('./config/mongoose')
 const passport = require('./config/passport')
 
-const users = require('./routes/users')
-const reviews = require('./routes/reviews')
+const routes = require('./routes')
 
 const app = express()
 
@@ -46,8 +45,7 @@ app.use((req, res, next) => {
 })
 
 // Routes
-app.use('/api/users', users)
-app.use('/api/modReviews', reviews)
+app.use('/api', routes)
 
 // Reaches this when no routes are found
 app.use((req, res, next) => {
@@ -61,7 +59,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500)
   res.json({
     isLoggedIn: res.locals.isLoggedIn,
-    msg: err.message || 'An unknown error occured'
+    message: err.message || 'An unknown error occured'
   })
 })
 

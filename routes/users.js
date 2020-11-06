@@ -7,17 +7,15 @@ const loggedInOnly = require('./auth').loggedInOnly
 const loggedOutOnly = require('./auth').loggedOutOnly
 const sendResponse = require('./utils').sendResponse
 
-router.get('/', sendResponse)
-
 // Get user details
-router.get('/view',
+router.get('/',
   loggedInOnly,
   users.getUser,
   sendResponse
 )
 
 // Edit user details
-router.patch('/edit',
+router.patch('/',
   loggedInOnly,
   users.editUser,
   sendResponse
@@ -37,15 +35,13 @@ router.post('/login',
 )
 
 // Sign user in with google
-router.get(
-  '/login/google',
+router.get('/login/google',
   passport.authenticate('google', {
     scope: ['profile', 'email']
   })
 )
 
-router.get(
-  '/login/google/redirect',
+router.get('/login/google/redirect',
   passport.authenticate('google'),
   users.googleRedirect
 )
@@ -58,7 +54,7 @@ router.post('/logout',
 )
 
 // Delete user account
-router.delete('/delete',
+router.delete('/',
   loggedInOnly,
   users.deleteUser,
   sendResponse

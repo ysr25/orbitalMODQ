@@ -9,8 +9,6 @@ export default class Registration extends Component {
   constructor (props) {
     super(props)
 
-    this.onChangeFirstName = this.onChangeFirstName.bind(this)
-    this.onChangeLastName = this.onChangeLastName.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
     this.onChangeCourse = this.onChangeCourse.bind(this)
     this.onChangeYearOfStudy = this.onChangeYearOfStudy.bind(this)
@@ -19,8 +17,6 @@ export default class Registration extends Component {
     this.onSubmit = this.onSubmit.bind(this)
 
     this.state = {
-      user_firstName: '',
-      user_lastName: '',
       user_email: '',
       user_course: '',
       user_yearOfStudy: 'matriculatingSoon', // default option
@@ -31,18 +27,6 @@ export default class Registration extends Component {
       regStatus: 'Create Account',
       errorMessage: null
     }
-  }
-
-  onChangeFirstName (e) {
-    this.setState({
-      user_firstName: e.target.value
-    })
-  }
-
-  onChangeLastName (e) {
-    this.setState({
-      user_lastName: e.target.value
-    })
   }
 
   onChangeEmail (e) {
@@ -80,8 +64,6 @@ export default class Registration extends Component {
 
     // variable names are same as backend
     const newUser = {
-      firstName: this.state.user_firstName,
-      lastName: this.state.user_lastName,
       email: this.state.user_email,
       course: this.state.user_course,
       yearOfStudy: this.state.user_yearOfStudy,
@@ -110,7 +92,7 @@ export default class Registration extends Component {
       .catch((err) => {
         console.log(err)
         this.setState({
-          errorMessage: err.response.data.msg,
+          errorMessage: err.response.data.message,
           isButtonDisabled: false,
           buttonVariant: 'primary',
           regStatus: 'Create Account'
@@ -133,28 +115,6 @@ export default class Registration extends Component {
             </p>
           </div>
           <form onSubmit={this.onSubmit}>
-            <Form.Row>
-              <Col>
-                <Form.Control
-                  type='text'
-                  placeholder='First Name'
-                  className='form-control'
-                  value={this.state.user_firstName}
-                  onChange={this.onChangeFirstName}
-                  required
-                />
-              </Col>
-              <Col>
-                <Form.Control
-                  type='text'
-                  placeholder='Last Name'
-                  className='form-control'
-                  value={this.state.user_lastName}
-                  onChange={this.onChangeLastName}
-                  required
-                />
-              </Col>
-            </Form.Row>
             <br />
             <Form.Row>
               <Col>
@@ -188,7 +148,7 @@ export default class Registration extends Component {
                 onChange={this.onChangeYearOfStudy}
               >
                 <option value='matriculatingSoon'>Matriculating Soon</option>
-                <option value='undergrad'>Undergrad</option>
+                <option value='undergraduate'>Undergraduate</option>
                 <option value='masters'>Masters</option>
                 <option value='doctorate'>Doctorate</option>
                 <option value='others'>Others</option>

@@ -12,14 +12,12 @@ const CommentSchema = new mongoose.Schema({
     trim: true,
     minlength: 2
   },
-  post_id: {
+  reviewId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ModReview'
-  },
-  datePosted: {
-    type: Date,
-    default: Date.now
+    ref: 'Review'
   }
+}, {
+  timestamps: true
 })
 
 CommentSchema.pre('save', function (next) {

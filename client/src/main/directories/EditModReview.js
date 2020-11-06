@@ -24,7 +24,7 @@ export default class EditModReview extends Component {
 
   componentDidMount = () => {
     axios
-      .get(`/api/modReviews/view/${this.state.post_id}`)
+      .get(`/api/reviews/${this.state.post_id}`)
       .then((res) => {
         return this.setState({
           post_id: res.data.content._id,
@@ -59,7 +59,7 @@ export default class EditModReview extends Component {
 
     axios
       .patch(
-        `/api/modReviews/edit/${this.state.post_id}`,
+        `/api/reviews/${this.state.post_id}`,
         newPost, 
         { withCredentials: true },
       )
@@ -69,7 +69,7 @@ export default class EditModReview extends Component {
       .catch((err) => {
         console.log(err)
         this.setState({ 
-          postStatus: err.response.data.msg,
+          postStatus: err.response.data.message,
         })
       });
   };
@@ -77,7 +77,7 @@ export default class EditModReview extends Component {
   onDelete = (e) => {
     axios
       .delete(
-        `/api/modReviews/delete/${this.state.post_id}`,
+        `/api/reviews/${this.state.post_id}`,
         { withCredentials: true }
       )
       .then((res) => console.log(res.data.content))
