@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import moduleList from "./ModuleList.js";
+import moduleList from "./module-list";
 
 const modulesWithRef = moduleList.map(option => {
   return { ...option, ref: React.createRef() } 
@@ -118,6 +118,7 @@ class ModuleInput extends Component {
     return (
       <>
         <input
+          id={this.props.id}
           className="form-control"
           value={this.state.displayedInput}
           onClick={this.onClickInput}

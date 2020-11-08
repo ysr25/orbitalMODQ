@@ -7,10 +7,6 @@ export default class LoginPage extends Component {
   constructor () {
     super()
 
-    this.onChangeUsername = this.onChangeUsername.bind(this)
-    this.onChangePassword = this.onChangePassword.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-
     this.state = {
       user_username: '',
       user_password: '',
@@ -23,19 +19,19 @@ export default class LoginPage extends Component {
     }
   }
 
-  onChangeUsername (e) {
+  onChangeUsername = (e) => {
     this.setState({
       user_username: e.target.value
     })
   }
 
-  onChangePassword (e) {
+  onChangePassword = (e) => {
     this.setState({
       user_password: e.target.value
     })
   }
 
-  onSubmit (e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     const userLogIn = {

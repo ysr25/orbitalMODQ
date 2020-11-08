@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom'
 import '../App.css'
 
 class Navbar extends Component {
-  constructor () {
-    super()
-    this.logout = this.logout.bind(this)
-  }
-
-  logout (event) {
+  logout = (event) => {
     event.preventDefault()
     console.log('logging out')
     axios

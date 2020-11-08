@@ -9,13 +9,6 @@ export default class Registration extends Component {
   constructor (props) {
     super(props)
 
-    this.onChangeEmail = this.onChangeEmail.bind(this)
-    this.onChangeCourse = this.onChangeCourse.bind(this)
-    this.onChangeYearOfStudy = this.onChangeYearOfStudy.bind(this)
-    this.onChangeUsername = this.onChangeUsername.bind(this)
-    this.onChangePassword = this.onChangePassword.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-
     this.state = {
       user_email: '',
       user_course: '',
@@ -29,37 +22,37 @@ export default class Registration extends Component {
     }
   }
 
-  onChangeEmail (e) {
+  onChangeEmail = (e) => {
     this.setState({
       user_email: e.target.value
     })
   }
 
-  onChangeCourse (e) {
+  onChangeCourse = (e) => {
     this.setState({
       user_course: e.target.value
     })
   }
 
-  onChangeYearOfStudy (e) {
+  onChangeYearOfStudy = (e) => {
     this.setState({
       user_yearOfStudy: e.target.value
     })
   }
 
-  onChangeUsername (e) {
+  onChangeUsername = (e) => {
     this.setState({
       user_username: e.target.value
     })
   }
 
-  onChangePassword (e) {
+  onChangePassword = (e) => {
     this.setState({
       user_password: e.target.value
     })
   }
 
-  onSubmit (e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     // variable names are same as backend

@@ -1,128 +1,101 @@
 import React, { Component } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
-import ModuleInput from "../components/ModuleInput.js"
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ReviewForm from "../components/ReviewForm"
 
 export default class CreateModReview extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      post_title: "",
-      post_content: "",
-      post_moduleCode: "",
-      isButtonDisabled: false,
-      buttonVariant: "primary",
-      post_id: "",
-      post_anonymously: false,
-      postStatus: null,
-      postButton: "Submit Post"
+      title: "",
+      content: "",
+      moduleCode: "",
+      isAnonymous: false,
+
+      status: null,
+      isButtonDisabled: false
     };
   }
 
-  onChangeTitle = (e) => {
-    this.setState({ post_title: e.target.value });
-  };
+  onChangeTitle = (data) => {
+    this.setState({ 
+      title: data,
+      isButtonDisabled: false
+    })
+  }
 
-  onChangeContent = (event, editor) => {
-    this.setState({ post_content: editor.getData() });
-  };
+  onChangeContent = (data) => {
+    this.setState({ 
+      content: data,
+      isButtonDisabled: false
+    })
+  }
 
-  onChangeModuleCode = (e) => {
-    this.setState({ post_moduleCode: e });
-  };
+  onChangeModuleCode = (data) => {
+    this.setState({ 
+      moduleCode: data,
+      isButtonDisabled: false
+    })
+  }
 
-  onChangeAnonymous = (e) => {
-    this.setState(prevState => ({ post_anonymously: !prevState.post_anonymously }));
-  };
+  onChangeIsAnonymous = () => {
+    this.setState(prevState => ({ 
+      isAnonymous: !prevState.isAnonymous,
+      isButtonDisabled: false 
+    }))
+  }
 
   onSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const newPost = {
-      title: this.state.post_title,
-      content: this.state.post_content,
-      moduleCode: this.state.post_moduleCode,
-      anonymous: this.state.post_anonymously,
-    };
+      title: this.state.title,
+      content: this.state.content,
+      moduleCode: this.state.moduleCode,
+      anonymous: this.state.isAnonymous
+    }
+
+    this.setState({
+      status: "Posting...",
+      isButtonDisabled: true
+    })
 
     axios
       .post('/api/reviews', newPost, {
-        withCredentials: true,
+        withCredentials: true
       })
-      .then((res) => {
-        console.log(res.data);
-        console.log(res);
-        this.setState({ postStatus: res.data.message });
-        this.props.history.push(`/modreviews/view/${res.data.content}`);
+      .then(res => {
+        this.setState({ status: res.data.message })
+        this.props.history.push(`/modreviews/view/${res.data.content}`)
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(err => {
         this.setState({ 
-          postStatus: err.response.data.message,
-          postButton: "Try Again"
+          status: err.response.data.message,
+          isButtonDisabled: true
         })
-      });
-
-    this.setState({
-      buttonVariant: "dark",
-      postButton: "Posting..."
-    });
-  };
+      })
+  }
 
   render() {
     return (
       <div style={{ marginTop: 10 }}>
         <h3>New Post</h3>
-        <Form onSubmit={this.onSubmit}>
-          <ModuleInput 
-            key={this.state.post_moduleCode} 
-            value={this.state.post_moduleCode} 
-            onChange={this.onChangeModuleCode}
-          />
-          <br />
-          <Form.Control
-            type="text"
-            placeholder="Title"
-            className="form-control"
-            value={this.state.post_title}
-            onChange={this.onChangeTitle}
-            required
-          />
-          <br />
-          <CKEditor
-            editor={ClassicEditor}
-            data={this.state.post_content}
-            config={{
-              toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
-            }}
-            onChange={this.onChangeContent}
-          />
-          <br />
-          <Form.Check
-            type="checkbox"
-            id="postAnonymously"
-            label="Post anonymously"
-            checked={this.state.post_anonymously}
-            onChange={this.onChangeAnonymous}
-          />
-          <br />
-          <div className="form-group">
-            <Button
-              type="submit"
-              className="btn btn-primary"
-              disabled={this.state.isButtonDisabled}
-              variant={this.state.buttonVariant}
-            >
-              {this.state.postButton}
-            </Button>
-            <p>{this.state.postStatus}</p>
-          </div>
-        </Form>
+        <ReviewForm 
+          title={this.state.title}
+          content={this.state.content}
+          moduleCode={this.state.moduleCode}
+          isAnonymous={this.state.isAnonymous}
+
+          status={this.state.status}
+          isButtonDisabled={this.state.isButtonDisabled}
+
+          onChangeTitle={this.onChangeTitle}
+          onChangeContent={this.onChangeContent}
+          onChangeModuleCode={this.onChangeModuleCode}
+          onChangeIsAnonymous={this.onChangeIsAnonymous}
+          onSubmit={this.onSubmit}
+        />
       </div>
-    );
+    )
   }
 }

@@ -3,145 +3,136 @@ import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import ModuleInput from "../components/ModuleInput.js"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ReviewForm from "../components/ReviewForm"
 
 export default class EditModReview extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      post_id: props.match.params.id,
-      post_title: "",
-      post_content: "",
-      post_moduleCode: "",
-      postStatus: null,
-    };
+      postId: props.match.params.id,
+      title: "",
+      content: "",
+      moduleCode: "",
+      isAnonymous: false,
+
+      status: null,
+      isButtonDisabled: false
+    }
   }
 
   componentDidMount = () => {
     axios
-      .get(`/api/reviews/${this.state.post_id}`)
-      .then((res) => {
-        return this.setState({
-          post_id: res.data.content._id,
-          post_title: res.data.content.title,
-          post_content: res.data.content.content,
-          post_moduleCode: res.data.content.moduleCode,
+      .get(`/api/reviews/${this.state.postId}`)
+      .then(res => {
+        const post = res.data.content
+        this.setState({
+          postId: post._id,
+          title: post.title,
+          content: post.content,
+          moduleCode: post.moduleCode,
+          isAnonymous: post.anonymous
         })
       })
-      .catch((err) => console.log(err));
-  };
+      .catch(err => {
+        this.setState({ status: err.response.data.message })
+      })
+  }
 
-  onChangeTitle = (e) => {
-    this.setState({ post_title: e.target.value });
-  };
+   onChangeTitle = (data) => {
+    this.setState({ 
+      title: data,
+      isButtonDisabled: false
+    })
+  }
 
-  onChangeContent = (event, editor) => {
-    this.setState({ post_content: editor.getData() });
-  };
+  onChangeContent = (data) => {
+    this.setState({ 
+      content: data,
+      isButtonDisabled: false
+    })
+  }
 
-  onChangeModuleCode = (e) => {
-    this.setState({ post_moduleCode: e });
-  };
+  onChangeModuleCode = (data) => {
+    this.setState({ 
+      moduleCode: data,
+      isButtonDisabled: false
+    })
+  }
+
+  onChangeIsAnonymous = () => {
+    this.setState(prevState => ({ 
+      isAnonymous: !prevState.isAnonymous,
+      isButtonDisabled: false 
+    }))
+  }
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    const newPost = {
-      title: this.state.post_title,
-      content: this.state.post_content,
-      moduleCode: this.state.post_moduleCode,
+    const editedPost = {
+      title: this.state.title,
+      content: this.state.content,
+      moduleCode: this.state.moduleCode,
+      anonymous: this.state.isAnonymous
     };
 
     axios
-      .patch(
-        `/api/reviews/${this.state.post_id}`,
-        newPost, 
-        { withCredentials: true },
+      .patch(`/api/reviews/${this.state.postId}`, editedPost, {
+        withCredentials: true 
+      })
+      .then(res =>
+        this.props.history.push(`/modreviews/view/${this.state.postId}`)
       )
-      .then((res) =>
-        this.props.history.push(`/modreviews/view/${this.state.post_id}`)
-      )
-      .catch((err) => {
-        console.log(err)
-        this.setState({ 
-          postStatus: err.response.data.message,
-        })
-      });
-  };
+      .catch(err => {
+        this.setState({ status: err.response.data.message })
+      })
+  }
 
   onDelete = (e) => {
     axios
-      .delete(
-        `/api/reviews/${this.state.post_id}`,
-        { withCredentials: true }
-      )
-      .then((res) => console.log(res.data.content))
-      .then((res) => this.props.history.push("/"))
-      .catch((err) => console.log(err));
-  };
+      .delete(`/api/reviews/${this.state.postId}`, {
+        withCredentials: true
+      })
+      .then(res => this.props.history.push("/"))
+      .catch(err => {
+        this.setState({ status: err.response.data.message })
+      })
+  }
 
   render() {
     return (
       <div style={{ marginTop: 10 }}>
         <h3>Edit Post</h3>
-        <form onSubmit={this.onSubmit}>
-          <Form.Group as={Row}>
-          <Form.Label column sm={1}>
-      Title
-    </Form.Label>
-    <Col sm={11}>
-            <Form.Control
-              type="text"
-              placeholder="Title"
-              className="form-control"
-              value={this.state.post_title}
-              onChange={this.onChangeTitle}
-              required
-            />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row}>
-          <Form.Label column sm={1}>
-          Module
-          </Form.Label>
-          <Col sm={11}>
-            <ModuleInput 
-              key={this.state.post_moduleCode}
-              value={this.state.post_moduleCode}
-              onChange={this.onChangeModuleCode}
-            />
-          </Col>
-          </Form.Group>
-          <CKEditor
-            editor={ClassicEditor}
-            data={this.state.post_content}
-            config={{
-              toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
-            }}
-            onChange={this.onChangeContent}
-          />
-          <br />
-          <Button variant="outline-primary" type="submit">
-            Submit
-          </Button>{" "}
-          <Link
-            className="btn btn-outline-secondary"
-            to={`/modreviews/view/${this.state.post_id}`}
-            onClick={this.props.updateUser}
-          >
-            Cancel
-          </Link>{" "}
-          <Button variant="outline-danger" onClick={this.onDelete}>
-            Delete
-          </Button>
-          <p>{this.state.postStatus}</p>
-        </form>
+        <ReviewForm 
+          title={this.state.title}
+          content={this.state.content}
+          moduleCode={this.state.moduleCode}
+          isAnonymous={this.state.isAnonymous}
+
+          status={this.state.status}
+          isButtonDisabled={this.state.isButtonDisabled}
+
+          onChangeTitle={this.onChangeTitle}
+          onChangeContent={this.onChangeContent}
+          onChangeModuleCode={this.onChangeModuleCode}
+          onChangeIsAnonymous={this.onChangeIsAnonymous}
+          onSubmit={this.onSubmit}
+        />
+        <br />
+        <Link
+          className="btn btn-outline-secondary"
+          to={`/modreviews/view/${this.state.postId}`}
+          onClick={this.props.updateUser}>
+        Cancel
+        </Link>
+        {" "}
+        <Button variant="outline-danger" onClick={this.onDelete}>
+        Delete
+        </Button>
       </div>
-    );
+    )
   }
 }
