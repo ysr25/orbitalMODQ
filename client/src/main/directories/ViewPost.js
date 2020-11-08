@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -54,11 +53,7 @@ export default class ViewPost extends Component {
     } else {
       this.state. upvote_button = "outline-success"
     }
-    axios
-      .patch(
-        `/api/reviews/${this.state.post_id}/upvote`, 
-        {withCredentials: true}
-      )
+    this.props.api('patch', `/reviews/${this.state.post_id}/upvote`)
       .then((res) => {
         this.setState({ post_votes: res.data.content })
       })
@@ -71,11 +66,7 @@ export default class ViewPost extends Component {
     } else {
       this.state.downvote_button = "outline-danger"
     }
-    axios
-      .patch(
-        `/api/reviews/${this.state.post_id}/downvote`, 
-        {withCredentials: true}
-      )
+    this.props.api('patch', `/reviews/${this.state.post_id}/downvote`)
       .then((res) => {
         this.setState({ post_votes: res.data.content })
       })
@@ -99,11 +90,7 @@ export default class ViewPost extends Component {
     //   commentStatus: "Posting Comment...",
     // });
 
-    axios
-    .post(
-      `/api/reviews/${this.state.post_id}/comments`, newComment, {
-        withCredentials: true,
-    })
+    this.props.api('post', `/reviews/${this.state.post_id}/comments`, newComment)
     .then((res) => {
       this.setState({
         commentButton: "primary",
@@ -117,8 +104,7 @@ export default class ViewPost extends Component {
   }
 
   componentDidMount = () => {
-    axios
-      .get(`/api/reviews/${this.state.post_id}`)
+    this.props.api('get', `/reviews/${this.state.post_id}`)
       .then((res) => {
         const post = res.data.content;
         this.setState({
@@ -135,18 +121,13 @@ export default class ViewPost extends Component {
       .catch((err) => console.log(err));
 
       console.log("checking if original poster");
-      axios
-        .get(
-          `/api/reviews/${this.state.post_id}/poster`, 
-          {withCredentials: true}
-        )
+      this.props.api('get', `/reviews/${this.state.post_id}/poster`)
         .then((res) => {
           this.setState({ originalPoster: res.data.content })
         })
         .catch((err) => console.log(err));
 
-      axios.
-        get(`/api/reviews/${this.state.post_id}/comments`)
+      this.props.api('get', `/reviews/${this.state.post_id}/comments`)
         .then((res) => {
           this.setState({ 
             post_comments: res.data.content

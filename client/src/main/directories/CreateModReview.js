@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import ReviewForm from "../components/ReviewForm"
 
 export default class CreateModReview extends Component {
@@ -56,14 +55,11 @@ export default class CreateModReview extends Component {
     }
 
     this.setState({
-      status: "Posting...",
+      status: "Submitting...",
       isButtonDisabled: true
     })
 
-    axios
-      .post('/api/reviews', newPost, {
-        withCredentials: true
-      })
+    this.props.api('post', '/reviews', newPost)
       .then(res => {
         this.setState({ status: res.data.message })
         this.props.history.push(`/modreviews/view/${res.data.content}`)

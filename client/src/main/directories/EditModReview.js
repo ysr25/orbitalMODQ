@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import ReviewForm from "../components/ReviewForm"
 
 export default class EditModReview extends Component {
@@ -24,8 +20,7 @@ export default class EditModReview extends Component {
   }
 
   componentDidMount = () => {
-    axios
-      .get(`/api/reviews/${this.state.postId}`)
+    this.props.api('get', `/reviews/${this.state.postId}`)
       .then(res => {
         const post = res.data.content
         this.setState({
@@ -79,23 +74,25 @@ export default class EditModReview extends Component {
       anonymous: this.state.isAnonymous
     };
 
-    axios
-      .patch(`/api/reviews/${this.state.postId}`, editedPost, {
-        withCredentials: true 
-      })
+    this.setState({
+      status: "Submitting...",
+      isButtonDisabled: true
+    })
+
+    this.props.api('patch', `/reviews/${this.state.postId}`, editedPost)
       .then(res =>
         this.props.history.push(`/modreviews/view/${this.state.postId}`)
       )
       .catch(err => {
-        this.setState({ status: err.response.data.message })
+        this.setState({ 
+          status: err.response.data.message,
+          isButtonDisabled: true
+        })
       })
   }
 
   onDelete = (e) => {
-    axios
-      .delete(`/api/reviews/${this.state.postId}`, {
-        withCredentials: true
-      })
+    this.props.api('delete', `/reviews/${this.state.postId}`)
       .then(res => this.props.history.push("/"))
       .catch(err => {
         this.setState({ status: err.response.data.message })

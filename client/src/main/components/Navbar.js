@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import '../App.css'
@@ -7,16 +6,8 @@ class Navbar extends Component {
   logout = (event) => {
     event.preventDefault()
     console.log('logging out')
-    axios
-      .post('/api/users/logout', {}, {
-        withCredentials: true
-      })
-      .then((res) => {
-        console.log(res.data)
-        if (res.status === 200) {
-          this.props.updateUser()
-        }
-      })
+
+    this.props.api('post', '/users/logout')
       .catch((error) => {
         console.log('Logout error')
       })

@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 export default class EditDetailsGoogle extends Component {
   constructor(props) {
@@ -23,8 +22,7 @@ export default class EditDetailsGoogle extends Component {
   }
 
   componentDidMount = () => {
-    axios
-      .get("/api/users/", { withCredentials: true })
+    this.props.api('get', '/users')
       .then((res) => {
         const user = res.data.content
         return this.setState({
@@ -78,10 +76,7 @@ export default class EditDetailsGoogle extends Component {
       regStatus: "Submitting details...",
     });
 
-    axios
-      .patch("/api/users", newUser, {
-        withCredentials: true,
-      })
+    this.props.api('patch', '/users', newUser)
       .then((res) => {
         console.log(res.data);
         this.setState({ redirectTo: "/" });

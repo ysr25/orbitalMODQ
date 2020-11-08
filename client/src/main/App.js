@@ -9,7 +9,6 @@ import EditModReview from './directories/EditModReview'
 import Registration from './directories/Registration'
 import LoginPage from './directories/LoginPage'
 import ViewPost from './directories/ViewPost'
-// import UserPage from "./directories/UserPage";
 import Navbar from './components/Navbar'
 import EditUser from './directories/EditUser'
 import logo from './logo.jpg'
@@ -20,30 +19,30 @@ class App extends Component {
     this.state = {
       loggedIn: false
     }
-
-    this.updateUser = this.updateUser.bind(this)
   }
 
-  componentDidMount () {
-    this.updateUser()
-  }
-
-  updateUser () {
-    axios.get('/api', {
+  api = (method, url, data = {}, params = {}) => {
+    console.log('api call', method, url)
+    return axios.request({
+      method: method,
+      url: '/api' + url,
+      data: data,
+      params: params,
       withCredentials: true
     })
-      .then((response) => {
-        console.log('Get user response: ')
-        console.log(response.data)
-        if (response.data.isLoggedIn) {
-          console.log('Get User: There is a user saved in the server session: ')
-          this.setState({ loggedIn: true })
-        } else {
-          console.log('Get user: no user')
-          this.setState({ loggedIn: false })
-        }
+      .then(res => {
+        this.setState({ loggedIn: res.data.isLoggedIn })
+        return res
       })
-      .catch((err) => console.log(err))
+  }
+
+  updateUser = () => {
+    this.api('get', '/')
+      .catch(err => console.log(err))
+  }
+
+  setShow = (show) => {
+    this.setState({ show: false })
   }
 
   render () {
@@ -58,42 +57,42 @@ class App extends Component {
             <Navbar
               updateUser={this.updateUser}
               loggedIn={this.state.loggedIn}
+              api={this.api}
             />
           </nav>
           <br />
           <Route
-            exact
-            path='/'
-            render={props => <Homepage {...props} updateUser={this.updateUser} />}
+            exact path='/'
+            render={props => <Homepage {...props} api={this.api} />}
           />
-          <Route path='/modreviews/newpost' component={CreateModReview} />
+          <Route 
+            path='/modreviews/newpost' 
+            render={props => <CreateModReview {...props} api={this.api} />}
+          />
           <Route
             path='/modreviews/edit/:id'
-            render={props => <EditModReview {...props} updateUser={this.updateUser} />}
+            render={props => <EditModReview {...props} api={this.api} />}
           />
           <Route
             path='/modreviews/view/:id'
             render={props => <ViewPost
               {...props}
               loggedIn={this.state.loggedIn}
-              updateUser={this.updateUser}
+              api={this.api}
             />}
           />
           <Route
-            exact
-            path='/users/signup'
-            render={props => <Registration {...props} updateUser={this.updateUser} />}
+            exact path='/users/signup'
+            render={props => <Registration {...props} api={this.api} />}
           />
           <Route
             path='/users/login'
-            render={props => <LoginPage {...props} updateUser={this.updateUser} />}
+            render={props => <LoginPage {...props} api={this.api} />}
           />
           <Route
-            exact
-            path='/users/edit'
-            render={props => <EditUser {...props} updateUser={this.updateUser} />}
+            exact path='/users/edit'
+            render={props => <EditUser {...props} api={this.api} />}
           />
-          {/* <Route path="/users/profile" render={props => <UserPage {...props} logout={this.updateUser} />} /> */}
         </div>
       </Router>
     )

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 
@@ -45,15 +44,8 @@ export default class LoginPage extends Component {
       loginStatus: 'Logging In...'
     })
 
-    axios
-      .post(
-        '/api/users/login',
-        userLogIn,
-        { withCredentials: true }
-      )
+    this.props.api('post', '/users/login', userLogIn)
       .then((res) => {
-        console.log(res.data)
-        this.props.updateUser()
         this.setState({ redirectTo: '/' })
       })
       .catch((err) => {

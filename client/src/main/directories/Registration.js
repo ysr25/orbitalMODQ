@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { Component } from 'react'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
@@ -72,14 +71,10 @@ export default class Registration extends Component {
       regStatus: 'Creating Account...'
     })
 
-    axios
-      .post('/api/users/signup', newUser, {
-        withCredentials: true
-      })
+    this.props.api('post', 'users/signup', newUser)
       .then((res) => {
         console.log(res.data)
         console.log('successful signup')
-        this.props.updateUser()
         this.setState({ redirectTo: '/' })
       })
       .catch((err) => {

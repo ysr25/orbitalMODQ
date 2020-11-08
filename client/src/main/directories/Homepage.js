@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
@@ -23,8 +22,7 @@ export default class Registration extends Component {
   }
 
   componentDidMount = () => {
-    axios
-      .get("/api/reviews")
+    this.props.api('get', '/reviews')
       .then((res) =>
         this.setState({
           post_list: res.data.content,
@@ -67,10 +65,10 @@ export default class Registration extends Component {
 
   submitSearch = (e) => {
     e.preventDefault();
-    axios
-      .get("/api/reviews/search", {
-        params: { q: this.state.search },
-      })
+
+    this.props.api('get', '/reviews/search', {}, {
+      q: this.state.search
+    })
       .then((res) =>
         this.setState({
           post_list: res.data.content,
@@ -80,8 +78,8 @@ export default class Registration extends Component {
   };
 
   reset = () => {
-    axios
-      .get("/api/reviews")
+
+    this.props.api('get', '/reviews')
       .then((res) => {
         this.setState({
           post_list: res.data.content,
