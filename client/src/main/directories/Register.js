@@ -87,14 +87,7 @@ export default class Register extends Component {
     return (
       <>
         <h3>Create An Account</h3>
-        <p className='grey-text text-darken-1'>
-          <em>Already have an account? </em>
-          <Link to='/users/login'>Log in to an existing account</Link>
-        </p>
-        <p>
-          <em>Alternatively, </em>
-          <a href={settings.serverUrl + 'api/users/login/google'}>Sign up with Google</a>
-        </p>
+        <p>Already have an account? <Link to='/users/login'>Log in</Link></p>
         <UserForm
           email={this.state.email}
           username={this.state.username}
@@ -114,6 +107,12 @@ export default class Register extends Component {
           onChangeYearOfStudy={this.onChangeYearOfStudy}
           onSubmit={this.onSubmit}
         />
+        <br />
+        <a 
+          href={settings.serverUrl + 'api/users/login/google'} 
+          className='btn btn-primary'>
+        Sign up with Google
+        </a>
       </>
     )
   }

@@ -1,32 +1,34 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
+import settings from '../config/settings'
+import Form from "react-bootstrap/Form"
+import Col from 'react-bootstrap/Col'
 
 export default class LogIn extends Component {
   constructor () {
     super()
 
     this.state = {
-      user_username: '',
-      user_password: '',
+      username: '',
+      password: '',
       isButtonDisabled: false,
-      buttonVariant: 'primary',
-      loginStatus: 'Log In',
       loggedIn: false,
-      redirectTo: null,
-      loginError: null
+      status: null
     }
   }
 
   onChangeUsername = (e) => {
     this.setState({
-      user_username: e.target.value
+      username: e.target.value,
+      isButtonDisabled: false
     })
   }
 
   onChangePassword = (e) => {
     this.setState({
-      user_password: e.target.value
+      password: e.target.value,
+      isButtonDisabled: false
     })
   }
 
@@ -34,85 +36,83 @@ export default class LogIn extends Component {
     e.preventDefault()
 
     const userLogIn = {
-      username: this.state.user_username,
-      password: this.state.user_password
+      username: this.state.username,
+      password: this.state.password
     }
 
     this.setState({
       isButtonDisabled: true,
-      buttonVariant: 'dark',
-      loginStatus: 'Logging In...'
+      status: 'Logging In...'
     })
 
     this.props.api('post', '/users/login', userLogIn)
-      .then((res) => {
-        this.setState({ redirectTo: '/' })
+      .then(res => {
+        this.setState({ status: res.data.message })
+        this.props.history.push('/')
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(err => {
         this.setState({
-          loginError: err.response.data.message,
-          buttonVariant: 'primary',
-          loginStatus: 'Log In',
-          isButtonDisabled: false
+          status: err.response.data.message,
+          isButtonDisabled: true
         })
       })
   }
 
   render () {
-    const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api/users/login/google' : '/api/users/login/google'
-    if (this.state.redirectTo) {
-      return <Redirect to={{ pathname: this.state.redirectTo }} />
-    } else {
-      return (
-        <div style={{ marginTop: 10 }}>
-          <div>
-            <h3>Log in to existing account</h3>
-            <p className='grey-text text-darken-1'>
-              <em>Don't have an account? </em>
-              <Link to='/users/signup'>Register</Link>
-            </p>
-          </div>
-          <form onSubmit={this.onSubmit}>
-            <input
-              type='text'
-              placeholder='Username'
-              className='form-control'
-              value={this.state.user_username}
-              onChange={this.onChangeUsername}
-              required
-            />
-            <br />
-            <input
-              type='password'
-              placeholder='Password'
-              className='form-control'
-              value={this.state.user_password}
-              onChange={this.onChangePassword}
-              required
-            />
-            <br />
-            <div className='form-group'>
-              <Button
-                type='submit'
-                className='btn btn-primary'
-                disabled={this.state.isButtonDisabled}
-                variant={this.state.buttonVariant}
-              >
-                {this.state.loginStatus}
-              </Button>
-              {' '}
-              <a
-                href={url}
-                className='btn btn-primary'
-              >
-                Log in with Google
-              </a>
-              <p>{this.state.loginError}</p>
-            </div>
-          </form>
-        </div>
-      )
-    }
+    return (
+      <>
+        <h3>Log in</h3>
+        <p>Don't have an account? <Link to='/users/signup'>Register</Link></p>
+        <Form onSubmit={this.onSubmit}>
+          <Form.Row>
+            <Form.Label 
+              htmlFor="username"
+              column sm={2}>
+            Username
+            </Form.Label>
+            <Col>
+              <Form.Control
+                id="username"
+                type="text"
+                value={this.state.username}
+                onChange={this.onChangeUsername}
+                required/>
+            </Col>
+          </Form.Row>
+          <br />
+
+          <Form.Row>
+            <Form.Label 
+              htmlFor="password"
+              column sm={2}>
+            Password
+            </Form.Label>
+            <Col>
+              <Form.Control
+                id="password"
+                type="text"
+                value={this.state.password}
+                onChange={this.onChangePassword}
+                required/>
+            </Col>
+          </Form.Row>
+          <br />
+
+          <Button
+            type='submit'
+            disabled={this.state.isButtonDisabled}>
+          Log In
+          </Button>
+          <br />
+          {this.state.status}
+          <br />
+          <a 
+            href={settings.serverUrl + 'api/users/login/google'} 
+            className='btn btn-primary'>
+          Log in with Google
+          </a>
+        </Form>
+      </>
+    )
   }
 }
