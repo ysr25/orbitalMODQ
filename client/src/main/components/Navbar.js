@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import '../App.css'
 
 class Navbar extends Component {
-  logout = (event) => {
-    event.preventDefault()
-    console.log('logging out')
+  logout = (e) => {
+    e.preventDefault()
 
     this.props.api('post', '/users/logout')
-      .catch((error) => {
+      .then(res => this.props.updateUser())
+      .catch(err => {
         console.log('Logout error')
       })
   }

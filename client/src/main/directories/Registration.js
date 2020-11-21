@@ -1,191 +1,120 @@
 import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import settings from '../config/settings'
+import UserForm from '../components/UserForm'
 
 export default class Registration extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      user_email: '',
-      user_course: '',
-      user_yearOfStudy: 'matriculatingSoon', // default option
-      user_username: '',
-      user_password: '',
-      isButtonDisabled: false,
-      buttonVariant: 'primary',
-      regStatus: 'Create Account',
-      errorMessage: null
+      email: '',
+      course: '',
+      yearOfStudy: 'matriculatingSoon', // default option
+      username: '',
+      password: '',
+
+      status: null,
+      isButtonDisabled: false
     }
   }
 
-  onChangeEmail = (e) => {
+  onChangeEmail = (data) => {
     this.setState({
-      user_email: e.target.value
+      email: data,
+      isButtonDisabled: false
     })
   }
 
-  onChangeCourse = (e) => {
+  onChangeCourse = (data) => {
     this.setState({
-      user_course: e.target.value
+      course: data,
+      isButtonDisabled: false
     })
   }
 
-  onChangeYearOfStudy = (e) => {
+  onChangeYearOfStudy = (data) => {
     this.setState({
-      user_yearOfStudy: e.target.value
+      yearOfStudy: data,
+      isButtonDisabled: false
     })
   }
 
-  onChangeUsername = (e) => {
+  onChangeUsername = (data) => {
     this.setState({
-      user_username: e.target.value
+      username: data,
+      isButtonDisabled: false
     })
   }
 
-  onChangePassword = (e) => {
+  onChangePassword = (data) => {
     this.setState({
-      user_password: e.target.value
+      password: data,
+      isButtonDisabled: false
     })
   }
 
   onSubmit = (e) => {
     e.preventDefault()
 
-    // variable names are same as backend
     const newUser = {
-      email: this.state.user_email,
-      course: this.state.user_course,
-      yearOfStudy: this.state.user_yearOfStudy,
-      username: this.state.user_username,
-      password: this.state.user_password
+      email: this.state.email,
+      course: this.state.course,
+      yearOfStudy: this.state.yearOfStudy,
+      username: this.state.username,
+      password: this.state.password
     }
 
-    console.log('New User successfully created (not submitted): ' + newUser)
-
     this.setState({
-      isButtonDisabled: true,
-      buttonVariant: 'dark',
-      regStatus: 'Creating Account...'
+      status: "Submitting...",
+      isButtonDisabled: true
     })
 
-    this.props.api('post', 'users/signup', newUser)
-      .then((res) => {
-        console.log(res.data)
-        console.log('successful signup')
-        this.setState({ redirectTo: '/' })
+    this.props.api('post', '/users/signup', newUser)
+      .then(res => {
+        this.setState({ status: res.data.message })
+        this.props.history.push('/')
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(err => {
         this.setState({
-          errorMessage: err.response.data.message,
-          isButtonDisabled: false,
-          buttonVariant: 'primary',
-          regStatus: 'Create Account'
+          status: err.response.data.message,
+          isButtonDisabled: true
         })
       })
   }
 
   render () {
-    const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api/users/login/google' : '/api/users/login/google'
-    if (this.state.redirectTo) {
-      return <Redirect to={{ pathname: this.state.redirectTo }} />
-    } else {
-      return (
-        <div style={{ marginTop: 10 }}>
-          <div>
-            <h3>Create An Account</h3>
-            <p className='grey-text text-darken-1'>
-              <em>Already have an account? </em>
-              <Link to='/users/login'>Log in to an existing account</Link>
-            </p>
-          </div>
-          <form onSubmit={this.onSubmit}>
-            <br />
-            <Form.Row>
-              <Col>
-                <Form.Control
-                  type='email'
-                  placeholder='Email Address'
-                  className='form-control'
-                  value={this.state.user_email}
-                  onChange={this.onChangeEmail}
-                  required
-                />
-              </Col>
-              <Col>
-                <Form.Control
-                  type='text'
-                  placeholder='Course of Study'
-                  className='form-control'
-                  value={this.state.user_course}
-                  onChange={this.onChangeCourse}
-                  required
-                />
-              </Col>
-            </Form.Row>
-            <br />
-            <div className='form-group'>
-              <label>Year of Study: </label>
-              <select
-                required
-                className='form-control'
-                value={this.state.user_yearOfStudy}
-                onChange={this.onChangeYearOfStudy}
-              >
-                <option value='matriculatingSoon'>Matriculating Soon</option>
-                <option value='undergraduate'>Undergraduate</option>
-                <option value='masters'>Masters</option>
-                <option value='doctorate'>Doctorate</option>
-                <option value='others'>Others</option>
-              </select>
-            </div>
-            <Form.Row>
-              <Col>
-                <Form.Control
-                  type='text'
-                  placeholder='Username'
-                  className='form-control'
-                  value={this.state.user_username}
-                  onChange={this.onChangeUsername}
-                  required
-                />
-              </Col>
-              <Col>
-                <Form.Control
-                  type='password'
-                  placeholder='Password'
-                  className='form-control'
-                  value={this.state.user_password}
-                  onChange={this.onChangePassword}
-                  required
-                />
-              </Col>
-            </Form.Row>
-            <br />
-            <div className='form-group'>
-              <Button
-                type='submit'
-                className='btn btn-primary'
-                disabled={this.state.isButtonDisabled}
-                variant={this.state.buttonVariant}
-              >
-                {this.state.regStatus}
-              </Button>
-              {' '}
-              <a
-                href={url}
-                className='btn btn-primary'
-              >
-                Sign up with Google
-              </a>
-              <p>{this.state.errorMessage}</p>
-            </div>
-          </form>
-        </div>
-      )
-    }
+    return (
+      <>
+        <h3>Create An Account</h3>
+        <p className='grey-text text-darken-1'>
+          <em>Already have an account? </em>
+          <Link to='/users/login'>Log in to an existing account</Link>
+        </p>
+        <p>
+          <em>Alternatively, </em>
+          <a href={settings.serverUrl + 'api/users/login/google'}>Sign up with Google</a>
+        </p>
+        <UserForm
+          email={this.state.email}
+          username={this.state.username}
+          password={this.state.password}
+          course={this.state.course}
+          yearOfStudy={this.state.yearOfStudy}
+
+          status={this.state.status}
+          isButtonDisabled={this.state.isButtonDisabled}
+          disabled={false}
+          displayPassword={true}
+
+          onChangeEmail={this.onChangeEmail}
+          onChangeUsername={this.onChangeUsername}
+          onChangePassword={this.onChangePassword}
+          onChangeCourse={this.onChangeCourse}
+          onChangeYearOfStudy={this.onChangeYearOfStudy}
+          onSubmit={this.onSubmit}
+        />
+      </>
+    )
   }
 }

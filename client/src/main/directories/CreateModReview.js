@@ -74,7 +74,7 @@ export default class CreateModReview extends Component {
 
   render() {
     return (
-      <div style={{ marginTop: 10 }}>
+      <>
         <h3>New Post</h3>
         <ReviewForm 
           title={this.state.title}
@@ -91,7 +91,7 @@ export default class CreateModReview extends Component {
           onChangeIsAnonymous={this.onChangeIsAnonymous}
           onSubmit={this.onSubmit}
         />
-      </div>
+      </>
     )
   }
 }

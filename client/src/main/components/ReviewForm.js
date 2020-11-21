@@ -33,7 +33,7 @@ export default class ReviewForm extends Component {
         <Form.Row>
           <Form.Label 
             htmlFor="title"
-            column sm={1}>
+            column sm={2}>
           Title
           </Form.Label>
           <Col>
@@ -46,10 +46,11 @@ export default class ReviewForm extends Component {
           </Col>
         </Form.Row>
         <br />
+
         <Form.Row>
           <Form.Label
             htmlFor="module"
-            column sm={1}>
+            column sm={2}>
           Module
           </Form.Label>
           <Col>
@@ -61,12 +62,14 @@ export default class ReviewForm extends Component {
           </Col>
         </Form.Row>
         <br />
+
         <Editor
           aria-labelledby="content"
           data={this.props.content}
           onChange={this.onChangeContent}
         />
         <br />
+
         <Form.Check
           type="checkbox"
           label="Post Anonymously"
@@ -75,9 +78,9 @@ export default class ReviewForm extends Component {
           onChange={this.onChangeIsAnonymous}
         />
         <br />
+        
         <Button
           type="submit"
-          className="btn btn-primary"
           disabled={this.props.isButtonDisabled}>
         Submit
         </Button>
