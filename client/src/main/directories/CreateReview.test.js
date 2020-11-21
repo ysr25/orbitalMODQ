@@ -1,15 +1,13 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import renderer from 'react-test-renderer'
-import Registration from './Registration'
+import CreateReview from './CreateReview'
 
-const mockUpdateUser = jest.fn(() => false)
-
-it('renders login page', () => {
+it('renders create module review page', () => {
   const tree = renderer
     .create(
       <MemoryRouter>
-        <Registration updateUser={mockUpdateUser} />
+        <CreateReview />
       </MemoryRouter>
     )
     .toJSON()

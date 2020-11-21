@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import renderer from 'react-test-renderer'
-import LoginPage from './LoginPage'
+import Register from './Register'
 
 const mockUpdateUser = jest.fn(() => false)
 
@@ -9,7 +9,7 @@ it('renders login page', () => {
   const tree = renderer
     .create(
       <MemoryRouter>
-        <LoginPage updateUser={mockUpdateUser} />
+        <Register updateUser={mockUpdateUser} />
       </MemoryRouter>
     )
     .toJSON()

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import UserForm from '../components/UserForm'
 
-export default class EditDetailsGoogle extends Component {
+export default class EditUser extends Component {
   constructor(props) {
     super(props)
 

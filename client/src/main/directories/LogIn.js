@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 
-export default class LoginPage extends Component {
+export default class LogIn extends Component {
   constructor () {
     super()
 

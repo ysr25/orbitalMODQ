@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import ReviewForm from "../components/ReviewForm"
 
-export default class EditModReview extends Component {
+export default class EditReview extends Component {
   constructor(props) {
     super(props)
 

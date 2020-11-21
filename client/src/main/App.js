@@ -4,11 +4,11 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Homepage from './directories/Homepage'
-import CreateModReview from './directories/CreateModReview'
-import EditModReview from './directories/EditModReview'
-import Registration from './directories/Registration'
-import LoginPage from './directories/LoginPage'
-import ViewPost from './directories/ViewPost'
+import CreateReview from './directories/CreateReview'
+import EditReview from './directories/EditReview'
+import Register from './directories/Register'
+import LogIn from './directories/LogIn'
+import ViewReview from './directories/ViewReview'
 import Navbar from './components/Navbar'
 import EditUser from './directories/EditUser'
 
@@ -61,15 +61,15 @@ class App extends Component {
           />
           <Route 
             path='/reviews/new' 
-            render={props => <CreateModReview {...props} api={this.api} />}
+            render={props => <CreateReview {...props} api={this.api} />}
           />
           <Route
             path='/reviews/edit/:id'
-            render={props => <EditModReview {...props} api={this.api} />}
+            render={props => <EditReview {...props} api={this.api} />}
           />
           <Route
             path='/reviews/view/:id'
-            render={props => <ViewPost
+            render={props => <ViewReview
               {...props}
               loggedIn={this.state.loggedIn}
               api={this.api}
@@ -77,11 +77,11 @@ class App extends Component {
           />
           <Route
             exact path='/users/signup'
-            render={props => <Registration {...props} api={this.api} />}
+            render={props => <Register {...props} api={this.api} />}
           />
           <Route
             path='/users/login'
-            render={props => <LoginPage {...props} api={this.api} />}
+            render={props => <LogIn {...props} api={this.api} />}
           />
           <Route
             exact path='/users/edit'

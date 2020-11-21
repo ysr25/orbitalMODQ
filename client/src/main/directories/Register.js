@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import settings from '../config/settings'
 import UserForm from '../components/UserForm'
 
-export default class Registration extends Component {
+export default class Register extends Component {
   constructor (props) {
     super(props)
 

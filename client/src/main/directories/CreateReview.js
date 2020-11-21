@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReviewForm from "../components/ReviewForm"
 
-export default class CreateModReview extends Component {
+export default class CreateReview extends Component {
   constructor(props) {
     super(props);
 

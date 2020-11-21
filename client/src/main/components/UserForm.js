@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 
-export default class Registration extends Component {
+export default class UserForm extends Component {
   onChangeEmail = (e) => {
     const email = e.target.value
     this.props.onChangeEmail(email)

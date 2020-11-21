@@ -8,7 +8,7 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Col from "react-bootstrap/Col";
 import ModuleInput from "../components/ModuleInput.js"
 
-export default class Registration extends Component {
+export default class Homepage extends Component {
   constructor(props) {
     super(props);
 
