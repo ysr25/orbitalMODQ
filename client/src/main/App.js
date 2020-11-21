@@ -11,7 +11,7 @@ import LoginPage from './directories/LoginPage'
 import ViewPost from './directories/ViewPost'
 import Navbar from './components/Navbar'
 import EditUser from './directories/EditUser'
-import logo from './logo.jpg'
+
 
 class App extends Component {
   constructor () {
@@ -49,17 +49,11 @@ class App extends Component {
     return (
       <Router>
         <div className='container'>
-          <nav className='navbar navbar-expand-lg navbar-light bg-light'>
-            <Link to='/' className='navbar-brand' onClick={this.updateUser}>
-              <img src={logo} width='50' height='50' alt='MODQ Logo' />
-              MODQ
-            </Link>
-            <Navbar
-              updateUser={this.updateUser}
-              loggedIn={this.state.loggedIn}
-              api={this.api}
-            />
-          </nav>
+          <Navbar
+            updateUser={this.updateUser}
+            loggedIn={this.state.loggedIn}
+            api={this.api}
+          />
           <br />
           <Route
             exact path='/'

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import moduleList from "./module-list";
+import React, { Component } from "react"
+import moduleList from "./module-list"
 
 const modulesWithRef = moduleList.map(option => {
   return { ...option, ref: React.createRef() } 
-});
+})
 
-class ModuleInput extends Component {
+export default class ModuleInput extends Component {
   constructor(props) {
     super(props)
 
@@ -14,7 +14,7 @@ class ModuleInput extends Component {
       filteredOptions: this.filterOptions(props.value),
       currentOption: 0,
       displayedInput: props.value,
-    };
+    }
   }
 
   filterOptions = (input) => {
@@ -85,7 +85,7 @@ class ModuleInput extends Component {
   }
 
   render() {
-    let options = <></>;
+    let options = <></>
     if (this.state.showOptions) {
       if (this.state.filteredOptions.length <= 0) {
         options = <div>No modules found</div>
@@ -104,14 +104,13 @@ class ModuleInput extends Component {
                   onClick={this.onClickOption}
                   onKeyDown={this.onKeyDown}
                   className={style}
-                  ref={option.ref}
-                >
-                  {option.name}
+                  ref={option.ref}>
+                {option.name}
                 </li>
               )
             })}
           </ul>
-        );
+        )
       }
     }
 
@@ -129,8 +128,6 @@ class ModuleInput extends Component {
         />
         {options}
       </>
-    );
+    )
   }
 }
-
-export default ModuleInput;
