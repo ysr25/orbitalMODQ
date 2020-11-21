@@ -176,7 +176,7 @@ export default class ViewPost extends Component {
             type="button"
             variant="outline-primary"
             size="sm"
-            href={`/modreviews/edit/${this.state.post_id}`}
+            href={`/reviews/edit/${this.state.post_id}`}
           >
             Edit
           </Button>): (

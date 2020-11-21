@@ -81,7 +81,7 @@ export default class EditModReview extends Component {
 
     this.props.api('patch', `/reviews/${this.state.postId}`, editedPost)
       .then(res =>
-        this.props.history.push(`/modreviews/view/${this.state.postId}`)
+        this.props.history.push(`/reviews/view/${this.state.postId}`)
       )
       .catch(err => {
         this.setState({ 
@@ -121,7 +121,7 @@ export default class EditModReview extends Component {
         <br />
         <Link
           className="btn btn-outline-secondary"
-          to={`/modreviews/view/${this.state.postId}`}
+          to={`/reviews/view/${this.state.postId}`}
           onClick={this.props.updateUser}>
         Cancel
         </Link>

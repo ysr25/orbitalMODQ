@@ -191,7 +191,7 @@ export default class Registration extends Component {
                     Upvotes: {post.upvotes.length - post.downvotes.length}
                     {""}
                   </Card.Text>
-                  <Link to={`/modreviews/view/${post._id}`} onClick={this.props.updateUser} className="card-link">
+                  <Link to={`/reviews/view/${post._id}`} onClick={this.props.updateUser} className="card-link">
                     View
                   </Link>
                 </Card.Body>

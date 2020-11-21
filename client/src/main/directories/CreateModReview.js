@@ -62,7 +62,7 @@ export default class CreateModReview extends Component {
     this.props.api('post', '/reviews', newPost)
       .then(res => {
         this.setState({ status: res.data.message })
-        this.props.history.push(`/modreviews/view/${res.data.content}`)
+        this.props.history.push(`/reviews/view/${res.data.content}`)
       })
       .catch(err => {
         this.setState({ 

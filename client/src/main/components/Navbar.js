@@ -25,7 +25,7 @@ export default class CustomNavbar extends Component {
       <Navbar.Collapse>
         <Nav className="mr-auto">
           <Link to='/' className='nav-link' onClick={this.props.updateUser}>Home</Link>
-          <Link to='/modreviews/newpost' className='nav-link' onClick={this.props.updateUser}>Create a Post</Link>
+          <Link to='/reviews/new' className='nav-link' onClick={this.props.updateUser}>Create a Post</Link>
           {loggedIn ? (<>
             <Link to='/users/edit/' className='nav-link' onClick={this.props.updateUser}>Edit Account Details</Link>
             <Link to='#' className='nav-link' onClick={this.logout}>Log Out</Link>

@@ -60,15 +60,15 @@ class App extends Component {
             render={props => <Homepage {...props} api={this.api} />}
           />
           <Route 
-            path='/modreviews/newpost' 
+            path='/reviews/new' 
             render={props => <CreateModReview {...props} api={this.api} />}
           />
           <Route
-            path='/modreviews/edit/:id'
+            path='/reviews/edit/:id'
             render={props => <EditModReview {...props} api={this.api} />}
           />
           <Route
-            path='/modreviews/view/:id'
+            path='/reviews/view/:id'
             render={props => <ViewPost
               {...props}
               loggedIn={this.state.loggedIn}
