@@ -35,22 +35,28 @@ const ReviewSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     default: []
   },
+  votes: {
+    type: Number,
+    default: 0
+  },
   editedAt: {
     type: Date,
     default: Date.now()
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true }
 })
 
 ReviewSchema.index({ title: 'text', content: 'text' })
 
-ReviewSchema.virtual('votes').get(function () {
-  return this.upvotes.length - this.downvotes.length
+ReviewSchema.virtual('displayedAuthor').get(function () {
+  return this.anonymous || !this.author ? 'Anonymous' : this.author.username
 })
 
-ReviewSchema.post('find', function (next) {
-
+ReviewSchema.pre('find', function (next) {
+  this.populate('author', 'username')
+  next()
 })
 
 ReviewSchema.pre('save', function (next) {
@@ -63,13 +69,30 @@ ReviewSchema.pre('save', function (next) {
   return next()
 })
 
-ReviewSchema.methods.updateVotes = function (direction, newArray, next) {
+ReviewSchema.methods.updateVotes = function (direction, newArray, newVotes, next) {
   this[direction] = newArray
-  console.log(this)
+  this.votes = newVotes
   this.save(function (err, review) {
     if (err) return next(err)
     return next(null, review)
   })
+}
+
+ReviewSchema.statics.findAndSort = function (findOptions, sort, filter, next) {
+  sort = sort || '-createdAt'
+  let options
+  if (filter) {
+    options = { ...findOptions, moduleCode: { $eq: filter } }
+  } else {
+    options = findOptions
+  }
+
+  return this.find(options)
+    .sort(sort)
+    .exec((err, result) => {
+      if (err) return next(err)
+      next(null, result)
+    })
 }
 
 module.exports = mongoose.model('Review', ReviewSchema)

@@ -17,7 +17,7 @@ export default class CustomNavbar extends Component {
     const loggedIn = this.props.loggedIn
 
     return (
-      <Navbar bg="light" expand="sm">
+      <Navbar bg="light" expand="sm" sticky="top">
       <Link to='/' className='navbar-brand' onClick={this.props.updateUser}>
         <img src={logo} width='50' height='50' alt='MODQ Logo'/>MODQ
       </Link>

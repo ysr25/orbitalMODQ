@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import settings from '../config/settings'
 import Form from "react-bootstrap/Form"
@@ -13,7 +13,6 @@ export default class LogIn extends Component {
       username: '',
       password: '',
       isButtonDisabled: false,
-      loggedIn: false,
       status: null
     }
   }

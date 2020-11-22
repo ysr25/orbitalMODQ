@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.card {
+  margin-bottom: 20px;
+}
+
+.search {
+  border: 1px solid gainsboro;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.searchComponent {
+  margin: 5px;
+}

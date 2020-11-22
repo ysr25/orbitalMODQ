@@ -6,7 +6,6 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Redirect } from "react-router-dom";
 
 export default class ViewReview extends Component {
   constructor(props) {
@@ -48,10 +47,10 @@ export default class ViewReview extends Component {
   };
 
   onUpvote = () => {
-    if(this.state.upvote_button == "outline-success") {
+    if(this.state.upvote_button === "outline-success") {
       this.state.upvote_button = "success"
     } else {
-      this.state. upvote_button = "outline-success"
+      this.state.upvote_button = "outline-success"
     }
     this.props.api('patch', `/reviews/${this.state.post_id}/upvote`)
       .then((res) => {
@@ -61,7 +60,7 @@ export default class ViewReview extends Component {
   }
 
   onDownvote = () => {
-    if(this.state.downvote_button == "outline-danger") {
+    if(this.state.downvote_button === "outline-danger") {
       this.state.downvote_button = "danger"
     } else {
       this.state.downvote_button = "outline-danger"
@@ -115,7 +114,7 @@ export default class ViewReview extends Component {
           post_author: post.anonymous || !post.author ? "Anonymous" : post.author.username,
           post_date: post.createdAt,
           post_editedDate: post.editedAt,
-          post_votes: post.upvotes.length - post.downvotes.length,
+          post_votes: post.votes,
         })
       })
       .catch((err) => console.log(err));

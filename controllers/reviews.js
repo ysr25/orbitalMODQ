@@ -2,9 +2,11 @@ const Review = require('../models/review-model')
 const Comment = require('../models/comment-model')
 
 exports.getAllReviews = async (req, res, next) => {
-  Review.find()
-    .populate('author')
-    .exec((err, reviews) => {
+  Review.findAndSort(
+    {},
+    req.query.sort,
+    req.query.filter,
+    (err, reviews) => {
       if (err) return next(err)
       res.locals.content = reviews
       next()
@@ -13,7 +15,6 @@ exports.getAllReviews = async (req, res, next) => {
 
 exports.getOneReview = (req, res, next) => {
   Review.findById(req.params.reviewId)
-    .populate('author')
     .exec((err, review) => {
       if (err) return next(err)
       res.locals.content = review
@@ -126,50 +127,59 @@ exports.searchReviews = (req, res, next) => {
       .filter(rev1 => !arr2.find(rev2 => String(rev1._id) === String(rev2._id)))
       .concat(arr2)
   }
-
   // Full search using text indexes
-  Review.find({ $text: { $search: req.query.q } })
-    .populate('author')
-    .exec((err, reviews) => {
+  Review.findAndSort({
+    $text: { $search: req.query.q }
+  },
+  req.query.sort,
+  req.query.filter,
+  (err, reviews) => {
+    if (err) return next(err)
+    // Partial search on last word only
+    const keywords = req.query.q.split(' ')
+    const lastWord = keywords[keywords.length - 1]
+    res.locals.query = Review.findAndSort({
+      $or: [
+        { title: { $regex: lastWord, $options: 'i' } },
+        { content: { $regex: lastWord, $options: 'i' } }
+      ]
+    },
+    req.query.sort,
+    req.query.filter,
+    (err, result) => {
       if (err) return next(err)
-      // Partial search on last word only
-      const keywords = req.query.q.split(' ')
-      const lastWord = keywords[keywords.length - 1]
-      Review.find({
-        $or: [
-          { title: { $regex: lastWord, $options: 'i' } },
-          { content: { $regex: lastWord, $options: 'i' } }
-        ]
-      })
-        .populate('author')
-        .exec((err, result) => {
-          if (err) return next(err)
-          res.locals.content = mergeReviews(reviews, result)
-          next()
-        })
+      res.locals.content = mergeReviews(reviews, result)
+      next()
     })
+  })
 }
 
 exports.vote = (req, res, next) => {
   Review.findById(req.params.reviewId, (err, review) => {
     if (err) return next(err)
 
-    const prevVotes = review[res.locals.vote]
+    const oldVoteArray = review[res.locals.vote]
+    const oldVotes = review.votes
+    const isUpvote = res.locals.vote === 'upvotes'
+    const voteType = isUpvote ? 'upvote' : 'downvote'
+    let newVoteArray
     let newVotes
     let message
 
-    if (prevVotes.includes(req.user._id)) {
+    if (oldVoteArray.includes(req.user._id)) {
       // Take back up/downvote
-      newVotes = prevVotes.filter(item => String(item) !== String(req.user._id))
-      message = `Module review ${res.locals.vote} removed.`
+      newVoteArray = oldVoteArray.filter(item => String(item) !== String(req.user._id))
+      newVotes = isUpvote ? oldVotes - 1 : oldVotes + 1
+      message = `Module review ${voteType} removed.`
     } else {
       // Up/downvote
-      newVotes = prevVotes.slice()
-      newVotes.push(req.user._id)
-      message = `Module review ${res.locals.vote} added.`
+      newVoteArray = oldVoteArray.slice()
+      newVoteArray.push(req.user._id)
+      newVotes = isUpvote ? oldVotes + 1 : oldVotes - 1
+      message = `Module review ${voteType} added.`
     }
 
-    review.updateVotes(res.locals.vote, newVotes, (err, result) => {
+    review.updateVotes(res.locals.vote, newVoteArray, newVotes, (err, result) => {
       if (err) return next(err)
       res.locals.msg = message
       res.locals.content = result.votes
