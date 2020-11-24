@@ -9,7 +9,7 @@ import ShortReview from "../components/ShortReview.js"
 
 export default class Homepage extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       reviews: [],
@@ -37,36 +37,28 @@ export default class Homepage extends Component {
   }
 
   changeSort = (e) => {
-    this.setState({ sort: e });
-  };
-
-  changeOrder = (e) => {
-    this.setState({ order: e });
-  };
+    this.setState({ sort: e })
+  }
 
   changeFilter = (e) => {
-    this.setState({ filter: e });
-  };
+    this.setState({ filter: e })
+  }
 
   changeSearch = (e) => {
-    this.setState({ search: e.target.value });
-  };
+    this.setState({ search: e.target.value })
+  }
 
   onSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     this.props.api('get', '/reviews/search', {}, {
       q: this.state.search,
       sort: this.state.sort,
       filter: this.state.filter
     })
-      .then(res =>
-        this.setState({
-          reviews: res.data.content,
-        })
-      )
-      .catch(err => console.log(err));
-  };
+      .then(res => this.setState({ reviews: res.data.content }))
+      .catch(err => console.log(err))
+  }
 
   onReset = () => {
     this.getReviews()
@@ -75,7 +67,7 @@ export default class Homepage extends Component {
   render() {
     let content
     if (this.state.reviews.length) {
-      content = this.state.reviews.map(review => <ShortReview post={review} key={review._id}/>)
+      content = this.state.reviews.map(review => <ShortReview review={review} key={review._id}/>)
     } else {
       content = 'No reviews found.'
     }

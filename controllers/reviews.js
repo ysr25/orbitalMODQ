@@ -24,7 +24,8 @@ exports.getOneReview = (req, res, next) => {
 
 exports.getComments = (req, res, next) => {
   Comment.find({ reviewId: req.params.reviewId })
-    .populate('author')
+    .sort('-createdAt')
+    .populate('author', 'username')
     .exec((err, comments) => {
       if (err) return next(err)
       res.locals.content = comments
@@ -71,16 +72,30 @@ exports.postReview = (req, res, next) => {
   })
 }
 
-exports.checkIfUserIsPoster = (req, res, next) => {
+exports.checkIfAuthor = (req, res, next) => {
   if (!req.user) {
-    res.locals.content = false
+    res.locals.isAuthor = false
     return next()
   }
-  Review.findById(req.params.reviewId, (err, review) => {
-    if (err) return next(err)
-    res.locals.content = String(review.author) === String(req.user._id)
-    next()
-  })
+  const review = res.locals.content
+  if (!review.author) {
+    res.locals.isAuthor = false
+    return next()
+  }
+  res.locals.isAuthor = String(review.author._id) === String(req.user._id)
+  next()
+}
+
+exports.checkVotes = (req, res, next) => {
+  if (!req.user) {
+    res.locals.isUpvoted = false
+    res.locals.isDownvoted = false
+    return next()
+  }
+  const review = res.locals.content
+  res.locals.isUpvoted = review.upvotes.includes(req.user._id)
+  res.locals.isDownvoted = review.downvotes.includes(req.user._id)
+  next()
 }
 
 exports.editReview = (req, res, next) => {
@@ -182,7 +197,7 @@ exports.vote = (req, res, next) => {
     review.updateVotes(res.locals.vote, newVoteArray, newVotes, (err, result) => {
       if (err) return next(err)
       res.locals.msg = message
-      res.locals.content = result.votes
+      res.locals.content = result
       next()
     })
   })

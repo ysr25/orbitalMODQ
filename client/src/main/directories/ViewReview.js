@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Row from "react-bootstrap/Row";
+import Editor from '../components/Editor';
+import Review from '../components/Review';
+import Comment from '../components/Comment';
+import Badge from 'react-bootstrap/Badge'
 
 export default class ViewReview extends Component {
   constructor(props) {
@@ -13,241 +15,138 @@ export default class ViewReview extends Component {
   
     this.state = {
       post_id: props.match.params.id,
-      post_title: "",
-      post_content: "",
-      post_moduleCode: "",
-      post_authorId: "",
-      post_author: "",
-      post_date: "",
-      post_editedDate: "",
-      post_votes: 0,
-      originalPoster: null,
+      post: '',
 
-      downvote_button: "outline-danger",
-      upvote_button: "outline-success",
-      post_comments: [],
-      post_new_comment: "",
-      commentButton: "primary",
-      commentStatus: "Post Comment",
+      isAuthor: false,
+      isUpvoted: false,
+      isDownvoted: false,
+
+      comments: [],
+      newComment: "",
       commentButtonDisabled: false,
-      sort_property: "createdAt",
-      sort_direction: 1,
+      status: ''
     };
 
-  }
-
-  compare = (property, direction) => {
-    if (property === "createdAt") {
-      return (a, b) => {
-        return (
-          (new Date(a[property]) < new Date(b[property]) ? 1 : -1) * direction
-        );
-      };
-    }
-  };
-
-  onUpvote = () => {
-    if(this.state.upvote_button === "outline-success") {
-      this.state.upvote_button = "success"
-    } else {
-      this.state.upvote_button = "outline-success"
-    }
-    this.props.api('patch', `/reviews/${this.state.post_id}/upvote`)
-      .then((res) => {
-        this.setState({ post_votes: res.data.content })
-      })
-      .catch((err) => console.log(err));
-  }
-
-  onDownvote = () => {
-    if(this.state.downvote_button === "outline-danger") {
-      this.state.downvote_button = "danger"
-    } else {
-      this.state.downvote_button = "outline-danger"
-    }
-    this.props.api('patch', `/reviews/${this.state.post_id}/downvote`)
-      .then((res) => {
-        this.setState({ post_votes: res.data.content })
-      })
-      .catch((err) => console.log(err));
-  }
-
-  onChangeContent = (event, editor) => {
-    this.setState({ post_new_comment: editor.getData() });
-  };
-
-  onComment = (e) => {
-    e.preventDefault();
-
-    const newComment = {
-      content: this.state.post_new_comment,
-    };
-
-    // this.setState({
-    //   commentButtonDisabled: true,
-    //   commentButton: "dark",
-    //   commentStatus: "Posting Comment...",
-    // });
-
-    this.props.api('post', `/reviews/${this.state.post_id}/comments`, newComment)
-    .then((res) => {
-      this.setState({
-        commentButton: "primary",
-        commentStatus: "Post Comment",
-        commentButtonDisabled: false,
-        post_new_comment: ""
-      })
-      window.location.reload(true);
-    })
-    .catch((err) => console.log(err));
   }
 
   componentDidMount = () => {
+    this.getData()
+  }
+
+  onUpvote = () => {
+    this.props.api('patch', `/reviews/${this.state.post_id}/upvote`)
+      .then(res => this.getData())
+      .catch(err => console.log(err))
+  }
+
+  onDownvote = () => {
+    this.props.api('patch', `/reviews/${this.state.post_id}/downvote`)
+      .then(res => this.getData())
+      .catch(err => console.log(err))
+  }
+
+  onChangeContent = (data) => {
+    this.setState({ newComment: data })
+  }
+
+  onComment = (e) => {
+    e.preventDefault()
+
+    const newComment = {
+      content: this.state.newComment
+    }
+
+    this.setState({
+      commentButtonDisabled: true,
+      status: "Posting comment...",
+    })
+
+    this.props.api('post', `/reviews/${this.state.post_id}/comments`, newComment)
+    .then(res => {
+      this.setState({
+        commentButtonDisabled: false,
+        newComment: '',
+        status: res.data.message
+      })
+      this.getData()
+    })
+    .catch(err => console.log(err))
+  }
+
+  getData = () => {
     this.props.api('get', `/reviews/${this.state.post_id}`)
-      .then((res) => {
-        const post = res.data.content;
+      .then(res => {
         this.setState({
-          post_id: post._id,
-          post_title: post.title,
-          post_content: post.content,
-          post_moduleCode: post.moduleCode,
-          post_author: post.anonymous || !post.author ? "Anonymous" : post.author.username,
-          post_date: post.createdAt,
-          post_editedDate: post.editedAt,
-          post_votes: post.votes,
+          post: res.data.content,
+          isAuthor: res.data.isAuthor,
+          isUpvoted: res.data.isUpvoted,
+          isDownvoted: res.data.isDownvoted
         })
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err))
 
-      console.log("checking if original poster");
-      this.props.api('get', `/reviews/${this.state.post_id}/poster`)
-        .then((res) => {
-          this.setState({ originalPoster: res.data.content })
-        })
-        .catch((err) => console.log(err));
-
-      this.props.api('get', `/reviews/${this.state.post_id}/comments`)
-        .then((res) => {
-          this.setState({ 
-            post_comments: res.data.content
-          })
-        })
-        .catch((err) => console.log(err))
-  };
+    this.props.api('get', `/reviews/${this.state.post_id}/comments`)
+      .then(res => this.setState({ comments: res.data.content }))
+      .catch(err => console.log(err))
+  }
 
   render() {
-    const originalPoster = this.state.originalPoster;
+    const editButton = this.props.loggedIn && this.state.isAuthor
+      ? <Button
+          variant="outline-primary"
+          href={`/reviews/edit/${this.state.post_id}`}>
+        Edit
+        </Button> 
+      : <></>
+
+    const postComment = this.props.loggedIn 
+      ? <Form onSubmit={this.onComment}>
+        Post a new comment:
+        <Editor
+          data={this.state.newComment}
+          onChange={this.onChangeContent}/>
+        <br />
+        <Button
+          type="comment"
+          variant="outline-primary"
+          disabled={this.state.commentButtonDisabled}>
+        Comment
+        </Button>
+        <br />
+        {this.state.status}
+        </Form>
+      : <>
+        <a href={`/users/login`}>Log in</a> or <a href={`/users/signup`}>Create an account</a> to leave a comment.
+      </>
+
+    const upvoteButtonType = this.state.isUpvoted ? 'success' : 'outline-success'
+    const downvoteButtonType = this.state.isDownvoted ? 'danger' : 'outline-danger'
+
+    const voteButtons = this.props.loggedIn 
+      ? <>
+        <Button variant={upvoteButtonType} onClick={this.onUpvote}>Upvote</Button>
+        {" "}
+        <Button variant={downvoteButtonType} onClick={this.onDownvote}>Downvote</Button>
+        </>
+      : <></>
+
     return (
-      <div style={{ marginTop: 10 }}>
-        <div>
-          <h6>Post #{this.state.post_id}</h6>
-          <em>
-            Last edited on {new Date(this.state.post_editedDate).toLocaleString()}
-          </em>
-          <br />
-          <Form.Group>
-            <br />
-            <h2>{this.state.post_title}</h2>
-            Posted by{" "}
-            <em>
-              {this.state.post_author} on{" "}
-              {new Date(this.state.post_date).toLocaleString()}
-            </em>
-            <br />
-            Upvotes: {this.state.post_votes}
-            <br />
-            <br />
-            <h5>
-              Review for:{" "}
-              <b>
-                <em>{this.state.post_moduleCode}</em>
-              </b>
-            </h5>
-            <br />
-            <div dangerouslySetInnerHTML={{ __html: this.state.post_content}}></div>
-          </Form.Group>
-          <br />
-          <br />
-          <Form.Row>
-          <Col>
-          {originalPoster ? (
-            <Button
-            type="button"
-            variant="outline-primary"
-            size="sm"
-            href={`/reviews/edit/${this.state.post_id}`}
-          >
-            Edit
-          </Button>): (
-            <></>
-          )}
-          {" "}
-          {this.props.loggedIn ?
-            <>
-              <Button variant={this.state.upvote_button} size="sm" onClick={this.onUpvote}>Upvote</Button>
-              {" "}
-              <Button variant={this.state.downvote_button} size="sm" onClick={this.onDownvote}>Downvote</Button>
-            </>
-          : <></> }
-          {" "}
-          <Link className="btn btn-outline-secondary btn-sm" to={`/`} onClick={this.props.updateUser}>
-            Return to Homepage
-          </Link>
-          </Col>
-          </Form.Row>
-          <br />
-          <br />
-            <Form onSubmit={this.onComment}>
-            {this.props.loggedIn ? (
-            <>
-            <h5>Post a new comment: </h5>
-            <CKEditor
-              editor={ClassicEditor}
-              data={this.state.post_new_comment}
-              config={{
-                toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
-              }}
-              onChange={this.onChangeContent}
-            />
-            <br  />
-              <Button
-                // class="float-sm-right"
-                type = "comment"
-                variant="outline-primary"
-                size="sm"
-              >
-                Comment
-              </Button>
-              </>
-            ) : (
-              <h6><a href={`/users/signup`}>Create an account</a> or <a href={`/users/login`}>login to an existing account</a> to make a comment.</h6>
-            )}
-            </Form>
-        </div>
-            <br />
-            {this.state.post_comments
-              .sort(
-            this.compare(this.state.sort_property, this.state.sort_direction)
-          )
-            .map((comment) => (
-              <div key={comment._id}>
-                <Card border='light'>
-                  <Card.Body>
-                    <Card.Text dangerouslySetInnerHTML={{ __html: comment.content}}></Card.Text>
-                    <Card.Text>
-                      <em>posted by {comment.author.username}</em>
-                      <br  />
-                      <em>
-                        date posted {new Date(comment.createdAt).toLocaleString()}
-                      </em>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </div>
-            ))}
+      <>
+        <Review review={this.state.post} />
+        {editButton}
+        {" "}
+        {voteButtons}
         <br />
-        <br />
+        
+        <div style={{ marginTop: '10px' }} >
+        {postComment}
         </div>
-    );
+        
+            
+        <div style={{ marginTop: '10px' }} >
+        {this.state.comments.map(comment => <Comment comment={comment} key={comment._id}/>)}
+        </div>
+      </>
+    )
   }
 }

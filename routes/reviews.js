@@ -20,7 +20,10 @@ router.get('/search',
 
 // Get a specific module review
 router.get('/:reviewId',
+  passport.authenticate(['local', 'anonymous']),
   reviews.getOneReview,
+  reviews.checkIfAuthor,
+  reviews.checkVotes,
   sendResponse
 )
 
@@ -41,13 +44,6 @@ router.post('/:reviewId/comments',
 router.post('/',
   passport.authenticate(['local', 'anonymous']),
   reviews.postReview,
-  sendResponse
-)
-
-// Check if user is poster
-router.get('/:reviewId/poster',
-  passport.authenticate(['local', 'anonymous']),
-  reviews.checkIfUserIsPoster,
   sendResponse
 )
 
