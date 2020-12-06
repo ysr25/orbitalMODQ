@@ -42,14 +42,14 @@ export default class UserForm extends Component {
       <Form onSubmit={this.onSubmit}>
         <Form.Row>
           <Form.Label 
-            htmlFor="email"
+            htmlFor='email'
             column sm={size}>
           Email
           </Form.Label>
           <Col>
             <Form.Control
-              id="email"
-              type="email"
+              id='email'
+              type='email'
               value={this.props.email}
               onChange={this.onChangeEmail}
               disabled={this.props.disabled}
@@ -60,14 +60,14 @@ export default class UserForm extends Component {
 
         <Form.Row>
           <Form.Label 
-            htmlFor="course"
+            htmlFor='course'
             column sm={size}>
           Course
           </Form.Label>
           <Col>
             <Form.Control
-              id="course"
-              type="text"
+              id='course'
+              type='text'
               value={this.props.course}
               onChange={this.onChangeCourse}
               required/>
@@ -77,7 +77,7 @@ export default class UserForm extends Component {
 
         <Form.Row>
           <Form.Label 
-            htmlFor="yearOfStudy"
+            htmlFor='yearOfStudy'
             column sm={size}>
           Year of Study
           </Form.Label>
@@ -101,14 +101,14 @@ export default class UserForm extends Component {
 
         <Form.Row>
         <Form.Label
-          htmlFor="username"
+          htmlFor='username'
           column sm={size}>
         Username
         </Form.Label>
         <Col>
           <Form.Control
-            id="username"
-            type="text"
+            id='username'
+            type='text'
             value={this.props.username}
             onChange={this.onChangeUsername}
             disabled={this.props.disabled}
@@ -119,15 +119,15 @@ export default class UserForm extends Component {
 
         <Form.Row>
         <Form.Label 
-          htmlFor="password"
+          htmlFor='password'
           style={{ display: displayPassword }}
           column sm={size}>
         Password
         </Form.Label>
         <Col>
           <Form.Control
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             value={this.props.password}
             onChange={this.onChangePassword}
             style={{ display: displayPassword }}/>

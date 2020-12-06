@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import ReviewForm from "../components/ReviewForm"
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import ReviewForm from '../components/ReviewForm'
 
 export default class EditReview extends Component {
   constructor(props) {
@@ -9,9 +9,9 @@ export default class EditReview extends Component {
 
     this.state = {
       postId: props.match.params.id,
-      title: "",
-      content: "",
-      moduleCode: "",
+      title: '',
+      content: '',
+      moduleCode: '',
       isAnonymous: false,
 
       status: null,
@@ -75,7 +75,7 @@ export default class EditReview extends Component {
     };
 
     this.setState({
-      status: "Submitting...",
+      status: 'Submitting...',
       isButtonDisabled: true
     })
 
@@ -120,13 +120,13 @@ export default class EditReview extends Component {
         />
         <br />
         <Link
-          className="btn btn-outline-secondary"
+          className='btn btn-outline-secondary'
           to={`/reviews/view/${this.state.postId}`}
           onClick={this.props.updateUser}>
         Cancel
         </Link>
-        {" "}
-        <Button variant="outline-danger" onClick={this.onDelete}>
+        {' '}
+        <Button variant='outline-danger' onClick={this.onDelete}>
         Delete
         </Button>
       </div>

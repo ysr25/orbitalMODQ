@@ -1,13 +1,10 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Editor from '../components/Editor';
-import Review from '../components/Review';
-import Comment from '../components/Comment';
-import Badge from 'react-bootstrap/Badge'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Editor from '../components/Editor'
+import Review from '../components/Review'
+import Comment from '../components/Comment'
 
 export default class ViewReview extends Component {
   constructor(props) {
@@ -22,7 +19,7 @@ export default class ViewReview extends Component {
       isDownvoted: false,
 
       comments: [],
-      newComment: "",
+      newComment: '',
       commentButtonDisabled: false,
       status: ''
     };
@@ -58,7 +55,7 @@ export default class ViewReview extends Component {
 
     this.setState({
       commentButtonDisabled: true,
-      status: "Posting comment...",
+      status: 'Posting comment...',
     })
 
     this.props.api('post', `/reviews/${this.state.post_id}/comments`, newComment)
@@ -92,11 +89,11 @@ export default class ViewReview extends Component {
 
   render() {
     const editButton = this.props.loggedIn && this.state.isAuthor
-      ? <Button
-          variant="outline-primary"
-          href={`/reviews/edit/${this.state.post_id}`}>
+      ? <Link
+          className='btn btn-outline-primary'
+          to={`/reviews/edit/${this.state.post_id}`}>
         Edit
-        </Button> 
+        </Link> 
       : <></>
 
     const postComment = this.props.loggedIn 
@@ -107,8 +104,8 @@ export default class ViewReview extends Component {
           onChange={this.onChangeContent}/>
         <br />
         <Button
-          type="comment"
-          variant="outline-primary"
+          type='comment'
+          variant='outline-primary'
           disabled={this.state.commentButtonDisabled}>
         Comment
         </Button>
@@ -125,7 +122,7 @@ export default class ViewReview extends Component {
     const voteButtons = this.props.loggedIn 
       ? <>
         <Button variant={upvoteButtonType} onClick={this.onUpvote}>Upvote</Button>
-        {" "}
+        {' '}
         <Button variant={downvoteButtonType} onClick={this.onDownvote}>Downvote</Button>
         </>
       : <></>
@@ -134,7 +131,7 @@ export default class ViewReview extends Component {
       <>
         <Review review={this.state.post} />
         {editButton}
-        {" "}
+        {' '}
         {voteButtons}
         <br />
         

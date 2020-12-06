@@ -66,7 +66,7 @@ export default class Register extends Component {
     }
 
     this.setState({
-      status: "Submitting...",
+      status: 'Submitting...',
       isButtonDisabled: true
     })
 

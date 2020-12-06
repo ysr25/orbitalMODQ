@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import settings from '../config/settings'
-import Form from "react-bootstrap/Form"
+import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
 export default class LogIn extends Component {
@@ -65,14 +65,14 @@ export default class LogIn extends Component {
         <Form onSubmit={this.onSubmit}>
           <Form.Row>
             <Form.Label 
-              htmlFor="username"
+              htmlFor='username'
               column sm={2}>
             Username
             </Form.Label>
             <Col>
               <Form.Control
-                id="username"
-                type="text"
+                id='username'
+                type='text'
                 value={this.state.username}
                 onChange={this.onChangeUsername}
                 required/>
@@ -82,14 +82,14 @@ export default class LogIn extends Component {
 
           <Form.Row>
             <Form.Label 
-              htmlFor="password"
+              htmlFor='password'
               column sm={2}>
             Password
             </Form.Label>
             <Col>
               <Form.Control
-                id="password"
-                type="password"
+                id='password'
+                type='password'
                 value={this.state.password}
                 onChange={this.onChangePassword}
                 required/>

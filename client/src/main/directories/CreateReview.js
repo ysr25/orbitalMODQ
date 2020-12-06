@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import ReviewForm from "../components/ReviewForm"
+import React, { Component } from 'react'
+import ReviewForm from '../components/ReviewForm'
 
 export default class CreateReview extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      title: "",
-      content: "",
-      moduleCode: "",
+      title: '',
+      content: '',
+      moduleCode: '',
       isAnonymous: false,
 
       status: null,
       isButtonDisabled: false
-    };
+    }
   }
 
   onChangeTitle = (data) => {
@@ -55,7 +55,7 @@ export default class CreateReview extends Component {
     }
 
     this.setState({
-      status: "Submitting...",
+      status:'Submitting...',
       isButtonDisabled: true
     })
 

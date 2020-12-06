@@ -9,7 +9,7 @@ export default class Comment extends Component {
     return (
       <Card>
         <Card.Body>
-          <Card.Text dangerouslySetInnerHTML={{ __html: comment.content}}></Card.Text>
+          <Card.Text dangerouslySetInnerHTML={{ __html: comment.content }}></Card.Text>
         </Card.Body>
         <Card.Footer>
           Posted by {comment.author.username} on {datePosted}

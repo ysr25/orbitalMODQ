@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 import UserForm from '../components/UserForm'
 
 export default class EditUser extends Component {
@@ -6,10 +6,10 @@ export default class EditUser extends Component {
     super(props)
 
     this.state = {
-      email: "",
-      course: "",
+      email: '',
+      course: '',
       yearOfStudy: "matriculatingSoon", // default option
-      username: "",
+      username: '',
       googleAccount: false,
 
       status: null,
@@ -23,8 +23,8 @@ export default class EditUser extends Component {
         const user = res.data.content
         return this.setState({
           email: user.email,
-          course: user.course === "notSelected" ? "" : user.course,
-          yearOfStudy: user.yearOfStudy === "notSelected" ? "matriculatingSoon" : user.yearOfStudy,
+          course: user.course === 'notSelected' ? '' : user.course,
+          yearOfStudy: user.yearOfStudy === 'notSelected' ? 'matriculatingSoon' : user.yearOfStudy,
           username: user.username,
           googleAccount: user.googleId ? true : false,
         })
@@ -62,7 +62,6 @@ export default class EditUser extends Component {
   }
 
   onSubmit = (e) => {
-    console.log('hi?')
     e.preventDefault()
 
     const editedUser = {
@@ -74,7 +73,7 @@ export default class EditUser extends Component {
 
     this.setState({
       isButtonDisabled: true,
-      status: "Submitting...",
+      status: 'Submitting...',
     })
 
     this.props.api('patch', '/users', editedUser)

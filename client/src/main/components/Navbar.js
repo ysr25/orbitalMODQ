@@ -17,13 +17,13 @@ export default class CustomNavbar extends Component {
     const loggedIn = this.props.loggedIn
 
     return (
-      <Navbar bg="light" expand="sm" sticky="top">
+      <Navbar bg='light' expand='sm' sticky='top'>
       <Link to='/' className='navbar-brand' onClick={this.props.updateUser}>
         <img src={logo} width='50' height='50' alt='MODQ Logo'/>MODQ
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav"/>
       <Navbar.Collapse>
-        <Nav className="mr-auto">
+        <Nav className='mr-auto'>
           <Link to='/' className='nav-link' onClick={this.props.updateUser}>Home</Link>
           <Link to='/reviews/new' className='nav-link' onClick={this.props.updateUser}>Create a Post</Link>
           {loggedIn ? (<>

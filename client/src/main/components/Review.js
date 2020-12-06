@@ -12,7 +12,7 @@ export default class Review extends Component {
         <p>Post #{review._id}<br />Last edited on {dateEdited}</p>
         <h1>{review.title} <Badge variant='info'>{review.moduleCode}</Badge></h1>
         <p>Posted by {review.displayedAuthor} on {datePosted}<br />Upvotes: {review.votes}</p>
-        <div dangerouslySetInnerHTML={{ __html: review.content}}></div>
+        <div dangerouslySetInnerHTML={{ __html: review.content }} />
       </>
     )
   }

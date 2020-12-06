@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import React, { Component } from 'react'
+import CKEditor from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default class Editor extends Component {
   onChangeContent = (event, editor) => {
@@ -14,7 +14,7 @@ export default class Editor extends Component {
         editor={ClassicEditor}
         data={this.props.data}
         config={{
-          toolbar: ["heading", "|", "bold", "italic", "blockQuote", "link", "numberedList", "bulletedList", "|", "undo", "redo"]
+          toolbar: ['heading', '|', 'bold', 'italic', 'blockQuote', 'link', 'numberedList', 'bulletedList', '|', 'undo', 'redo']
         }}
         onChange={this.onChangeContent}
       />

@@ -1,11 +1,11 @@
-import React, { Component } from "react"
-import Button from "react-bootstrap/Button"
-import Form from "react-bootstrap/Form"
-import ToggleButton from "react-bootstrap/ToggleButton"
-import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup"
-import Col from "react-bootstrap/Col"
-import ModuleInput from "../components/ModuleInput.js"
-import ShortReview from "../components/ShortReview.js"
+import React, { Component } from 'react'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import ToggleButton from 'react-bootstrap/ToggleButton'
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import Col from 'react-bootstrap/Col'
+import ModuleInput from '../components/ModuleInput.js'
+import ShortReview from '../components/ShortReview.js'
 
 export default class Homepage extends Component {
   constructor(props) {
@@ -82,16 +82,16 @@ export default class Homepage extends Component {
               className='d-flex'
               onChange={this.changeSort}
               value={this.state.sort}>
-              <ToggleButton variant="outline-info" value="-createdAt">
+              <ToggleButton variant='outline-info' value='-createdAt'>
                 Newest
               </ToggleButton>
-              <ToggleButton variant="outline-info" value="createdAt">
+              <ToggleButton variant='outline-info' value='createdAt'>
                 Oldest
               </ToggleButton>
-              <ToggleButton variant="outline-info" value="-editedAt">
+              <ToggleButton variant='outline-info' value='-editedAt'>
                 Edited
               </ToggleButton>
-              <ToggleButton variant="outline-info" value="-votes">
+              <ToggleButton variant='outline-info' value='-votes'>
                 Votes
               </ToggleButton>
             </ToggleButtonGroup>
@@ -110,17 +110,17 @@ export default class Homepage extends Component {
             <Form.Control
               value={this.state.search}
               onChange={this.changeSearch}
-              placeholder="Search reviews"/>
+              placeholder='Search reviews'/>
           </Col>
             
           <Col xs='auto' className='searchComponent'>
-            <Button variant="info" type="submit" className='d-flex'>
+            <Button variant='info' type='submit' className='d-flex'>
             Submit
             </Button>
           </Col >
           
           <Col xs='auto' className='searchComponent'>
-            <Button variant="info" onClick={this.onReset} className='d-flex'>
+            <Button variant='info' onClick={this.onReset} className='d-flex'>
               Reset
             </Button>
           </Col>
