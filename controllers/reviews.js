@@ -142,6 +142,16 @@ exports.searchReviews = (req, res, next) => {
       .filter(rev1 => !arr2.find(rev2 => String(rev1._id) === String(rev2._id)))
       .concat(arr2)
   }
+
+  const sortReviews = (reviews, sort) => {
+    const isAsc = sort.charAt(0) !== '-'
+    const field = isAsc ? sort : sort.substring(1)
+    const comparator = (rev1, rev2) => isAsc 
+      ? rev1[field] - rev2[field]
+      : rev2[field] - rev1[field]
+    return reviews.sort(comparator)
+  }
+
   // Full search using text indexes
   Review.findAndSort({
     $text: { $search: req.query.q }
@@ -163,7 +173,7 @@ exports.searchReviews = (req, res, next) => {
     req.query.filter,
     (err, result) => {
       if (err) return next(err)
-      res.locals.content = mergeReviews(reviews, result)
+      res.locals.content = sortReviews(mergeReviews(reviews, result), req.query.sort)
       next()
     })
   })
