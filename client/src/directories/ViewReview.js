@@ -21,7 +21,7 @@ export default class ViewReview extends Component {
       comments: [],
       newComment: '',
       commentButtonDisabled: false,
-      status: ''
+      status: 'Loading...'
     };
 
   }
@@ -77,7 +77,8 @@ export default class ViewReview extends Component {
           post: res.data.content,
           isAuthor: res.data.isAuthor,
           isUpvoted: res.data.isUpvoted,
-          isDownvoted: res.data.isDownvoted
+          isDownvoted: res.data.isDownvoted,
+          status: ''
         })
       })
       .catch(err => console.log(err))

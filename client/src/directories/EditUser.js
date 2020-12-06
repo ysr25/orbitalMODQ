@@ -12,7 +12,7 @@ export default class EditUser extends Component {
       username: '',
       googleAccount: false,
 
-      status: null,
+      status: 'Loading...',
       isButtonDisabled: false
     }
   }
@@ -27,6 +27,7 @@ export default class EditUser extends Component {
           yearOfStudy: user.yearOfStudy === 'notSelected' ? 'matriculatingSoon' : user.yearOfStudy,
           username: user.username,
           googleAccount: user.googleId ? true : false,
+          status: ''
         })
       })
       .catch(err => console.log(err));

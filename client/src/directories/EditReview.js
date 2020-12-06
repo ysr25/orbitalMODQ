@@ -14,7 +14,7 @@ export default class EditReview extends Component {
       moduleCode: '',
       isAnonymous: false,
 
-      status: null,
+      status: 'Loading...',
       isButtonDisabled: false
     }
   }
@@ -28,7 +28,8 @@ export default class EditReview extends Component {
           title: post.title,
           content: post.content,
           moduleCode: post.moduleCode,
-          isAnonymous: post.anonymous
+          isAnonymous: post.anonymous,
+          status: ''
         })
       })
       .catch(err => {
@@ -36,7 +37,7 @@ export default class EditReview extends Component {
       })
   }
 
-   onChangeTitle = (data) => {
+  onChangeTitle = (data) => {
     this.setState({ 
       title: data,
       isButtonDisabled: false
@@ -72,7 +73,7 @@ export default class EditReview extends Component {
       content: this.state.content,
       moduleCode: this.state.moduleCode,
       anonymous: this.state.isAnonymous
-    };
+    }
 
     this.setState({
       status: 'Submitting...',
