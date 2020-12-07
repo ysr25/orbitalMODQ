@@ -12,7 +12,7 @@ export default class ViewReview extends Component {
 
     this.state = {
       post_id: props.match.params.id,
-      isValidId: false,
+      isValidId: true,
       post: "",
 
       isAuthor: false,
@@ -86,7 +86,10 @@ export default class ViewReview extends Component {
           status: "",
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        this.setState({ isValidId: false });
+      });
 
     this.props
       .api("get", `/reviews/${this.state.post_id}/comments`)

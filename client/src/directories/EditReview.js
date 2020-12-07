@@ -9,7 +9,7 @@ export default class EditReview extends Component {
 
     this.state = {
       postId: props.match.params.id,
-      isValidId: false,
+      isValidId: true,
       title: "",
       content: "",
       moduleCode: "",
@@ -36,7 +36,10 @@ export default class EditReview extends Component {
         });
       })
       .catch((err) => {
-        this.setState({ status: err.response.data.message });
+        this.setState({
+          status: err.response.data.message,
+          isValidId: false,
+        });
       });
   };
 
