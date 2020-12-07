@@ -1,63 +1,42 @@
-const express = require('express')
-const router = express.Router()
-const passport = require('../config/passport')
-const users = require('../controllers/users')
+const express = require("express");
+const router = express.Router();
+const passport = require("../config/passport");
+const users = require("../controllers/users");
 
-const loggedInOnly = require('./auth').loggedInOnly
-const loggedOutOnly = require('./auth').loggedOutOnly
-const sendResponse = require('./utils').sendResponse
+const loggedInOnly = require("./auth").loggedInOnly;
+const loggedOutOnly = require("./auth").loggedOutOnly;
+const sendResponse = require("./utils").sendResponse;
 
 // Get user details
-router.get('/',
-  loggedInOnly,
-  users.getUser,
-  sendResponse
-)
+router.get("/", loggedInOnly, users.getUser, sendResponse);
 
 // Edit user details
-router.patch('/',
-  loggedInOnly,
-  users.editUser,
-  sendResponse
-)
+router.patch("/", loggedInOnly, users.editUser, sendResponse);
 
 // Create new user
-router.post('/signup',
-  users.createUser,
-  sendResponse
-)
+router.post("/signup", users.createUser, sendResponse);
 
 // Sign user in
-router.post('/login',
-  loggedOutOnly,
-  users.signIn,
-  sendResponse
-)
+router.post("/login", loggedOutOnly, users.signIn, sendResponse);
 
 // Sign user in with google
-router.get('/login/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
+router.get(
+  "/login/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
   })
-)
+);
 
-router.get('/login/google/redirect',
-  passport.authenticate('google'),
+router.get(
+  "/login/google/redirect",
+  passport.authenticate("google"),
   users.googleRedirect
-)
+);
 
 // Sign user out
-router.post('/logout',
-  loggedInOnly,
-  users.signOut,
-  sendResponse
-)
+router.post("/logout", loggedInOnly, users.signOut, sendResponse);
 
 // Delete user account
-router.delete('/',
-  loggedInOnly,
-  users.deleteUser,
-  sendResponse
-)
+router.delete("/", loggedInOnly, users.deleteUser, sendResponse);
 
-module.exports = router
+module.exports = router;

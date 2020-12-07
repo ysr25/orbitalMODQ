@@ -1,86 +1,74 @@
-const express = require('express')
-const router = express.Router()
-const passport = require('../config/passport')
-const reviews = require('../controllers/reviews')
+const express = require("express");
+const router = express.Router();
+const passport = require("../config/passport");
+const reviews = require("../controllers/reviews");
 
-const loggedInOnly = require('./auth').loggedInOnly
-const sendResponse = require('./utils').sendResponse
+const loggedInOnly = require("./auth").loggedInOnly;
+const sendResponse = require("./utils").sendResponse;
 
 // Get all module reviews
-router.get('/',
-  reviews.getAllReviews,
-  sendResponse
-)
+router.get("/", reviews.getAllReviews, sendResponse);
 
 // Search for reviews
-router.get('/search',
-  reviews.searchReviews,
-  sendResponse
-)
+router.get("/search", reviews.searchReviews, sendResponse);
 
 // Get a specific module review
-router.get('/:reviewId',
-  passport.authenticate(['local', 'anonymous']),
+router.get(
+  "/:reviewId",
+  passport.authenticate(["local", "anonymous"]),
   reviews.getOneReview,
   reviews.checkIfAuthor,
   reviews.checkVotes,
   sendResponse
-)
+);
 
 // Get comments for a specific review
-router.get('/:reviewId/comments',
-  reviews.getComments,
-  sendResponse
-)
+router.get("/:reviewId/comments", reviews.getComments, sendResponse);
 
 // Post comment
-router.post('/:reviewId/comments',
+router.post(
+  "/:reviewId/comments",
   loggedInOnly,
   reviews.postComment,
   sendResponse
-)
+);
 
 // Post module review
-router.post('/',
-  passport.authenticate(['local', 'anonymous']),
+router.post(
+  "/",
+  passport.authenticate(["local", "anonymous"]),
   reviews.postReview,
   sendResponse
-)
+);
 
 // Edit module review
-router.patch('/:reviewId',
-  loggedInOnly,
-  reviews.editReview,
-  sendResponse
-)
+router.patch("/:reviewId", loggedInOnly, reviews.editReview, sendResponse);
 
 // Delete module review
-router.delete('/:reviewId',
-  loggedInOnly,
-  reviews.deleteReview,
-  sendResponse
-)
+router.delete("/:reviewId", loggedInOnly, reviews.deleteReview, sendResponse);
 
 // Upvote review
-router.patch('/:reviewId/upvote',
+router.patch(
+  "/:reviewId/upvote",
   loggedInOnly,
   (req, res, next) => {
-    res.locals.vote = 'upvotes'
-    next()
+    res.locals.vote = "upvotes";
+    next();
   },
   reviews.vote,
   sendResponse
-)
+);
 
 // Downvote review
-router.patch('/:reviewId/downvote',
+router.patch(
+  "/:reviewId/downvote",
   loggedInOnly,
   (req, res, next) => {
-    res.locals.vote = 'downvotes'
-    next()
+    res.locals.vote = "downvotes";
+    next();
   },
   reviews.vote,
   sendResponse
-)
+);
 
-module.exports = router
+module.exports = router;

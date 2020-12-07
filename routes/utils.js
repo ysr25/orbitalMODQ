@@ -4,7 +4,7 @@ exports.sendResponse = (req, res) => {
     isAuthor: res.locals.isAuthor,
     isUpvoted: res.locals.isUpvoted,
     isDownvoted: res.locals.isDownvoted,
-    message: res.locals.msg === null ? '' : res.locals.msg,
-    content: res.locals.content === null ? '' : res.locals.content
-  })
-}
+    message: res.locals.msg === null ? "" : res.locals.msg,
+    content: res.locals.content === null ? "" : res.locals.content,
+  });
+};

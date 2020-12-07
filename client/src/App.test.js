@@ -1,9 +1,9 @@
-import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
-import renderer from 'react-test-renderer'
-import App from './App'
+import React from "react";
+import { MemoryRouter } from "react-router-dom";
+import renderer from "react-test-renderer";
+import App from "./App";
 
-test('renders app', () => {
+test("renders app", () => {
   // const { getByText } = render(<App />);
   // const linkElement = getByText(/learn react/i);
   // expect(linkElement).toBeInTheDocument();
@@ -13,6 +13,6 @@ test('renders app', () => {
         <App />
       </MemoryRouter>
     )
-    .toJSON()
-  expect(tree).toMatchSnapshot()
-})
+    .toJSON();
+  expect(tree).toMatchSnapshot();
+});

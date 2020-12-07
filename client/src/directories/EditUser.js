@@ -1,94 +1,99 @@
-import React, { Component } from 'react'
-import UserForm from '../components/UserForm'
+import React, { Component } from "react";
+import UserForm from "../components/UserForm";
 
 export default class EditUser extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      email: '',
-      course: '',
+      email: "",
+      course: "",
       yearOfStudy: "matriculatingSoon", // default option
-      username: '',
+      username: "",
       googleAccount: false,
 
-      status: 'Loading...',
-      isButtonDisabled: false
-    }
+      status: "Loading...",
+      isButtonDisabled: false,
+    };
   }
 
   componentDidMount = () => {
-    this.props.api('get', '/users')
-      .then(res => {
-        const user = res.data.content
+    this.props
+      .api("get", "/users")
+      .then((res) => {
+        const user = res.data.content;
         return this.setState({
           email: user.email,
-          course: user.course === 'notSelected' ? '' : user.course,
-          yearOfStudy: user.yearOfStudy === 'notSelected' ? 'matriculatingSoon' : user.yearOfStudy,
+          course: user.course === "notSelected" ? "" : user.course,
+          yearOfStudy:
+            user.yearOfStudy === "notSelected"
+              ? "matriculatingSoon"
+              : user.yearOfStudy,
           username: user.username,
           googleAccount: user.googleId ? true : false,
-          status: ''
-        })
+          status: "",
+        });
       })
-      .catch(err => console.log(err));
-  }
+      .catch((err) => console.log(err));
+  };
 
   onChangeEmail = (data) => {
     this.setState({
       email: data,
-      isButtonDisabled: false
-    })
-  }
+      isButtonDisabled: false,
+    });
+  };
 
   onChangeCourse = (data) => {
-    console.log('aaa')
+    console.log("aaa");
     this.setState({
       course: data,
-      isButtonDisabled: false
-    })
-  }
+      isButtonDisabled: false,
+    });
+  };
 
   onChangeYearOfStudy = (data) => {
     this.setState({
       yearOfStudy: data,
-      isButtonDisabled: false
-    })
-  }
+      isButtonDisabled: false,
+    });
+  };
 
   onChangeUsername = (data) => {
     this.setState({
       username: data,
-      isButtonDisabled: false
-    })
-  }
+      isButtonDisabled: false,
+    });
+  };
 
   onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const editedUser = {
       email: this.state.email,
       course: this.state.course,
       yearOfStudy: this.state.yearOfStudy,
-      username: this.state.username
-    }
+      username: this.state.username,
+    };
 
     this.setState({
       isButtonDisabled: true,
-      status: 'Submitting...',
-    })
+      status: "Submitting...",
+    });
 
-    this.props.api('patch', '/users', editedUser)
-      .then(res => {
-        this.setState({ status: res.data.message })
-        this.props.history.push('/')
+    this.props
+      .api("patch", "/users", editedUser)
+      .then((res) => {
+        this.setState({ status: res.data.message });
+        this.props.history.push("/");
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
           status: err.response.data.message,
           isButtonDisabled: true,
-        })
-      })
-  }
+        });
+      });
+  };
 
   render() {
     return (
@@ -99,12 +104,10 @@ export default class EditUser extends Component {
           username={this.state.username}
           course={this.state.course}
           yearOfStudy={this.state.yearOfStudy}
-
           status={this.state.status}
           isButtonDisabled={this.state.isButtonDisabled}
           disabled={this.state.googleAccount}
           displayPassword={false}
-
           onChangeEmail={this.onChangeEmail}
           onChangeUsername={this.onChangeUsername}
           onChangeCourse={this.onChangeCourse}
@@ -112,6 +115,6 @@ export default class EditUser extends Component {
           onSubmit={this.onSubmit}
         />
       </>
-    )
+    );
   }
 }
