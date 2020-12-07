@@ -12,6 +12,7 @@ export default class ViewReview extends Component {
 
     this.state = {
       post_id: props.match.params.id,
+      isValidId: false,
       post: "",
 
       isAuthor: false,
@@ -81,6 +82,7 @@ export default class ViewReview extends Component {
           isAuthor: res.data.isAuthor,
           isUpvoted: res.data.isUpvoted,
           isDownvoted: res.data.isDownvoted,
+          isValidId: true,
           status: "",
         });
       })
@@ -146,6 +148,10 @@ export default class ViewReview extends Component {
     ) : (
       <></>
     );
+
+    if (!this.state.isValidId) {
+      return <>No such review found</>;
+    }
 
     return (
       <>

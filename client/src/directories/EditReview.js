@@ -9,6 +9,7 @@ export default class EditReview extends Component {
 
     this.state = {
       postId: props.match.params.id,
+      isValidId: false,
       title: "",
       content: "",
       moduleCode: "",
@@ -30,6 +31,7 @@ export default class EditReview extends Component {
           content: post.content,
           moduleCode: post.moduleCode,
           isAnonymous: post.anonymous,
+          isValidId: true,
           status: "",
         });
       })
@@ -104,6 +106,10 @@ export default class EditReview extends Component {
   };
 
   render() {
+    if (!this.state.isValidId) {
+      return <>No such review found</>;
+    }
+
     return (
       <div style={{ marginTop: 10 }}>
         <h3>Edit Post</h3>

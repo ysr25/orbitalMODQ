@@ -47,22 +47,6 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api", routes);
 
-// Reaches this when no routes are found
-app.use((req, res, next) => {
-  const error = new Error("No endpoint (route) found");
-  error.status = 404;
-  next(error);
-});
-
-// Reaches this when other parts of code throws error
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    isLoggedIn: res.locals.isLoggedIn,
-    message: err.message || "An unknown error occured",
-  });
-});
-
 // Heroku deployment
 app.use(express.static(path.join(__dirname, "client", "build")));
 app.get("*", (req, res) => {
