@@ -207,6 +207,6 @@ exports[`renders app 1`] = `
       </div>
     </div>
   </form>
-  No reviews found.
+  Loading...
 </div>
 `;
