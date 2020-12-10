@@ -11,16 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rgabelarde/orbital-MODQ.git"
+    "url": "git+https://github.com/ysr25/orbital-MODQ.git"
   },
   "author": "Shan Rong & Rachel",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rgabelarde/orbital-MODQ/issues"
+    "url": "https://github.com/ysr25/orbital-MODQ/issues"
   },
-  "homepage": "https://github.com/rgabelarde/orbital-MODQ#readme",
+  "homepage": "https://github.com/ysr25/orbital-MODQ#readme",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
@@ -31,21 +30,15 @@
     "passport": "^0.4.1",
     "passport-anonymous": "^1.0.1",
     "passport-google-oauth20": "^2.0.0",
-    "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.0.1",
     "path": "^0.12.7",
     "sanitize-html": "^1.27.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "chai": "^4.2.0",
     "jest": "^24.9.0",
-    "mocha": "^8.2.1",
-    "node-mocks-http": "^1.8.1",
     "nodemon": "^2.0.4",
-    "prettier": "^2.0.5",
-    "sinon": "^9.0.2"
+    "prettier": "^2.0.5"
   },
   "engines": {
     "node": "14.1.0"
