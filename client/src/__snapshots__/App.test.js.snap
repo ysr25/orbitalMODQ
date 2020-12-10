@@ -5,7 +5,7 @@ exports[`renders app 1`] = `
   className="container"
 >
   <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
+    className="navbar navbar-expand-sm navbar-light bg-light sticky-top"
   >
     <a
       className="navbar-brand"
@@ -20,219 +20,193 @@ exports[`renders app 1`] = `
       />
       MODQ
     </a>
-    <div
-      className="collpase navbar-collapse"
+    <button
+      aria-controls="basic-navbar-nav"
+      aria-label="Toggle navigation"
+      className="navbar-toggler collapsed"
+      onClick={[Function]}
+      type="button"
     >
-      <ul
-        className="navbar-nav mr-auto"
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      aria-expanded={null}
+      className="navbar-collapse collapse"
+    >
+      <div
+        className="mr-auto navbar-nav"
+        onKeyDown={[Function]}
       >
-        <li
-          className="navbar-item"
+        <a
+          className="nav-link"
+          href="/"
+          onClick={[Function]}
         >
-          <a
-            className="nav-link"
-            href="/"
-            onClick={[Function]}
-          >
-            Home
-          </a>
-        </li>
-        <li
-          className="navbar-item"
+          Home
+        </a>
+        <a
+          className="nav-link"
+          href="/reviews/new"
+          onClick={[Function]}
         >
-          <a
-            className="nav-link"
-            href="/modreviews/newpost"
-            onClick={[Function]}
-          >
-            Create A Post
-          </a>
-        </li>
-        <li
-          className="navbar-item"
+          Create a Post
+        </a>
+        <a
+          className="nav-link"
+          href="/users/signup"
+          onClick={[Function]}
         >
-          <a
-            className="nav-link"
-            href="/users/signup"
-            onClick={[Function]}
-          >
-            Register
-          </a>
-        </li>
-        <li
-          className="navbar-item"
+          Register
+        </a>
+        <a
+          className="nav-link"
+          href="/users/login"
+          onClick={[Function]}
         >
-          <a
-            className="nav-link"
-            href="/users/login"
-            onClick={[Function]}
-          >
-            Log In
-          </a>
-        </li>
-      </ul>
+          Log In
+        </a>
+      </div>
     </div>
   </nav>
   <br />
-  <div
-    style={
-      Object {
-        "marginTop": 10,
-      }
-    }
+  <form
+    className="search"
+    onSubmit={[Function]}
   >
-    <div>
+    <div
+      className="form-row"
+    >
       <div
-        className="btn-group btn-group-toggle"
-        role="group"
-      >
-        <label
-          className="btn active btn-outline-info"
-          disabled={false}
-        >
-          <input
-            autoComplete="off"
-            checked={true}
-            disabled={false}
-            name="sort_by"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            type="radio"
-            value="datePosted"
-          />
-          Date posted
-        </label>
-        <label
-          className="btn btn-outline-info"
-          disabled={false}
-        >
-          <input
-            autoComplete="off"
-            checked={false}
-            disabled={false}
-            name="sort_by"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            type="radio"
-            value="dateEdited"
-          />
-          Date edited
-        </label>
-        <label
-          className="btn btn-outline-info"
-          disabled={false}
-        >
-          <input
-            autoComplete="off"
-            checked={false}
-            disabled={false}
-            name="sort_by"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            type="radio"
-            value="upvotes"
-          />
-          Upvotes
-        </label>
-      </div>
-       
-      <div
-        className="btn-group btn-group-toggle"
-        role="group"
-      >
-        <label
-          className="btn btn-outline-info"
-          disabled={false}
-        >
-          <input
-            autoComplete="off"
-            checked={false}
-            disabled={false}
-            name="sort_by"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            type="radio"
-            value={-1}
-          />
-          Oldest to Latest Post
-        </label>
-        <label
-          className="btn active btn-outline-info"
-          disabled={false}
-        >
-          <input
-            autoComplete="off"
-            checked={true}
-            disabled={false}
-            name="sort_by"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            type="radio"
-            value={1}
-          />
-          Latest to Oldest Post
-        </label>
-      </div>
-      <br />
-      <br />
-      <input
-        autoComplete="off"
-        className="form-control"
-        onChange={[Function]}
-        onClick={[Function]}
-        onKeyDown={[Function]}
-        placeholder="Choose a module"
-        value=""
-      />
-      <br />
-      <form
-        className=""
-        onSubmit={[Function]}
+        className="searchComponent col-md"
       >
         <div
-          className="form-row"
+          className="d-flex btn-group btn-group-toggle"
+          role="group"
         >
-          <div
-            className="col"
+          <label
+            className="btn active btn-outline-info"
+            disabled={false}
           >
             <input
-              className="form-control"
+              autoComplete="off"
+              checked={true}
+              disabled={false}
+              name="sort"
+              onBlur={[Function]}
               onChange={[Function]}
-              placeholder="Search reviews"
-              required={true}
-              value=""
+              onFocus={[Function]}
+              type="radio"
+              value="-createdAt"
             />
-          </div>
-          <div
-            className="col"
+            Newest
+          </label>
+          <label
+            className="btn btn-outline-info"
+            disabled={false}
           >
-            <button
-              className="btn btn-info"
+            <input
+              autoComplete="off"
+              checked={false}
               disabled={false}
-              type="submit"
-            >
-              Search
-            </button>
-             
-            
-            <button
-              className="btn btn-info"
+              name="sort"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              type="radio"
+              value="createdAt"
+            />
+            Oldest
+          </label>
+          <label
+            className="btn btn-outline-info"
+            disabled={false}
+          >
+            <input
+              autoComplete="off"
+              checked={false}
               disabled={false}
-              onClick={[Function]}
-              type="button"
-            >
-              Reset
-            </button>
-          </div>
+              name="sort"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              type="radio"
+              value="-editedAt"
+            />
+            Edited
+          </label>
+          <label
+            className="btn btn-outline-info"
+            disabled={false}
+          >
+            <input
+              autoComplete="off"
+              checked={false}
+              disabled={false}
+              name="sort"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              type="radio"
+              value="-votes"
+            />
+            Votes
+          </label>
         </div>
-      </form>
+      </div>
+      <div
+        className="searchComponent col"
+      >
+        <input
+          autoComplete="off"
+          className="form-control"
+          onChange={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          placeholder="Choose a module"
+          value=""
+        />
+      </div>
     </div>
-    <br />
-  </div>
+    <div
+      className="form-row"
+    >
+      <div
+        className="searchComponent col-sm"
+      >
+        <input
+          className="form-control"
+          onChange={[Function]}
+          placeholder="Search reviews"
+          value=""
+        />
+      </div>
+      <div
+        className="searchComponent col-auto"
+      >
+        <button
+          className="d-flex btn btn-info"
+          disabled={false}
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+      <div
+        className="searchComponent col-auto"
+      >
+        <button
+          className="d-flex btn btn-info"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  </form>
+  No reviews found.
 </div>
 `;

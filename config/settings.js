@@ -18,4 +18,12 @@ settings.production = {
   clientUrl: "/",
 };
 
+settings.test = {
+  mongoUrl: "",
+  sessionSecret: "",
+  googleClientId: "",
+  googleClientSecret: "",
+  clientUrl: "http://localhost:3000/",
+};
+
 module.exports = settings[process.env.NODE_ENV];

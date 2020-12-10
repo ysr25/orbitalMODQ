@@ -1,14 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders navigation bar (logged in) 1`] = `
-<div
-  className="collpase navbar-collapse"
+<nav
+  className="navbar navbar-expand-sm navbar-light bg-light sticky-top"
 >
-  <ul
-    className="navbar-nav mr-auto"
+  <a
+    className="navbar-brand"
+    href="/"
+    onClick={[Function]}
   >
-    <li
-      className="navbar-item"
+    <img
+      alt="MODQ Logo"
+      height="50"
+      src="logo.jpg"
+      width="50"
+    />
+    MODQ
+  </a>
+  <button
+    aria-controls="basic-navbar-nav"
+    aria-label="Toggle navigation"
+    className="navbar-toggler collapsed"
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className="navbar-toggler-icon"
+    />
+  </button>
+  <div
+    aria-expanded={null}
+    className="navbar-collapse collapse"
+  >
+    <div
+      className="mr-auto navbar-nav"
+      onKeyDown={[Function]}
     >
       <a
         className="nav-link"
@@ -17,21 +43,13 @@ exports[`renders navigation bar (logged in) 1`] = `
       >
         Home
       </a>
-    </li>
-    <li
-      className="navbar-item"
-    >
       <a
         className="nav-link"
-        href="/modreviews/newpost"
+        href="/reviews/new"
         onClick={[Function]}
       >
-        Create A Post
+        Create a Post
       </a>
-    </li>
-    <li
-      className="navbar-item"
-    >
       <a
         className="nav-link"
         href="/users/edit/"
@@ -39,10 +57,6 @@ exports[`renders navigation bar (logged in) 1`] = `
       >
         Edit Account Details
       </a>
-    </li>
-    <li
-      className="navbar-item"
-    >
       <a
         className="nav-link"
         href="/"
@@ -50,20 +64,46 @@ exports[`renders navigation bar (logged in) 1`] = `
       >
         Log Out
       </a>
-    </li>
-  </ul>
-</div>
+    </div>
+  </div>
+</nav>
 `;
 
 exports[`renders navigation bar (not logged in) 1`] = `
-<div
-  className="collpase navbar-collapse"
+<nav
+  className="navbar navbar-expand-sm navbar-light bg-light sticky-top"
 >
-  <ul
-    className="navbar-nav mr-auto"
+  <a
+    className="navbar-brand"
+    href="/"
+    onClick={[Function]}
   >
-    <li
-      className="navbar-item"
+    <img
+      alt="MODQ Logo"
+      height="50"
+      src="logo.jpg"
+      width="50"
+    />
+    MODQ
+  </a>
+  <button
+    aria-controls="basic-navbar-nav"
+    aria-label="Toggle navigation"
+    className="navbar-toggler collapsed"
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className="navbar-toggler-icon"
+    />
+  </button>
+  <div
+    aria-expanded={null}
+    className="navbar-collapse collapse"
+  >
+    <div
+      className="mr-auto navbar-nav"
+      onKeyDown={[Function]}
     >
       <a
         className="nav-link"
@@ -72,21 +112,13 @@ exports[`renders navigation bar (not logged in) 1`] = `
       >
         Home
       </a>
-    </li>
-    <li
-      className="navbar-item"
-    >
       <a
         className="nav-link"
-        href="/modreviews/newpost"
+        href="/reviews/new"
         onClick={[Function]}
       >
-        Create A Post
+        Create a Post
       </a>
-    </li>
-    <li
-      className="navbar-item"
-    >
       <a
         className="nav-link"
         href="/users/signup"
@@ -94,10 +126,6 @@ exports[`renders navigation bar (not logged in) 1`] = `
       >
         Register
       </a>
-    </li>
-    <li
-      className="navbar-item"
-    >
       <a
         className="nav-link"
         href="/users/login"
@@ -105,7 +133,7 @@ exports[`renders navigation bar (not logged in) 1`] = `
       >
         Log In
       </a>
-    </li>
-  </ul>
-</div>
+    </div>
+  </div>
+</nav>
 `;

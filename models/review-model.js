@@ -57,7 +57,7 @@ ReviewSchema.virtual("displayedAuthor").get(function () {
   return this.anonymous || !this.author ? "Anonymous" : this.author.username;
 });
 
-ReviewSchema.pre("find", function (next) {
+ReviewSchema.pre(/^find/, function (next) {
   this.populate("author", "username");
   next();
 });
@@ -98,7 +98,6 @@ ReviewSchema.statics.findAndSort = function (findOptions, sort, filter, next) {
   } else {
     options = findOptions;
   }
-
   return this.find(options)
     .sort(sort)
     .exec((err, result) => {

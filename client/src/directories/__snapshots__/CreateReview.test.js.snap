@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders create module review page 1`] = `
+Array [
+  <h3>
+    New Post
+  </h3>,
+  <form
+    className=""
+    onSubmit={[Function]}
+  >
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="title"
+      >
+        Title
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          id="title"
+          onChange={[Function]}
+          required={true}
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="module"
+      >
+        Module
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          autoComplete="off"
+          className="form-control"
+          id="module"
+          onChange={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          placeholder="Choose a module"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <div
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+    <br />
+    <div
+      className="form-check"
+    >
+      <input
+        aria-label="Post Anonymously"
+        checked={false}
+        className="form-check-input"
+        disabled={false}
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        className="form-check-label"
+        title=""
+      >
+        Post Anonymously
+      </label>
+    </div>
+    <br />
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      type="submit"
+    >
+      Submit
+    </button>
+    <br />
+  </form>,
+]
+`;

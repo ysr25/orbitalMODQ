@@ -41,10 +41,6 @@ class App extends Component {
     this.api("get", "/").catch((err) => console.log(err));
   };
 
-  setShow = (show) => {
-    this.setState({ show: false });
-  };
-
   render() {
     return (
       <Router>

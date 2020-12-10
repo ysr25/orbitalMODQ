@@ -67,7 +67,6 @@ UserSchema.methods.comparePassword = function (password, next) {
 // Reused from http://devsmash.com/blog/password-authentication-with-mongoose-and-bcrypt
 UserSchema.pre("save", function (next) {
   const user = this;
-
   if (!user.isModified("password")) return next();
 
   bcrypt.hash(user.password, saltRounds, function (err, hash) {

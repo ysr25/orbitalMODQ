@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders login page 1`] = `
+Array [
+  <h3>
+    Log in
+  </h3>,
+  <p>
+    Don't have an account? 
+    <a
+      href="/users/signup"
+      onClick={[Function]}
+    >
+      Register
+    </a>
+  </p>,
+  <form
+    className=""
+    onSubmit={[Function]}
+  >
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="username"
+      >
+        Username
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          id="username"
+          onChange={[Function]}
+          required={true}
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="password"
+      >
+        Password
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          id="password"
+          onChange={[Function]}
+          required={true}
+          type="password"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      type="submit"
+    >
+      Log In
+    </button>
+    <br />
+    <br />
+    <a
+      className="btn btn-primary"
+      href="http://localhost:3001/api/users/login/google"
+    >
+      Log in with Google
+    </a>
+  </form>,
+]
+`;

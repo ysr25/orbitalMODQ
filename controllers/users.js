@@ -61,7 +61,7 @@ exports.createUser = (req, res, next) => {
     req.login(user, (err) => {
       if (err) return next(err);
       res.locals.msg = "Logged in successfully.";
-      res.locals.user = user;
+      res.locals.content = user;
       return next();
     });
   });

@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders register page 1`] = `
+Array [
+  <h3>
+    Create An Account
+  </h3>,
+  <p>
+    Already have an account? 
+    <a
+      href="/users/login"
+      onClick={[Function]}
+    >
+      Log in
+    </a>
+  </p>,
+  <form
+    className=""
+    onSubmit={[Function]}
+  >
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="email"
+      >
+        Email
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          disabled={false}
+          id="email"
+          onChange={[Function]}
+          required={true}
+          type="email"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="course"
+      >
+        Course
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          id="course"
+          onChange={[Function]}
+          required={true}
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="yearOfStudy"
+      >
+        Year of Study
+      </label>
+      <div
+        className="col"
+      >
+        <select
+          className="form-control"
+          id="yearOfStudy"
+          onChange={[Function]}
+          required={true}
+          value="matriculatingSoon"
+        >
+          <option
+            value="matriculatingSoon"
+          >
+            Matriculating Soon
+          </option>
+          <option
+            value="undergraduate"
+          >
+            Undergraduate
+          </option>
+          <option
+            value="masters"
+          >
+            Masters
+          </option>
+          <option
+            value="doctorate"
+          >
+            Doctorate
+          </option>
+          <option
+            value="others"
+          >
+            Others
+          </option>
+        </select>
+      </div>
+    </div>
+    <br />
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="username"
+      >
+        Username
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          disabled={false}
+          id="username"
+          onChange={[Function]}
+          required={true}
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <div
+      className="form-row"
+    >
+      <label
+        className="form-label col-form-label col-sm-2"
+        htmlFor="password"
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      >
+        Password
+      </label>
+      <div
+        className="col"
+      >
+        <input
+          className="form-control"
+          id="password"
+          onChange={[Function]}
+          style={
+            Object {
+              "display": "block",
+            }
+          }
+          type="password"
+          value=""
+        />
+      </div>
+    </div>
+    <br />
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      type="submit"
+    >
+      Submit
+    </button>
+    <br />
+  </form>,
+  <br />,
+  <a
+    className="btn btn-primary"
+    href="http://localhost:3001/api/users/login/google"
+  >
+    Sign up with Google
+  </a>,
+]
+`;

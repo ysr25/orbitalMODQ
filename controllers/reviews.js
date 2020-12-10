@@ -1,7 +1,7 @@
 const Review = require("../models/review-model");
 const Comment = require("../models/comment-model");
 
-exports.getAllReviews = async (req, res, next) => {
+exports.getAllReviews = (req, res, next) => {
   Review.findAndSort({}, req.query.sort, req.query.filter, (err, reviews) => {
     if (err) return next(err);
     res.locals.content = reviews;
