@@ -16,10 +16,13 @@ export default class Homepage extends Component {
       sort: "-createdAt",
       filter: "",
       search: "",
+      status: "Loading...",
     };
   }
 
   getReviews = () => {
+    this.setState({ status: "Loading..." });
+
     this.props
       .api("get", "/reviews")
       .then((res) =>
@@ -28,6 +31,7 @@ export default class Homepage extends Component {
           sort: "-createdAt",
           filter: "",
           search: "",
+          status: "",
         })
       )
       .catch((err) => console.log(err));
@@ -52,6 +56,8 @@ export default class Homepage extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
+    this.setState({ status: "Loading..." });
+
     this.props
       .api(
         "get",
@@ -63,7 +69,7 @@ export default class Homepage extends Component {
           filter: this.state.filter,
         }
       )
-      .then((res) => this.setState({ reviews: res.data.content }))
+      .then((res) => this.setState({ reviews: res.data.content, status: "" }))
       .catch((err) => console.log(err));
   };
 
@@ -73,7 +79,9 @@ export default class Homepage extends Component {
 
   render() {
     let content;
-    if (this.state.reviews.length) {
+    if (this.state.status) {
+      content = this.state.status;
+    } else if (this.state.reviews.length) {
       content = this.state.reviews.map((review) => (
         <ShortReview review={review} key={review._id} />
       ));
